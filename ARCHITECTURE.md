@@ -30,7 +30,8 @@ Rules:
 ```
 Splash → Welcome → Login / Register → Home shell (bottom nav)
                                         ├─ Home → Product Details (route argument: Product)
-                                        ├─ Cart → Checkout
+                                        ├─ Explore → Products List
+                                        ├─ Cart → Checkout → Order Success (route argument: order id)
                                         ├─ Orders → bottom sheet with the order
                                         └─ Profile → address form
 ```
@@ -44,6 +45,10 @@ Splash → Welcome → Login / Register → Home shell (bottom nav)
 - Cart and Checkout read the shared dummy basket and delivery methods. Every total is
   computed from the item line totals; nothing is hardcoded per screen.
 - Profile and Checkout share the same address form widgets and dummy address.
+- Explore and Products List both pump the shared `ProductGrid`/`ProductCard` and pass
+  the tapped `Product` to Product Details as a route argument.
+- Order Success is pushed after checkout clears the cart and shows the new order id
+  passed as a route argument; its button goes back to Home.
 
 ## State of the project (end of phase 1)
 

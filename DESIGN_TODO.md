@@ -44,12 +44,11 @@ must fix.
 - [ ] **Login / Register** – first-pass layout, not the Figma frames. Register still
       needs the password helper text and the real API RegExp. Phone field still shows
       the flag instead of the approved "+20".
-- [ ] **Product Details** – structure is close; verify image ratio, quantity stepper and
-      sticky bar against the frame.
-- [ ] **Cart** – summary is not a Figma card yet; empty state and item cards need the
-      frame values.
-- [ ] **Checkout** – delivery methods and summary use Material defaults; verify spacing
-      and card radii.
+- [x] **Product Details** (Group 3; structurally complete, overflow-proofed).
+- [x] **Cart** (Group 3; overflow-proofed).
+- [x] **Checkout** (Group 3; delivery cards replaced with overflow-proof rows,
+      `_placeOrder` navigates to Order Success).
+- [x] **Order Success** (Group 3; pushed from checkout with the new order id).
 - [ ] **Orders** – order cards and status pills are first-pass; bottom sheet needs the
       frame values.
 - [ ] **Profile** – header card and menu rows do not match the Figma layout (avatar
@@ -67,3 +66,4 @@ must fix.
 
 - [x] Group 1: bugs + core refactor (Group 1 commit).
 - [x] Group 2: Home, Explore, Products List.
+- [x] Group 3: Product Details, Cart, Checkout, Order Success.

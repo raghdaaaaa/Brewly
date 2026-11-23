@@ -239,9 +239,14 @@ class _CartScreenState extends State<CartScreen> {
                   children: [
                     _buildStepper(item),
                     const Spacer(),
-                    Text(
-                      '${item.lineTotal.toStringAsFixed(0)} EGP',
-                      style: AppTextStyles.priceSmall,
+                    Expanded(
+                      child: Text(
+                        '${item.lineTotal.toStringAsFixed(0)} EGP',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.right,
+                        style: AppTextStyles.priceSmall,
+                      ),
                     ),
                   ],
                 ),

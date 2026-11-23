@@ -6,7 +6,9 @@ import '../core/theme/app_text_styles.dart';
 import '../models/product.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
-  const ProductDetailsScreen({super.key});
+  const ProductDetailsScreen({super.key, this.product});
+
+  final Product? product;
 
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
@@ -27,20 +29,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Arguments can be a plain Product (old callers) or a Map with
-    // 'product' and 'heroPrefix' (screens that use IndexedStack).
-    final arguments = ModalRoute.of(context)?.settings.arguments;
-    final Product? product;
-    final String heroPrefix;
-    if (arguments is Map) {
-      product = arguments['product'] as Product?;
-      heroPrefix = (arguments['heroPrefix'] as String?) ?? 'home';
-    } else if (arguments is Product) {
-      product = arguments;
-      heroPrefix = 'home';
-    } else {
-      product = null;
-      heroPrefix = 'home';
+    Product? product = widget.product;
+    if (product == null) {
+      final arguments = ModalRoute.of(context)?.settings.arguments;
+      if (arguments is Product) {
+        product = arguments;
+      }
     }
 
     if (product == null) {
@@ -75,7 +69,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               child: AspectRatio(
                 aspectRatio: 358 / 269,
                 child: Hero(
-                  tag: '${heroPrefix}_product_${product.id}',
+                  tag: 'product_${product.id}',
                   child: Image.network(
                     product.pictureUrl,
                     fit: BoxFit.cover,
@@ -115,6 +109,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 Expanded(
                   child: Text(
                     product.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: AppTextStyles.pageTitle,
                   ),
                 ),
@@ -176,21 +172,27 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      IconButton(
-                        onPressed: _quantity > 1
+                      InkWell(
+                        onTap: _quantity > 1
                             ? () {
                                 setState(() {
                                   _quantity--;
                                 });
                               }
                             : null,
-                        icon: const Icon(Icons.remove, size: 18),
-                        color: AppColors.textColor,
-                        disabledColor: AppColors.borderColor,
+                        borderRadius: BorderRadius.circular(AppRadius.pill),
+                        child: const SizedBox(
+                          width: 24,
+                          child: Icon(
+                            Icons.remove,
+                            size: 14,
+                            color: AppColors.textColor,
+                          ),
+                        ),
                       ),
                       // Animated number.
                       SizedBox(
-                        width: 28,
+                        width: 22,
                         child: AnimatedSwitcher(
                           duration: const Duration(milliseconds: 200),
                           transitionBuilder: (child, animation) {
@@ -207,17 +209,23 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           ),
                         ),
                       ),
-                      IconButton(
-                        onPressed: _quantity < 10
+                      InkWell(
+                        onTap: _quantity < 10
                             ? () {
                                 setState(() {
                                   _quantity++;
                                 });
                               }
                             : null,
-                        icon: const Icon(Icons.add, size: 18),
-                        color: AppColors.textColor,
-                        disabledColor: AppColors.borderColor,
+                        borderRadius: BorderRadius.circular(AppRadius.pill),
+                        child: const SizedBox(
+                          width: 24,
+                          child: Icon(
+                            Icons.add,
+                            size: 14,
+                            color: AppColors.textColor,
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -250,17 +258,19 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           ),
           child: Row(
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text('Total', style: AppTextStyles.caption),
-                  const SizedBox(height: 2),
-                  Text(
-                    '${(product.price * _quantity).toStringAsFixed(0)} EGP',
-                    style: AppTextStyles.priceTotal,
-                  ),
-                ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text('Total', style: AppTextStyles.caption),
+                    const SizedBox(height: 2),
+                    Text(
+                      '${(details.price * _quantity).toStringAsFixed(0)} EGP',
+                      style: AppTextStyles.priceTotal,
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(width: AppSpacing.lg),
               Expanded(
@@ -271,7 +281,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     children: [
                       Icon(Icons.shopping_bag_outlined, size: 18),
                       SizedBox(width: AppSpacing.sm),
-                      // Flexible + ellipsis so the label never overflows.
                       Flexible(
                         child: Text(
                           'Add to cart',

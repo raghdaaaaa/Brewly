@@ -61,7 +61,7 @@ class AppHeaderBack extends StatelessWidget {
   }
 }
 
-/// Top navigation bar (location block + bell + avatar).
+/// Top navigation bar (brand + location + bell + avatar).
 class AppHeaderTop extends StatelessWidget {
   const AppHeaderTop({super.key});
 
@@ -72,35 +72,87 @@ class AppHeaderTop extends StatelessWidget {
       child: Row(
         children: [
           const Expanded(
-            child: Text(
-              'BREWLY ROASTERS / Zamalek, Cairo',
-              style: AppTextStyles.brandCaps,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'BREWLY\nROASTERS',
+                  style: TextStyle(
+                    fontFamily: AppTextStyles.fontFamily,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w800,
+                    height: 1.15,
+                    letterSpacing: 0.8,
+                    color: AppColors.primaryColor,
+                  ),
+                ),
+                SizedBox(height: 2),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Zamalek,',
+                      style: TextStyle(
+                        fontFamily: AppTextStyles.fontFamily,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textColor,
+                      ),
+                    ),
+                    SizedBox(width: 2),
+                    Icon(
+                      Icons.keyboard_arrow_down_rounded,
+                      size: 18,
+                      color: AppColors.mutedTextColor,
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-          IconButton(
-            tooltip: 'Notifications',
-            icon: const Icon(
-              Icons.notifications_outlined,
-              size: 20,
-              color: AppColors.mutedTextColor,
-            ),
-            onPressed: () {
+          InkWell(
+            onTap: () {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Coming soon')),
               );
             },
-          ),
-          Container(
-            width: 32,
-            height: 32,
-            decoration: const BoxDecoration(
-              color: AppColors.primaryColor,
-              shape: BoxShape.circle,
+            borderRadius: BorderRadius.circular(AppRadius.pill),
+            child: Container(
+              width: 44,
+              height: 44,
+              decoration: const BoxDecoration(
+                color: AppColors.softSurfaceColor,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.notifications_outlined,
+                size: 20,
+                color: AppColors.textColor,
+              ),
             ),
-            child: const Center(
-              child: Text('OE', style: AppTextStyles.avatarInitials),
+          ),
+          const SizedBox(width: AppSpacing.sm),
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: AppColors.cardColor,
+                width: 2,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.textColor.withValues(alpha: 0.08),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+              image: const DecorationImage(
+                image: AssetImage(AppAssets.userAvatar),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
         ],

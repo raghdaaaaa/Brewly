@@ -17,4 +17,5 @@ class AppAssets {
   static const String welcomeCtaArrow = 'assets/icons/welcome_cta_arrow.svg';
   static const String welcomeSteamIcon = 'assets/icons/welcome_steam.svg';
   static const String welcomeHeroImage = 'assets/images/welcome_hero.jpg';
+  static const String userAvatar = 'assets/images/user_avatar.png';
 }

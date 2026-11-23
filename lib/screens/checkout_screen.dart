@@ -59,6 +59,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     super.dispose();
   }
 
+  String _nextOrderId() {
+    if (dummyOrders.isEmpty) {
+      return 'ORD-1001';
+    }
+    final last = int.tryParse(dummyOrders.last.id.split('-').last);
+    return last == null ? dummyOrders.last.id : 'ORD-${last + 1}';
+  }
+
   void _placeOrder() {
     // Stop if a field is empty.
     if (!_formKey.currentState!.validate()) {
@@ -69,17 +77,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     // The API step will call POST /api/Orders and DELETE /api/Basket.
     dummyBasketItems.clear();
 
-    // Success message (the API step will show the real response).
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Your order has been placed!')),
-    );
-
-    // Back to Main, with the Orders tab open.
     Navigator.pushNamedAndRemoveUntil(
       context,
-      AppRoutes.homeRoute,
+      AppRoutes.orderSuccessRoute,
       (route) => false,
-      arguments: 2,
+      arguments: _nextOrderId(),
     );
   }
 
@@ -183,30 +185,60 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 child: Column(
                   children: [
                     for (final method in dummyDeliveryMethods)
-                      RadioListTile<int>(
-                        value: method.id,
-                        // ignore: deprecated_member_use
-                        groupValue: _selectedMethodId,
-                        // ignore: deprecated_member_use
-                        onChanged: (value) {
-                          if (value == null) {
-                            return;
-                          }
+                      InkWell(
+                        onTap: () {
                           setState(() {
-                            _selectedMethodId = value;
+                            _selectedMethodId = method.id;
                           });
                         },
-                        activeColor: AppColors.primaryColor,
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
-                        title: Text(
-                          method.shortName,
-                          style: AppTextStyles.cardTitle,
-                        ),
-                        subtitle: Text(
-                          '${method.deliveryTime} · '
-                          '${method.cost == 0 ? 'Free' : '${method.cost.toStringAsFixed(0)} EGP'}',
-                          style: AppTextStyles.caption,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: AppSpacing.sm,
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                method.id == _selectedMethodId
+                                    ? Icons.radio_button_checked
+                                    : Icons.radio_button_off,
+                                size: 18,
+                                color: method.id == _selectedMethodId
+                                    ? AppColors.primaryColor
+                                    : AppColors.mutedTextColor,
+                              ),
+                              const SizedBox(width: AppSpacing.md),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      method.shortName,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: AppTextStyles.cardTitle,
+                                    ),
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      '${method.description} · '
+                                      '${method.deliveryTime}',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: AppTextStyles.caption,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(width: AppSpacing.md),
+                              Text(
+                                method.cost == 0
+                                    ? 'Free'
+                                    : '${method.cost.toStringAsFixed(0)} EGP',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTextStyles.caption,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                   ],
@@ -244,9 +276,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         children: [
                           const Text('Total', style: AppTextStyles.subtitle),
                           const Spacer(),
-                          Text(
-                            '${_total.toStringAsFixed(0)} EGP',
-                            style: AppTextStyles.priceTotal,
+                          Expanded(
+                            child: Text(
+                              '${_total.toStringAsFixed(0)} EGP',
+                              style: AppTextStyles.priceTotal,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.right,
+                            ),
                           ),
                         ],
                       ),
@@ -296,7 +333,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       children: [
         Text(label, style: AppTextStyles.bodyMuted),
         const Spacer(),
-        Text(value, style: AppTextStyles.summaryValue),
+        Expanded(
+          child: Text(
+            value,
+            style: AppTextStyles.summaryValue,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.right,
+          ),
+        ),
       ],
     );
   }
