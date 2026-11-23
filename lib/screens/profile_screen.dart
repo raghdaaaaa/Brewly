@@ -4,10 +4,8 @@ import '../core/routes/app_routes.dart';
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_spacing.dart';
 import '../core/theme/app_text_styles.dart';
-import '../models/address.dart';
 import '../services/dummy/dummy_data.dart';
 import '../widgets/app_header.dart';
-import '../widgets/profile/address_bottom_sheet.dart';
 import '../widgets/profile/profile_header_card.dart';
 import '../widgets/profile/profile_logout_card.dart';
 import '../widgets/profile/profile_menu_card.dart';
@@ -20,29 +18,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  Address _userAddress = dummyAddress;
-
-  void _openAddressSheet() {
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (sheetContext) {
-        return AddressBottomSheet(
-          initialAddress: _userAddress,
-          onSaved: (updated) {
-            setState(() {
-              _userAddress = updated;
-            });
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Address saved!')),
-            );
-          },
-        );
-      },
-    );
-  }
-
   void _logOut() {
     showDialog<void>(
       context: context,
@@ -87,7 +62,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const AppHeaderTop(),
             const SizedBox(height: AppSpacing.md),
             ProfileHeaderCard(
-              name: '${_userAddress.firstName} ${_userAddress.lastName}',
+              name: '${dummyAddress.firstName} ${dummyAddress.lastName}',
               email: dummyUserEmail,
             ),
             const SizedBox(height: AppSpacing.lg),
@@ -95,7 +70,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               onOrdersTap: () {
                 Navigator.pushNamed(context, AppRoutes.homeRoute, arguments: 3);
               },
-              onAddressTap: _openAddressSheet,
+              onAddressTap: () {
+                Navigator.pushNamed(
+                  context,
+                  AppRoutes.addressRoute,
+                  arguments: dummyAddress,
+                );
+              },
               onSettingsTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Coming soon')),

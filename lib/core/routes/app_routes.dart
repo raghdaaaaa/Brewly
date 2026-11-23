@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../../models/address.dart';
+import '../../models/order.dart';
+import '../../screens/address_screen.dart';
 import '../../screens/checkout_screen.dart';
 import '../../screens/explore_screen.dart';
 import '../../screens/login_screen.dart';
 import '../../screens/main_screen.dart';
+import '../../screens/order_details_screen.dart';
 import '../../screens/order_success_screen.dart';
 import '../../screens/product_details_screen.dart';
 import '../../screens/products_list_screen.dart';
@@ -24,7 +28,9 @@ class AppRoutes {
   static const String productsListRoute = '/products';
   static const String detailsRoute = '/details';
   static const String checkoutRoute = '/checkout';
+  static const String orderDetailsRoute = '/order_details';
   static const String orderSuccessRoute = '/order_success';
+  static const String addressRoute = '/address';
 
   static final Map<String, WidgetBuilder> routes = {
     splashRoute: (context) => const SplashScreen(),
@@ -40,9 +46,17 @@ class AppRoutes {
     productsListRoute: (context) => const ProductsListScreen(),
     detailsRoute: (context) => const ProductDetailsScreen(),
     checkoutRoute: (context) => const CheckoutScreen(),
+    orderDetailsRoute: (context) {
+      final arguments = ModalRoute.of(context)?.settings.arguments;
+      return OrderDetailsScreen(order: arguments as Order?);
+    },
     orderSuccessRoute: (context) {
       final arguments = ModalRoute.of(context)?.settings.arguments;
       return OrderSuccessScreen(orderId: arguments as String?);
+    },
+    addressRoute: (context) {
+      final arguments = ModalRoute.of(context)?.settings.arguments;
+      return AddressScreen(initialAddress: arguments as Address?);
     },
   };
 }

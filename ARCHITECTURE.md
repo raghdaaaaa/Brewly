@@ -32,8 +32,8 @@ Splash → Welcome → Login / Register → Home shell (bottom nav)
                                         ├─ Home → Product Details (route argument: Product)
                                         ├─ Explore → Products List
                                         ├─ Cart → Checkout → Order Success (route argument: order id)
-                                        ├─ Orders → bottom sheet with the order
-                                        └─ Profile → address form
+                                        ├─ Orders → Order Details (route argument: Order)
+                                        └─ Profile → My Address (route argument: Address)
 ```
 
 - Home owns the selected category, the search text, the favorite ids and
@@ -44,6 +44,8 @@ Splash → Welcome → Login / Register → Home shell (bottom nav)
   (`ModalRoute.of(context)!.settings.arguments`), never through a global variable.
 - Cart and Checkout read the shared dummy basket and delivery methods. Every total is
   computed from the item line totals; nothing is hardcoded per screen.
+- Orders passes the `Order` to Order Details; Order Details shows items, address,
+  delivery method and totals.
 - Profile and Checkout share the same address form widgets and dummy address.
 - Explore and Products List both pump the shared `ProductGrid`/`ProductCard` and pass
   the tapped `Product` to Product Details as a route argument.

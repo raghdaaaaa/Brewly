@@ -49,10 +49,10 @@ must fix.
 - [x] **Checkout** (Group 3; delivery cards replaced with overflow-proof rows,
       `_placeOrder` navigates to Order Success).
 - [x] **Order Success** (Group 3; pushed from checkout with the new order id).
-- [ ] **Orders** – order cards and status pills are first-pass; bottom sheet needs the
-      frame values.
-- [ ] **Profile** – header card and menu rows do not match the Figma layout (avatar
-      corner, menu rows, section list).
+- [x] **Orders** (Group 4; order cards tap to Order Details).
+- [x] **Order Details** (Group 4; new screen, items + address + summary).
+- [x] **Profile** (Group 4; "My Address" row navigates to the new Address screen).
+- [x] **My Address** (Group 4; new screen with a validated address form).
 - [ ] **Images** – dummy products still use picsum URLs. Export real product images to
       `assets/images` and reference them through `AppAssets`.
 
@@ -67,3 +67,4 @@ must fix.
 - [x] Group 1: bugs + core refactor (Group 1 commit).
 - [x] Group 2: Home, Explore, Products List.
 - [x] Group 3: Product Details, Cart, Checkout, Order Success.
+- [x] Group 4: My Orders, Order Details, Profile, My Address.

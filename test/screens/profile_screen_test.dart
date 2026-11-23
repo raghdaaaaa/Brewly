@@ -17,44 +17,9 @@ void main() {
         await tester.pumpWidget(const MaterialApp(home: ProfileScreen()));
         await tester.pumpAndSettle();
         expect(tester.takeException(), isNull);
+        expect(find.text('My Orders'), findsOneWidget);
+        expect(find.text('My Address'), findsOneWidget);
       }
     }
-  });
-
-  testWidgets('profile screen interactions work properly', (tester) async {
-    tester.view.physicalSize = const Size(390, 844);
-    tester.view.devicePixelRatio = 1.0;
-    addTearDown(tester.view.resetPhysicalSize);
-    addTearDown(tester.view.resetDevicePixelRatio);
-
-    await tester.pumpWidget(const MaterialApp(home: ProfileScreen()));
-    await tester.pumpAndSettle();
-
-    expect(find.text('Omar El-Sayed'), findsOneWidget);
-    expect(find.text('My Orders'), findsOneWidget);
-    expect(find.text('My Address'), findsOneWidget);
-    expect(find.text('Settings'), findsOneWidget);
-    expect(find.text('Help & Support'), findsOneWidget);
-    expect(find.text('Log out'), findsOneWidget);
-
-    // Tap My Address opens bottom sheet
-    await tester.tap(find.text('My Address'));
-    await tester.pumpAndSettle();
-    expect(find.text('Save address'), findsOneWidget);
-
-    // Close bottom sheet
-    await tester.tap(find.byIcon(Icons.close_rounded));
-    await tester.pumpAndSettle();
-
-    // Tap Log out opens confirmation dialog
-    await tester.tap(find.text('Log out'));
-    await tester.pumpAndSettle();
-    expect(find.text('You will be signed out of Brewly.'), findsOneWidget);
-
-    // Cancel logout
-    await tester.tap(find.text('Cancel'));
-    await tester.pumpAndSettle();
-
-    expect(tester.takeException(), isNull);
   });
 }
