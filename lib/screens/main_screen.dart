@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../core/theme/app_colors.dart';
+import '../services/dummy/dummy_data.dart';
+import '../widgets/common/app_bottom_nav.dart';
 import 'cart_screen.dart';
+import 'explore_screen.dart';
 import 'home_screen.dart';
 import 'orders_screen.dart';
 import 'profile_screen.dart';
@@ -9,7 +11,7 @@ import 'profile_screen.dart';
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key, this.initialIndex = 0});
 
-  // 0 = Home, 1 = Cart, 2 = Orders, 3 = Profile.
+  // 0 = Home, 1 = Explore, 2 = Cart, 3 = Orders, 4 = Profile.
   final int initialIndex;
 
   @override
@@ -17,7 +19,6 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  // Which tab is selected right now.
   late int _currentIndex = widget.initialIndex;
 
   void _selectTab(int index) {
@@ -29,81 +30,20 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // IndexedStack keeps the state of every tab alive.
       body: IndexedStack(
         index: _currentIndex,
         children: [
           const HomeScreen(),
-          // The empty cart can jump back to the Home tab.
+          const ExploreScreen(),
           CartScreen(onBrowseMenu: () => _selectTab(0)),
           const OrdersScreen(),
           const ProfileScreen(),
         ],
       ),
-
-      // Floating white pill navigation, like the design.
-      bottomNavigationBar: SafeArea(
-        top: false,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppColors.cardColor,
-              borderRadius: BorderRadius.circular(32),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.textColor.withValues(alpha: 0.08),
-                  blurRadius: 24,
-                  offset: const Offset(0, 8),
-                ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(32),
-              child: BottomNavigationBar(
-                currentIndex: _currentIndex,
-                type: BottomNavigationBarType.fixed,
-                backgroundColor: AppColors.cardColor,
-                elevation: 0,
-                selectedItemColor: AppColors.primaryColor,
-                unselectedItemColor: AppColors.mutedTextColor,
-                selectedFontSize: 11,
-                unselectedFontSize: 11,
-                selectedLabelStyle: const TextStyle(
-                  fontWeight: FontWeight.w700,
-                ),
-                unselectedLabelStyle: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                ),
-                onTap: (index) {
-                  _selectTab(index);
-                },
-                items: const [
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.home_outlined),
-                    activeIcon: Icon(Icons.home),
-                    label: 'Home',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.shopping_cart_outlined),
-                    activeIcon: Icon(Icons.shopping_cart),
-                    label: 'Cart',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.receipt_long_outlined),
-                    activeIcon: Icon(Icons.receipt_long),
-                    label: 'Orders',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.person_outline),
-                    activeIcon: Icon(Icons.person),
-                    label: 'Profile',
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
+      bottomNavigationBar: AppBottomNav(
+        currentIndex: _currentIndex,
+        onTap: _selectTab,
+        cartCount: dummyBasketItems.length,
       ),
     );
   }

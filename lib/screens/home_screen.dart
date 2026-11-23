@@ -6,10 +6,11 @@ import '../core/theme/app_spacing.dart';
 import '../core/theme/app_text_styles.dart';
 import '../models/product.dart';
 import '../services/dummy/dummy_data.dart';
+import '../widgets/app_header.dart';
+import '../widgets/common/product_grid.dart';
 import '../widgets/category_chip.dart';
 import '../widgets/error_retry.dart';
 import '../widgets/loading_indicator.dart';
-import '../widgets/product_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -98,10 +99,12 @@ class _HomeScreenState extends State<HomeScreen> {
             AppSpacing.xl,
           ),
           children: [
+            const AppHeaderTop(),
+            const SizedBox(height: AppSpacing.md),
             _buildGreeting(),
-            const SizedBox(height: 20),
+            const SizedBox(height: AppSpacing.xl),
             _buildSearchField(),
-            const SizedBox(height: 20),
+            const SizedBox(height: AppSpacing.xl),
             _buildCategories(),
             const SizedBox(height: AppSpacing.xl),
             const Text(
@@ -110,6 +113,15 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: AppSpacing.md),
             _buildProductGrid(),
+            const SizedBox(height: AppSpacing.lg),
+            Align(
+              child: TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, AppRoutes.productsListRoute);
+                },
+                child: const Text('See all products', style: AppTextStyles.link),
+              ),
+            ),
           ],
         ),
       ),
@@ -125,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Good evening, Omar 👋',
+                'Good evening, Omar ðŸ‘‹',
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: AppTextStyles.pageTitle,
@@ -237,67 +249,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
         // 3. Data.
         final visibleProducts = _filterProducts(snapshot.data ?? []);
-
-        if (visibleProducts.isEmpty) {
-          return _buildEmptyState();
-        }
-
-        return GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: visibleProducts.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: AppSpacing.md,
-            crossAxisSpacing: AppSpacing.md,
-            childAspectRatio: 0.70,
-          ),
-          itemBuilder: (context, index) {
-            final product = visibleProducts[index];
-            return ProductCard(
-              product: product,
-              isFavorite: _favoriteIds.contains(product.id),
-              onFavoriteTap: () => _toggleFavorite(product.id),
-              onTap: () {
-                // Pass the product to the Details screen as an argument.
-                Navigator.pushNamed(
-                  context,
-                  AppRoutes.detailsRoute,
-                  arguments: product,
-                );
-              },
+        return ProductGrid(
+          products: visibleProducts,
+          favorites: _favoriteIds,
+          onFavoriteTap: _toggleFavorite,
+          onTap: (product) {
+            Navigator.pushNamed(
+              context,
+              AppRoutes.detailsRoute,
+              arguments: product,
             );
           },
         );
       },
-    );
-  }
-
-  Widget _buildEmptyState() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 40),
-      child: Column(
-        children: [
-          const Icon(
-            Icons.search_off,
-            size: 40,
-            color: AppColors.mutedTextColor,
-          ),
-          const SizedBox(height: AppSpacing.md),
-          const Text('No products found', style: AppTextStyles.cardTitle),
-          const SizedBox(height: AppSpacing.sm),
-          TextButton(
-            onPressed: () {
-              setState(() {
-                _selectedCategory = 'All';
-                _searchText = '';
-                _searchController.clear();
-              });
-            },
-            child: const Text('Clear filters', style: AppTextStyles.link),
-          ),
-        ],
-      ),
     );
   }
 }
