@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
-import '../dummy_data.dart';
+import '../core/routes/app_routes.dart';
+import '../core/theme/app_colors.dart';
+import '../core/theme/app_spacing.dart';
+import '../core/theme/app_text_styles.dart';
 import '../models/product.dart';
+import '../services/dummy/dummy_data.dart';
 import '../widgets/category_chip.dart';
 import '../widgets/error_retry.dart';
 import '../widgets/loading_indicator.dart';
@@ -41,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Fake "network" call, so the loading spinner is visible.
-  // It will be replaced by ApiService.getProducts() later.
+  // It will be replaced by the product service later.
   Future<List<Product>> _loadProducts() async {
     await Future.delayed(const Duration(milliseconds: 700));
     return dummyProducts;
@@ -88,23 +91,24 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.lg,
+            AppSpacing.lg,
+            AppSpacing.lg,
+            AppSpacing.xl,
+          ),
           children: [
             _buildGreeting(),
             const SizedBox(height: 20),
             _buildSearchField(),
             const SizedBox(height: 20),
             _buildCategories(),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSpacing.xl),
             const Text(
               'Popular Right Now',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: textColor,
-              ),
+              style: AppTextStyles.heading,
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacing.md),
             _buildProductGrid(),
           ],
         ),
@@ -124,40 +128,26 @@ class _HomeScreenState extends State<HomeScreen> {
                 'Good evening, Omar 👋',
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w700,
-                  color: textColor,
-                ),
+                style: AppTextStyles.pageTitle,
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: AppSpacing.xs),
               Text(
                 'What would you like today?',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: mutedTextColor.withValues(alpha: 0.9),
-                ),
+                style: AppTextStyles.bodySubtle,
               ),
             ],
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: AppSpacing.md),
         Container(
           width: 44,
           height: 44,
           decoration: const BoxDecoration(
-            color: primaryColor,
+            color: AppColors.primaryColor,
             shape: BoxShape.circle,
           ),
           child: const Center(
-            child: Text(
-              'OE',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                color: Colors.white,
-              ),
-            ),
+            child: Text('OE', style: AppTextStyles.avatarInitials),
           ),
         ),
       ],
@@ -172,19 +162,19 @@ class _HomeScreenState extends State<HomeScreen> {
         controller: _searchController,
         textInputAction: TextInputAction.search,
         onFieldSubmitted: (_) => _search(),
-        style: const TextStyle(fontSize: 14, color: textColor),
+        style: AppTextStyles.input,
         decoration: InputDecoration(
           hintText: 'Search coffee, pastry...',
           prefixIcon: const Icon(
             Icons.search,
             size: 20,
-            color: mutedTextColor,
+            color: AppColors.mutedTextColor,
           ),
           suffixIcon: IconButton(
             icon: const Icon(
               Icons.arrow_forward,
               size: 18,
-              color: primaryColor,
+              color: AppColors.primaryColor,
             ),
             onPressed: _search,
           ),
@@ -206,7 +196,8 @@ class _HomeScreenState extends State<HomeScreen> {
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: dummyCategories.length,
-        separatorBuilder: (context, index) => const SizedBox(width: 8),
+        separatorBuilder: (context, index) =>
+            const SizedBox(width: AppSpacing.sm),
         itemBuilder: (context, index) {
           final category = dummyCategories[index];
           return CategoryChip(
@@ -257,8 +248,8 @@ class _HomeScreenState extends State<HomeScreen> {
           itemCount: visibleProducts.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 12,
+            mainAxisSpacing: AppSpacing.md,
+            crossAxisSpacing: AppSpacing.md,
             childAspectRatio: 0.70,
           ),
           itemBuilder: (context, index) {
@@ -271,7 +262,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 // Pass the product to the Details screen as an argument.
                 Navigator.pushNamed(
                   context,
-                  detailsRoute,
+                  AppRoutes.detailsRoute,
                   arguments: product,
                 );
               },
@@ -290,18 +281,11 @@ class _HomeScreenState extends State<HomeScreen> {
           const Icon(
             Icons.search_off,
             size: 40,
-            color: mutedTextColor,
+            color: AppColors.mutedTextColor,
           ),
-          const SizedBox(height: 12),
-          const Text(
-            'No products found',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: textColor,
-            ),
-          ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.md),
+          const Text('No products found', style: AppTextStyles.cardTitle),
+          const SizedBox(height: AppSpacing.sm),
           TextButton(
             onPressed: () {
               setState(() {
@@ -310,14 +294,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 _searchController.clear();
               });
             },
-            child: const Text(
-              'Clear filters',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: primaryColor,
-              ),
-            ),
+            child: const Text('Clear filters', style: AppTextStyles.link),
           ),
         ],
       ),

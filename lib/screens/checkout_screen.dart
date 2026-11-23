@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../core/app_colors.dart';
-import '../core/app_routes.dart';
-import '../dummy_data.dart';
+import '../core/routes/app_routes.dart';
+import '../core/theme/app_colors.dart';
+import '../core/theme/app_spacing.dart';
+import '../core/theme/app_text_styles.dart';
 import '../models/delivery_method.dart';
+import '../services/dummy/dummy_data.dart';
 import '../widgets/app_text_field.dart';
 
 class CheckoutScreen extends StatefulWidget {
@@ -75,7 +77,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     // Back to Main, with the Orders tab open.
     Navigator.pushNamedAndRemoveUntil(
       context,
-      homeRoute,
+      AppRoutes.homeRoute,
       (route) => false,
       arguments: 2,
     );
@@ -86,7 +88,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('Checkout')),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.lg,
+          AppSpacing.sm,
+          AppSpacing.lg,
+          AppSpacing.xl,
+        ),
         child: Form(
           key: _formKey,
           child: Column(
@@ -95,16 +102,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               // 1. Address.
               const Text(
                 'Delivery address',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: textColor,
-                ),
+                style: AppTextStyles.sectionTitle,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: AppSpacing.sm),
               Card(
                 child: Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(AppSpacing.lg),
                   child: Column(
                     children: [
                       Row(
@@ -119,7 +122,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               validator: _required('your first name'),
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: AppSpacing.md),
                           Expanded(
                             child: AppTextField(
                               label: 'Last name',
@@ -131,7 +134,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: AppSpacing.lg),
                       AppTextField(
                         label: 'Street and building',
                         hint: '14 Gezira St, Apt 4B',
@@ -139,7 +142,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         textInputAction: TextInputAction.next,
                         validator: _required('your street'),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: AppSpacing.lg),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -152,7 +155,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               validator: _required('your city'),
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: AppSpacing.md),
                           Expanded(
                             child: AppTextField(
                               label: 'Country',
@@ -168,18 +171,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppSpacing.xl),
 
               // 2. Delivery method.
               const Text(
                 'Delivery method',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: textColor,
-                ),
+                style: AppTextStyles.sectionTitle,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: AppSpacing.sm),
               Card(
                 child: Column(
                   children: [
@@ -197,51 +196,40 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             _selectedMethodId = value;
                           });
                         },
-                        activeColor: primaryColor,
+                        activeColor: AppColors.primaryColor,
                         contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 8),
+                            const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
                         title: Text(
                           method.shortName,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: textColor,
-                          ),
+                          style: AppTextStyles.cardTitle,
                         ),
                         subtitle: Text(
                           '${method.deliveryTime} · '
                           '${method.cost == 0 ? 'Free' : '${method.cost.toStringAsFixed(0)} EGP'}',
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: mutedTextColor,
-                          ),
+                          style: AppTextStyles.caption,
                         ),
                       ),
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppSpacing.xl),
 
               // 3. Order summary.
               const Text(
                 'Order summary',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: textColor,
-                ),
+                style: AppTextStyles.sectionTitle,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: AppSpacing.sm),
               Card(
                 child: Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(AppSpacing.lg),
                   child: Column(
                     children: [
                       _buildSummaryRow(
                         'Subtotal',
                         '${_subtotal.toStringAsFixed(0)} EGP',
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: AppSpacing.sm),
                       _buildSummaryRow(
                         'Delivery',
                         _selectedMethod.cost == 0
@@ -249,27 +237,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             : '${_selectedMethod.cost.toStringAsFixed(0)} EGP',
                       ),
                       const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 12),
+                        padding: EdgeInsets.symmetric(vertical: AppSpacing.md),
                         child: Divider(height: 1),
                       ),
                       Row(
                         children: [
-                          const Text(
-                            'Total',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: textColor,
-                            ),
-                          ),
+                          const Text('Total', style: AppTextStyles.subtitle),
                           const Spacer(),
                           Text(
                             '${_total.toStringAsFixed(0)} EGP',
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                              color: textColor,
-                            ),
+                            style: AppTextStyles.priceTotal,
                           ),
                         ],
                       ),
@@ -277,7 +254,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppSpacing.xl),
 
               // 4. Main button.
               ElevatedButton(
@@ -286,7 +263,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.lock_outline, size: 18),
-                    SizedBox(width: 8),
+                    SizedBox(width: AppSpacing.sm),
                     Flexible(
                       child: Text(
                         'Place order',
@@ -317,19 +294,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Widget _buildSummaryRow(String label, String value) {
     return Row(
       children: [
-        Text(
-          label,
-          style: const TextStyle(fontSize: 14, color: mutedTextColor),
-        ),
+        Text(label, style: AppTextStyles.bodyMuted),
         const Spacer(),
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: textColor,
-          ),
-        ),
+        Text(value, style: AppTextStyles.summaryValue),
       ],
     );
   }

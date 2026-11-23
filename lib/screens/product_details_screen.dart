@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../core/app_colors.dart';
+import '../core/theme/app_colors.dart';
+import '../core/theme/app_spacing.dart';
+import '../core/theme/app_text_styles.dart';
 import '../models/product.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -15,7 +17,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   int _quantity = 1;
 
   void _addToCart(Product product) {
-    // Dummy add for now. The POST /api/Basket call comes later.
+    // Dummy add for now. The basket service call comes later.
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('$_quantity × ${product.name} added to cart'),
@@ -35,7 +37,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         body: const Center(
           child: Text(
             'Product not found',
-            style: TextStyle(fontSize: 16, color: mutedTextColor),
+            style: AppTextStyles.bodyLargeMuted,
           ),
         ),
       );
@@ -44,13 +46,18 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('Product Detail')),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.lg,
+          AppSpacing.sm,
+          AppSpacing.lg,
+          AppSpacing.xl,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Hero image (same tag as the Home card).
             ClipRRect(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(AppRadius.lg),
               child: AspectRatio(
                 aspectRatio: 358 / 269,
                 child: Hero(
@@ -60,11 +67,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
-                        color: softSurfaceColor,
+                        color: AppColors.softSurfaceColor,
                         child: const Icon(
                           Icons.local_cafe,
                           size: 48,
-                          color: mutedTextColor,
+                          color: AppColors.mutedTextColor,
                         ),
                       );
                     },
@@ -72,7 +79,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       if (progress == null) {
                         return child;
                       }
-                      return Container(color: softSurfaceColor);
+                      return Container(color: AppColors.softSurfaceColor);
                     },
                   ),
                 ),
@@ -83,14 +90,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             // Brand.
             Text(
               product.brandName.toUpperCase(),
-              style: const TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-                color: mutedTextColor,
-                letterSpacing: 0.8,
-              ),
+              style: AppTextStyles.brandCaps,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacing.sm),
 
             // Name + price.
             Row(
@@ -99,80 +101,63 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 Expanded(
                   child: Text(
                     product.name,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      color: textColor,
-                    ),
+                    style: AppTextStyles.pageTitle,
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: AppSpacing.md),
                 Text(
                   '${product.price.toStringAsFixed(0)} EGP',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                    color: primaryColor,
-                  ),
+                  style: AppTextStyles.priceLarge,
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacing.md),
 
             // Category pill.
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
-              decoration: BoxDecoration(
-                color: softSurfaceColor,
-                borderRadius: BorderRadius.circular(999),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 14,
+                vertical: 7,
+              ),
+              decoration: const BoxDecoration(
+                color: AppColors.softSurfaceColor,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(AppRadius.pill),
+                ),
               ),
               child: Text(
                 product.categoryName,
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: mutedTextColor,
-                ),
+                style: AppTextStyles.tag,
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSpacing.xl),
 
             // Description.
             const Text(
               'About this item',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: textColor,
-              ),
+              style: AppTextStyles.subtitle,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacing.sm),
             Text(
               product.description,
-              style: const TextStyle(
-                fontSize: 14,
-                height: 1.6,
-                color: mutedTextColor,
-              ),
+              style: AppTextStyles.description,
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSpacing.xl),
 
             // Quantity counter.
             Row(
               children: [
                 const Text(
                   'Quantity',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: textColor,
-                  ),
+                  style: AppTextStyles.subtitle,
                 ),
                 const Spacer(),
                 Container(
-                  decoration: BoxDecoration(
-                    color: softSurfaceDeepColor,
-                    borderRadius: BorderRadius.circular(14),
+                  decoration: const BoxDecoration(
+                    color: AppColors.softSurfaceDeepColor,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(14),
+                    ),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -186,8 +171,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               }
                             : null,
                         icon: const Icon(Icons.remove, size: 18),
-                        color: textColor,
-                        disabledColor: borderColor,
+                        color: AppColors.textColor,
+                        disabledColor: AppColors.borderColor,
                       ),
                       // Animated number.
                       SizedBox(
@@ -204,11 +189,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             '$_quantity',
                             key: ValueKey(_quantity),
                             textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: textColor,
-                            ),
+                            style: AppTextStyles.title,
                           ),
                         ),
                       ),
@@ -221,8 +202,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               }
                             : null,
                         icon: const Icon(Icons.add, size: 18),
-                        color: textColor,
-                        disabledColor: borderColor,
+                        color: AppColors.textColor,
+                        disabledColor: AppColors.borderColor,
                       ),
                     ],
                   ),
@@ -237,12 +218,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       bottomNavigationBar: SafeArea(
         top: false,
         child: Container(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.lg,
+            AppSpacing.md,
+            AppSpacing.lg,
+            AppSpacing.md,
+          ),
           decoration: BoxDecoration(
-            color: backgroundColor,
+            color: AppColors.backgroundColor,
             boxShadow: [
               BoxShadow(
-                color: textColor.withValues(alpha: 0.06),
+                color: AppColors.textColor.withValues(alpha: 0.06),
                 blurRadius: 20,
                 offset: const Offset(0, -4),
               ),
@@ -254,22 +240,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
-                    'Total',
-                    style: TextStyle(fontSize: 12, color: mutedTextColor),
-                  ),
+                  const Text('Total', style: AppTextStyles.caption),
                   const SizedBox(height: 2),
                   Text(
                     '${(product.price * _quantity).toStringAsFixed(0)} EGP',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      color: textColor,
-                    ),
+                    style: AppTextStyles.priceTotal,
                   ),
                 ],
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: AppSpacing.lg),
               Expanded(
                 child: ElevatedButton(
                   onPressed: () => _addToCart(product),
@@ -277,7 +256,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.shopping_bag_outlined, size: 18),
-                      SizedBox(width: 8),
+                      SizedBox(width: AppSpacing.sm),
                       // Flexible + ellipsis so the label never overflows.
                       Flexible(
                         child: Text(

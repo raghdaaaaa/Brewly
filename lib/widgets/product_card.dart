@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../core/app_colors.dart';
+import '../core/theme/app_colors.dart';
+import '../core/theme/app_spacing.dart';
+import '../core/theme/app_text_styles.dart';
 import '../models/product.dart';
 
 /// One product inside the Home grid.
@@ -42,11 +44,11 @@ class ProductCard extends StatelessWidget {
                         // Gray box with an icon if the image cannot load.
                         errorBuilder: (context, error, stackTrace) {
                           return Container(
-                            color: softSurfaceColor,
+                            color: AppColors.softSurfaceColor,
                             child: const Icon(
                               Icons.local_cafe,
                               size: 32,
-                              color: mutedTextColor,
+                              color: AppColors.mutedTextColor,
                             ),
                           );
                         },
@@ -54,21 +56,21 @@ class ProductCard extends StatelessWidget {
                           if (progress == null) {
                             return child;
                           }
-                          return Container(color: softSurfaceColor);
+                          return Container(color: AppColors.softSurfaceColor);
                         },
                       ),
                     ),
                   ),
                   Positioned(
-                    top: 8,
-                    right: 8,
+                    top: AppSpacing.sm,
+                    right: AppSpacing.sm,
                     child: GestureDetector(
                       onTap: onFavoriteTap,
                       child: Container(
-                        width: 32,
-                        height: 32,
+                        width: AppSpacing.xxl,
+                        height: AppSpacing.xxl,
                         decoration: const BoxDecoration(
-                          color: cardColor,
+                          color: AppColors.cardColor,
                           shape: BoxShape.circle,
                         ),
                         child: AnimatedSwitcher(
@@ -86,7 +88,9 @@ class ProductCard extends StatelessWidget {
                             // The key makes AnimatedSwitcher animate the change.
                             key: ValueKey(isFavorite),
                             size: 18,
-                            color: isFavorite ? errorColor : mutedTextColor,
+                            color: isFavorite
+                                ? AppColors.errorColor
+                                : AppColors.mutedTextColor,
                           ),
                         ),
                       ),
@@ -106,20 +110,12 @@ class ProductCard extends StatelessWidget {
                     product.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: textColor,
-                    ),
+                    style: AppTextStyles.cardTitle,
                   ),
                   const SizedBox(height: 6),
                   Text(
                     '${product.price.toStringAsFixed(0)} EGP',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: textColor,
-                    ),
+                    style: AppTextStyles.priceMedium,
                   ),
                 ],
               ),

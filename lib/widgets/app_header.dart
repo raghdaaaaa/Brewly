@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../constants.dart';
+import '../core/constants/app_assets.dart';
+import '../core/theme/app_colors.dart';
+import '../core/theme/app_spacing.dart';
+import '../core/theme/app_text_styles.dart';
 
+/// Round back button with an optional title.
 class AppHeaderBack extends StatelessWidget {
   const AppHeaderBack({super.key, this.title});
 
@@ -14,29 +18,31 @@ class AppHeaderBack extends StatelessWidget {
       children: [
         InkWell(
           onTap: () => Navigator.of(context).pop(),
-          borderRadius: BorderRadius.circular(999),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(AppRadius.pill),
+          ),
           child: Container(
             width: 40,
             height: 40,
-            decoration: BoxDecoration(
-              color: softSurfaceDeepColor,
+            decoration: const BoxDecoration(
+              color: AppColors.softSurfaceDeepColor,
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: shadowBlack10,
+                  color: AppColors.shadowBlack10,
                   blurRadius: 6,
-                  offset: const Offset(0, 4),
+                  offset: Offset(0, 4),
                 ),
                 BoxShadow(
-                  color: shadowBlack10,
+                  color: AppColors.shadowBlack10,
                   blurRadius: 4,
-                  offset: const Offset(-2, 2),
+                  offset: Offset(-2, 2),
                 ),
               ],
             ),
             child: Center(
               child: SvgPicture.asset(
-                'assets/icons/back_arrow.svg',
+                AppAssets.backArrow,
                 width: 9.8125,
                 height: 16.6667,
               ),
@@ -47,11 +53,7 @@ class AppHeaderBack extends StatelessWidget {
           Expanded(
             child: Text(
               title!,
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
-                color: textColor,
-              ),
+              style: AppTextStyles.pageTitle,
             ),
           ),
       ],

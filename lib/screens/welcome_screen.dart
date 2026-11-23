@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../core/app_assets.dart';
-import '../core/app_colors.dart';
-import '../core/app_routes.dart';
-import '../core/app_theme.dart';
+import '../core/constants/app_assets.dart';
+import '../core/routes/app_routes.dart';
+import '../core/theme/app_colors.dart';
+import '../core/theme/app_spacing.dart';
+import '../core/theme/app_text_styles.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -12,7 +13,7 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: AppColors.backgroundColor,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -23,12 +24,12 @@ class WelcomeScreen extends StatelessWidget {
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: EdgeInsets.only(bottom: 8),
+                padding: const EdgeInsets.only(bottom: AppSpacing.sm),
                 child: Container(
                   width: 128,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: subtleBottomPillColor,
+                  height: AppSpacing.xs,
+                  decoration: const BoxDecoration(
+                    color: AppColors.subtleBottomPillColor,
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -49,21 +50,21 @@ class WelcomeScreen extends StatelessWidget {
             Container(
               width: 56,
               height: 56,
-              decoration: BoxDecoration(
-                color: primaryColor,
+              decoration: const BoxDecoration(
+                color: AppColors.primaryColor,
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: Color.fromRGBO(0, 81, 58, 0.2),
+                    color: AppColors.primaryShadow20,
                     blurRadius: 6,
                     spreadRadius: -1,
-                    offset: const Offset(0, 2),
+                    offset: Offset(0, 2),
                   ),
                   BoxShadow(
-                    color: Color.fromRGBO(0, 81, 58, 0.2),
+                    color: AppColors.primaryShadow20,
                     blurRadius: 4,
                     spreadRadius: -2,
-                    offset: const Offset(0, 2),
+                    offset: Offset(0, 2),
                   ),
                 ],
               ),
@@ -72,7 +73,7 @@ class WelcomeScreen extends StatelessWidget {
               child: SizedBox(
                 width: 18,
                 height: 18,
-                child: SvgPicture.asset('assets/icons/welcome_steam.svg'),
+                child: SvgPicture.asset(AppAssets.welcomeSteamIcon),
               ),
             ),
             Positioned(
@@ -81,19 +82,19 @@ class WelcomeScreen extends StatelessWidget {
               child: Row(
                 children: [
                   Container(
-                    width: 8,
-                    height: 8,
+                    width: AppSpacing.sm,
+                    height: AppSpacing.sm,
                     decoration: const BoxDecoration(
-                      color: accentColor,
+                      color: AppColors.accentColor,
                       shape: BoxShape.circle,
                     ),
                   ),
-                  SizedBox(width: 4),
+                  const SizedBox(width: AppSpacing.xs),
                   Container(
-                    width: 8,
-                    height: 8,
+                    width: AppSpacing.sm,
+                    height: AppSpacing.sm,
                     decoration: const BoxDecoration(
-                      color: accentColor,
+                      color: AppColors.accentColor,
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -102,27 +103,17 @@ class WelcomeScreen extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: 12),
+        const SizedBox(height: AppSpacing.md),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              'Brewly',
-              style: TextStyle(
-                fontFamily: 'PlusJakartaSans',
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
-                height: 32 / 24,
-                letterSpacing: -0.6,
-                color: textColor,
-              ),
-            ),
-            SizedBox(width: 6),
+            const Text('Brewly', style: AppTextStyles.displayTitle),
+            const SizedBox(width: 6),
             Container(
               width: 6,
               height: 6,
               decoration: const BoxDecoration(
-                color: accentColor,
+                color: AppColors.accentColor,
                 shape: BoxShape.circle,
               ),
             ),
@@ -134,18 +125,18 @@ class WelcomeScreen extends StatelessWidget {
 
   Widget _heroCard() {
     return Container(
-      margin: const EdgeInsets.only(top: 8),
+      margin: const EdgeInsets.only(top: AppSpacing.sm),
       child: Container(
         padding: const EdgeInsets.only(bottom: 20),
-        decoration: BoxDecoration(
-          color: cardColor,
-          borderRadius: BorderRadius.circular(24),
+        decoration: const BoxDecoration(
+          color: AppColors.cardColor,
+          borderRadius: BorderRadius.all(Radius.circular(AppRadius.xl)),
           boxShadow: [
             BoxShadow(
-              color: shadowBlack05,
+              color: AppColors.shadowBlack05,
               blurRadius: 2,
               spreadRadius: 0,
-              offset: const Offset(0, 1),
+              offset: Offset(0, 1),
             ),
           ],
         ),
@@ -162,20 +153,23 @@ class WelcomeScreen extends StatelessWidget {
                       widthFactor: 1.3123,
                       heightFactor: 1.0,
                       child: Image.asset(
-                        'assets/images/welcome_hero.jpg',
+                        AppAssets.welcomeHeroImage,
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
-                  ColoredBox(
-                    color: Colors.white,
+                  const ColoredBox(
+                    color: AppColors.cardColor,
                     child: DecoratedBox(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,
                           stops: [0.5, 1.0],
-                          colors: [Color(0xE6FFFFFF), Color(0x00FFFFFF)],
+                          colors: [
+                            AppColors.heroFadeStart,
+                            AppColors.heroFadeEnd,
+                          ],
                         ),
                       ),
                       child: SizedBox.expand(),
@@ -184,34 +178,20 @@ class WelcomeScreen extends StatelessWidget {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     'Artisanal Coffee & Pastries,',
-                    style: TextStyle(
-                      fontFamily: 'PlusJakartaSans',
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      height: 30 / 24,
-                      letterSpacing: -0.6,
-                      color: textColor,
-                    ),
+                    style: AppTextStyles.heroLine,
                   ),
                   SizedBox(height: 2),
                   Text(
                     'Delivered Fresh.',
-                    style: TextStyle(
-                      fontFamily: 'PlusJakartaSans',
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      height: 32 / 24,
-                      letterSpacing: -0.48,
-                      color: primaryColor,
-                    ),
+                    style: AppTextStyles.heroLineAccent,
                   ),
                 ],
               ),
@@ -225,41 +205,31 @@ class WelcomeScreen extends StatelessWidget {
   Widget _getStartedButton(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushReplacementNamed(context, loginRoute);
+        Navigator.pushReplacementNamed(context, AppRoutes.loginRoute);
       },
       child: Container(
-        height: 56,
+        height: AppSizes.buttonHeight,
         width: double.infinity,
-        decoration: BoxDecoration(
-          color: primaryColor,
-          borderRadius: BorderRadius.circular(9999),
+        decoration: const BoxDecoration(
+          color: AppColors.primaryColor,
+          borderRadius: BorderRadius.all(Radius.circular(AppRadius.pill)),
           boxShadow: [
             BoxShadow(
-              color: Color.fromRGBO(0, 81, 58, 0.25),
+              color: AppColors.primaryShadow25,
               blurRadius: 6,
               spreadRadius: -4,
-              offset: const Offset(0, 4),
+              offset: Offset(0, 4),
             ),
           ],
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Get Started',
-              style: TextStyle(
-                fontFamily: 'PlusJakartaSans',
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                height: 20 / 14,
-                letterSpacing: 0.14,
-                color: Colors.white,
-              ),
-            ),
-            SizedBox(width: 8),
+            const Text('Get Started', style: AppTextStyles.buttonLabel),
+            const SizedBox(width: AppSpacing.sm),
             SizedBox(
               width: 13.333,
-              child: SvgPicture.asset('assets/icons/welcome_cta_arrow.svg'),
+              child: SvgPicture.asset(AppAssets.welcomeCtaArrow),
             ),
           ],
         ),

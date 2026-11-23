@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
-import '../dummy_data.dart';
+import '../core/routes/app_routes.dart';
+import '../core/theme/app_colors.dart';
+import '../core/theme/app_spacing.dart';
+import '../core/theme/app_text_styles.dart';
+import '../services/dummy/dummy_data.dart';
 import '../widgets/app_text_field.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -63,15 +66,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             TextButton(
               onPressed: () {
                 Navigator.pop(dialogContext);
-                Navigator.pushReplacementNamed(context, loginRoute);
+                Navigator.pushReplacementNamed(
+                  context,
+                  AppRoutes.loginRoute,
+                );
               },
-              child: const Text(
-                'Log out',
-                style: TextStyle(
-                  color: errorColor,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
+              child: const Text('Log out', style: AppTextStyles.dangerAction),
             ),
           ],
         );
@@ -95,12 +95,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('Profile')),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.lg,
+          AppSpacing.lg,
+          AppSpacing.lg,
+          AppSpacing.xl,
+        ),
         children: [
           // Header: avatar with initials, name and email.
           Card(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(AppSpacing.lg),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -109,21 +114,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     width: 96,
                     height: 96,
                     decoration: const BoxDecoration(
-                      color: emeraldTintColor,
+                      color: AppColors.emeraldTintColor,
                       shape: BoxShape.circle,
                     ),
                     child: Center(
                       child: Text(
                         _getInitials(),
-                        style: const TextStyle(
-                          fontSize: 36,
-                          fontWeight: FontWeight.w700,
-                          color: onAccentColor,
-                        ),
+                        style: AppTextStyles.avatarInitialsLarge,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(width: AppSpacing.lg),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,19 +132,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         Text(
                           '${dummyAddress.firstName} ${dummyAddress.lastName}',
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w700,
-                            color: textColor,
-                          ),
+                          style: AppTextStyles.pageTitle,
                         ),
-                        const SizedBox(height: 4),
-                        Text(
+                        const SizedBox(height: AppSpacing.xs),
+                        const Text(
                           dummyUserEmail,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: mutedTextColor,
-                          ),
+                          style: AppTextStyles.bodyMuted,
                         ),
                       ],
                     ),
@@ -152,26 +146,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.lg),
 
           // Address form card.
           Card(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(AppSpacing.lg),
               child: Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'My Address',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: textColor,
-                      ),
+                      style: AppTextStyles.sectionTitle,
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: AppSpacing.md),
 
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -184,7 +174,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             validator: _required('first name'),
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(width: AppSpacing.md),
                         Expanded(
                           child: AppTextField(
                             label: 'Last name',
@@ -195,7 +185,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: AppSpacing.md),
 
                     AppTextField(
                       label: 'Street and building',
@@ -203,7 +193,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       textInputAction: TextInputAction.next,
                       validator: _required('street'),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: AppSpacing.md),
 
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -216,7 +206,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             validator: _required('city'),
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(width: AppSpacing.md),
                         Expanded(
                           child: AppTextField(
                             label: 'Country',
@@ -241,18 +231,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.lg),
 
           // Log out row.
           TextButton(
             onPressed: _logOut,
             child: const Text(
               'Log out',
-              style: TextStyle(
-                color: errorColor,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+              style: AppTextStyles.dangerLabel,
             ),
           ),
         ],

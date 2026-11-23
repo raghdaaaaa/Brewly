@@ -52,14 +52,16 @@ There is no Splash frame – the splash is logo only (fade + scale, 2 s).
 Shadows: very soft – `#000000` 5 % `y1 blur2` on cards, `#0E6B4F` 6 % `y4 blur20` on
 floating elements, `#1C1B18` 8 % `y12 blur32` on the bottom nav.
 
-> `constants.dart` was updated to these exact values so no screen hardcodes a color.
+> These values live in `lib/core/theme/app_colors.dart` (`AppColors`). No screen
+> declares a raw color.
 
 ---
 
 ## 3. Typography
 
-The design uses **Plus Jakarta Sans**. The project rule says *no custom fonts*, so we
-keep the default Roboto and copy only the **sizes / weights / line heights**.
+The design uses **Plus Jakarta Sans**, bundled in `assets/fonts` and declared in
+`pubspec.yaml` (no runtime download). The sizes / weights / line heights below are the
+`AppTextStyles` tokens in `lib/core/theme/app_text_styles.dart`.
 
 | Role | Size | Weight | Line height | Example |
 |---|---|---|---|---|
@@ -149,4 +151,29 @@ chevron, "My Address" opens the address form (4 fields + "Save address"),
   `Scaffold / AppBar / Column / Row / Stack / Container / Card / ListView / GridView`.
 - Secondary text, promo badges, status timelines, copyable IDs and checklists from
   the Figma file are skipped to keep every screen beginner-level and uncluttered.
-- All dummy data lives in `lib/dummy_data.dart` until the API step.
+- All dummy data lives in `lib/services/dummy/dummy_data.dart` until the API step.
+
+---
+
+## 7. Core tokens implemented in phase 1
+
+| File | Contents |
+|---|---|
+| `lib/core/theme/app_colors.dart` | `AppColors`: every color above, plus shadow and hero-fade tints |
+| `lib/core/theme/app_text_styles.dart` | `AppTextStyles`: display, headings, body, form, buttons, chips, avatar |
+| `lib/core/theme/app_spacing.dart` | `AppSpacing` (4/8/12/16/24/32), `AppRadius` (12/16/20/24/pill), `AppSizes` (input 52, button 56, nav bar 64) |
+| `lib/core/constants/app_assets.dart` | `AppAssets`: every icon and image path |
+| `lib/core/constants/app_config.dart` | `AppConfig.baseUrl` |
+| `lib/core/routes/app_routes.dart` | `AppRoutes`: route names + route table |
+
+Approved deviations already applied:
+
+1. Login has "Don't have an account? Create account" under the button (opens Register);
+   Register has "Already have an account? Login" under the button (opens Login).
+2. Login and Register are prefilled with `Cairo@12`, a password that satisfies the API
+   rule. Register still needs the helper text and the real RegExp validator (phase 2).
+3. The Welcome "Get Started" button is unchanged.
+
+Implementation fix (not a design change): the Register brand mark is now a pill sized by
+its content. It used to be a 40×40 circle that overflowed by up to 87 px at text scale
+1.3. It keeps the white surface, soft shadow, emerald mark and "BREWLY" label.

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../core/app_colors.dart';
+import '../core/theme/app_colors.dart';
 
 /// A simple centered loading spinner.
 /// Used by FutureBuilder while the data is loading.
@@ -13,7 +13,7 @@ class LoadingIndicator extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.all(32),
         child: CircularProgressIndicator(
-          color: primaryColor,
+          color: AppColors.primaryColor,
           strokeWidth: 3,
         ),
       ),

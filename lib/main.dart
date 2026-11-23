@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'core/app_routes.dart';
-import 'core/app_theme.dart';
+import 'core/routes/app_routes.dart';
+import 'core/theme/app_theme.dart';
 
 void main() {
   runApp(const BrewlyApp());

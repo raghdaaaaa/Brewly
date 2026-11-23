@@ -16,4 +16,12 @@ class AppColors {
   static const Color shadowBlack10 = Color(0x1A000000);
   static const Color shadowBlack05 = Color(0x0D000000);
   static const Color subtleBottomPillColor = Color(0x331C1B18);
+
+  // Emerald glows used behind the Welcome brand mark and CTA.
+  static const Color primaryShadow20 = Color(0x3300513A);
+  static const Color primaryShadow25 = Color(0x4000513A);
+
+  // White fade over the Welcome hero image.
+  static const Color heroFadeStart = Color(0xE6FFFFFF);
+  static const Color heroFadeEnd = Color(0x00FFFFFF);
 }

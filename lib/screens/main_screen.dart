@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../core/app_colors.dart';
+import '../core/theme/app_colors.dart';
 import 'cart_screen.dart';
 import 'home_screen.dart';
 import 'orders_screen.dart';
@@ -48,11 +48,11 @@ class _MainScreenState extends State<MainScreen> {
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
           child: Container(
             decoration: BoxDecoration(
-              color: cardColor,
+              color: AppColors.cardColor,
               borderRadius: BorderRadius.circular(32),
               boxShadow: [
                 BoxShadow(
-                  color: textColor.withValues(alpha: 0.08),
+                  color: AppColors.textColor.withValues(alpha: 0.08),
                   blurRadius: 24,
                   offset: const Offset(0, 8),
                 ),
@@ -63,10 +63,10 @@ class _MainScreenState extends State<MainScreen> {
               child: BottomNavigationBar(
                 currentIndex: _currentIndex,
                 type: BottomNavigationBarType.fixed,
-                backgroundColor: cardColor,
+                backgroundColor: AppColors.cardColor,
                 elevation: 0,
-                selectedItemColor: primaryColor,
-                unselectedItemColor: mutedTextColor,
+                selectedItemColor: AppColors.primaryColor,
+                unselectedItemColor: AppColors.mutedTextColor,
                 selectedFontSize: 11,
                 unselectedFontSize: 11,
                 selectedLabelStyle: const TextStyle(

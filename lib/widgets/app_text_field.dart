@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../core/app_colors.dart';
+import '../core/theme/app_text_styles.dart';
 
 /// A text field with a small label above it.
-/// Used by Login, Register, Checkout and Profile so every form looks the same.
+/// Used by Checkout and Profile so every form looks the same.
 class AppTextField extends StatelessWidget {
   const AppTextField({
     super.key,
@@ -32,14 +32,7 @@ class AppTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Small label above the field.
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            color: mutedTextColor,
-          ),
-        ),
+        Text(label, style: AppTextStyles.fieldLabel),
         const SizedBox(height: 6),
         TextFormField(
           controller: controller,
@@ -47,7 +40,7 @@ class AppTextField extends StatelessWidget {
           keyboardType: keyboardType,
           obscureText: obscureText,
           textInputAction: textInputAction,
-          style: const TextStyle(fontSize: 14, color: textColor),
+          style: AppTextStyles.input,
           decoration: InputDecoration(
             hintText: hint,
             suffixIcon: suffixIcon,

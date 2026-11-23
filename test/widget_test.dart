@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:brewly/core/app_routes.dart';
+import 'package:brewly/core/routes/app_routes.dart';
 import 'package:brewly/main.dart';
 import 'package:brewly/screens/main_screen.dart';
 import 'package:brewly/screens/product_details_screen.dart';

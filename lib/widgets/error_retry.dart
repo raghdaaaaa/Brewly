@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../core/app_colors.dart';
+import '../core/theme/app_colors.dart';
+import '../core/theme/app_text_styles.dart';
 
 /// Shows an error message with a Retry button.
 /// Used everywhere the data can fail to load.
@@ -25,13 +26,13 @@ class ErrorRetry extends StatelessWidget {
             const Icon(
               Icons.cloud_off,
               size: 40,
-              color: mutedTextColor,
+              color: AppColors.mutedTextColor,
             ),
             const SizedBox(height: 12),
             Text(
               message,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 14, color: mutedTextColor),
+              style: AppTextStyles.bodyMuted,
             ),
             const SizedBox(height: 16),
             SizedBox(

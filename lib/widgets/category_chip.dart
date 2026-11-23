@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../core/app_colors.dart';
+import '../core/theme/app_colors.dart';
+import '../core/theme/app_spacing.dart';
+import '../core/theme/app_text_styles.dart';
 
 /// One selectable category pill.
 /// The color change is animated with AnimatedContainer.
@@ -25,19 +27,23 @@ class CategoryChip extends StatelessWidget {
         curve: Curves.easeOut,
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? primaryColor : cardColor,
-          borderRadius: BorderRadius.circular(999),
+          color: isSelected
+              ? AppColors.primaryColor
+              : AppColors.cardColor,
+          borderRadius: const BorderRadius.all(
+            Radius.circular(AppRadius.pill),
+          ),
           border: Border.all(
-            color: isSelected ? primaryColor : borderColor,
+            color: isSelected
+                ? AppColors.primaryColor
+                : AppColors.borderColor,
           ),
         ),
         child: Text(
           label,
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-            color: isSelected ? Colors.white : mutedTextColor,
-          ),
+          style: isSelected
+              ? AppTextStyles.chipLabelSelected
+              : AppTextStyles.chipLabel,
         ),
       ),
     );

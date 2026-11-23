@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
-import '../dummy_data.dart';
+import '../core/routes/app_routes.dart';
+import '../core/theme/app_colors.dart';
+import '../core/theme/app_spacing.dart';
+import '../core/theme/app_text_styles.dart';
 import '../models/basket.dart';
+import '../services/dummy/dummy_data.dart';
 import '../widgets/loading_indicator.dart';
 
 class CartScreen extends StatefulWidget {
@@ -71,13 +74,7 @@ class _CartScreenState extends State<CartScreen> {
                   dummyBasketItems.clear();
                 });
               },
-              child: const Text(
-                'Clear',
-                style: TextStyle(
-                  color: errorColor,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
+              child: const Text('Clear', style: AppTextStyles.dangerAction),
             ),
           ],
         );
@@ -95,7 +92,10 @@ class _CartScreenState extends State<CartScreen> {
           if (!_isLoading && dummyBasketItems.isNotEmpty)
             IconButton(
               tooltip: 'Clear cart',
-              icon: const Icon(Icons.delete_outline, color: errorColor),
+              icon: const Icon(
+                Icons.delete_outline,
+                color: AppColors.errorColor,
+              ),
               onPressed: _confirmClearCart,
             ),
         ],
@@ -112,7 +112,7 @@ class _CartScreenState extends State<CartScreen> {
   Widget _buildEmptyState() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(32),
+        padding: const EdgeInsets.all(AppSpacing.xxl),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -120,29 +120,25 @@ class _CartScreenState extends State<CartScreen> {
               width: 96,
               height: 96,
               decoration: const BoxDecoration(
-                color: softSurfaceColor,
+                color: AppColors.softSurfaceColor,
                 shape: BoxShape.circle,
               ),
               child: const Icon(
                 Icons.shopping_bag_outlined,
                 size: 40,
-                color: mutedTextColor,
+                color: AppColors.mutedTextColor,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             const Text(
               'Your cart is empty',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: textColor,
-              ),
+              style: AppTextStyles.titleLarge,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacing.sm),
             const Text(
               'Add a coffee or a pastry from the menu.',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, color: mutedTextColor),
+              style: AppTextStyles.bodyMuted,
             ),
             const SizedBox(height: 20),
             SizedBox(
@@ -164,9 +160,15 @@ class _CartScreenState extends State<CartScreen> {
       children: [
         Expanded(
           child: ListView.separated(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.lg,
+              AppSpacing.sm,
+              AppSpacing.lg,
+              AppSpacing.lg,
+            ),
             itemCount: dummyBasketItems.length,
-            separatorBuilder: (context, index) => const SizedBox(height: 12),
+            separatorBuilder: (context, index) =>
+                const SizedBox(height: AppSpacing.md),
             itemBuilder: (context, index) {
               return _buildItemCard(dummyBasketItems[index]);
             },
@@ -179,10 +181,10 @@ class _CartScreenState extends State<CartScreen> {
 
   Widget _buildItemCard(BasketItem item) {
     return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: cardColor,
-        borderRadius: BorderRadius.circular(16),
+      padding: const EdgeInsets.all(AppSpacing.md),
+      decoration: const BoxDecoration(
+        color: AppColors.cardColor,
+        borderRadius: BorderRadius.all(Radius.circular(AppRadius.md)),
       ),
       child: Row(
         children: [
@@ -197,11 +199,11 @@ class _CartScreenState extends State<CartScreen> {
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
-                    color: softSurfaceColor,
+                    color: AppColors.softSurfaceColor,
                     child: const Icon(
                       Icons.local_cafe,
                       size: 24,
-                      color: mutedTextColor,
+                      color: AppColors.mutedTextColor,
                     ),
                   );
                 },
@@ -209,12 +211,12 @@ class _CartScreenState extends State<CartScreen> {
                   if (progress == null) {
                     return child;
                   }
-                  return Container(color: softSurfaceColor);
+                  return Container(color: AppColors.softSurfaceColor);
                 },
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacing.md),
 
           // Name, unit price, quantity and line total.
           Expanded(
@@ -225,32 +227,21 @@ class _CartScreenState extends State<CartScreen> {
                   item.productName,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: textColor,
-                  ),
+                  style: AppTextStyles.cardTitle,
                 ),
                 const SizedBox(height: 2),
                 Text(
                   '${item.price.toStringAsFixed(0)} EGP each',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: mutedTextColor,
-                  ),
+                  style: AppTextStyles.caption,
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: AppSpacing.sm),
                 Row(
                   children: [
                     _buildStepper(item),
                     const Spacer(),
                     Text(
                       '${item.lineTotal.toStringAsFixed(0)} EGP',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: textColor,
-                      ),
+                      style: AppTextStyles.priceSmall,
                     ),
                   ],
                 ),
@@ -265,10 +256,10 @@ class _CartScreenState extends State<CartScreen> {
   // Small − quantity + counter.
   Widget _buildStepper(BasketItem item) {
     return Container(
-      height: 32,
-      decoration: BoxDecoration(
-        color: softSurfaceDeepColor,
-        borderRadius: BorderRadius.circular(10),
+      height: AppSpacing.xxl,
+      decoration: const BoxDecoration(
+        color: AppColors.softSurfaceDeepColor,
+        borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -285,11 +276,7 @@ class _CartScreenState extends State<CartScreen> {
             child: Text(
               '${item.quantity}',
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                color: textColor,
-              ),
+              style: AppTextStyles.quantityLabel,
             ),
           ),
           _buildStepButton(Icons.add, () {
@@ -310,8 +297,8 @@ class _CartScreenState extends State<CartScreen> {
       borderRadius: BorderRadius.circular(10),
       child: SizedBox(
         width: 28,
-        height: 32,
-        child: Icon(icon, size: 14, color: textColor),
+        height: AppSpacing.xxl,
+        child: Icon(icon, size: 14, color: AppColors.textColor),
       ),
     );
   }
@@ -319,13 +306,15 @@ class _CartScreenState extends State<CartScreen> {
   // Bottom summary + Checkout button.
   Widget _buildSummary() {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
-        color: cardColor,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        color: AppColors.cardColor,
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(AppRadius.xl),
+        ),
         boxShadow: [
           BoxShadow(
-            color: textColor.withValues(alpha: 0.06),
+            color: AppColors.textColor.withValues(alpha: 0.06),
             blurRadius: 20,
             offset: const Offset(0, -4),
           ),
@@ -334,40 +323,29 @@ class _CartScreenState extends State<CartScreen> {
       child: Column(
         children: [
           _buildSummaryRow('Subtotal', '${_subtotal.toStringAsFixed(0)} EGP'),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.sm),
           _buildSummaryRow(
             'Delivery',
             _deliveryFee == 0 ? 'Free' : '${_deliveryFee.toStringAsFixed(0)} EGP',
           ),
           const Padding(
-            padding: EdgeInsets.symmetric(vertical: 12),
+            padding: EdgeInsets.symmetric(vertical: AppSpacing.md),
             child: Divider(height: 1),
           ),
           Row(
             children: [
-              const Text(
-                'Total',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: textColor,
-                ),
-              ),
+              const Text('Total', style: AppTextStyles.subtitle),
               const Spacer(),
               Text(
                 '${_total.toStringAsFixed(0)} EGP',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  color: textColor,
-                ),
+                style: AppTextStyles.priceTotal,
               ),
             ],
           ),
           const SizedBox(height: 14),
           ElevatedButton(
             onPressed: () {
-              Navigator.pushNamed(context, checkoutRoute);
+              Navigator.pushNamed(context, AppRoutes.checkoutRoute);
             },
             child: const Text('Checkout'),
           ),
@@ -379,19 +357,9 @@ class _CartScreenState extends State<CartScreen> {
   Widget _buildSummaryRow(String label, String value) {
     return Row(
       children: [
-        Text(
-          label,
-          style: const TextStyle(fontSize: 14, color: mutedTextColor),
-        ),
+        Text(label, style: AppTextStyles.bodyMuted),
         const Spacer(),
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: textColor,
-          ),
-        ),
+        Text(value, style: AppTextStyles.summaryValue),
       ],
     );
   }

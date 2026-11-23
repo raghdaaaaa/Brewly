@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../core/app_assets.dart';
-import '../core/app_colors.dart';
-import '../core/app_routes.dart';
-import '../core/app_theme.dart';
+import '../core/constants/app_assets.dart';
+import '../core/routes/app_routes.dart';
+import '../core/theme/app_colors.dart';
+import '../core/theme/app_spacing.dart';
+import '../core/theme/app_text_styles.dart';
 import '../widgets/app_header.dart';
+import '../widgets/common/auth_switch_link.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -20,9 +22,9 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController(
     text: 'omar.sayed@cairobrew.com',
   );
-  final _passwordController = TextEditingController(
-    text: 'EspressoZamalek2024!',
-  );
+
+  // Sample password that satisfies the API password rule.
+  final _passwordController = TextEditingController(text: 'Cairo@12');
 
   bool _obscurePassword = true;
 
@@ -35,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _login() {
     if (_formKey.currentState!.validate()) {
-      Navigator.pushReplacementNamed(context, homeRoute);
+      Navigator.pushReplacementNamed(context, AppRoutes.homeRoute);
     }
   }
 
@@ -56,53 +58,66 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: AppColors.backgroundColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const Padding(
-            padding: EdgeInsets.symmetric(vertical: 8),
+            padding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
             child: AppHeaderBack(),
           ),
-          SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.xl),
           Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               _emblem(),
-              SizedBox(height: 8),
-              Text(
+              const SizedBox(height: AppSpacing.sm),
+              const Text(
                 'Welcome Back',
                 textAlign: TextAlign.center,
-                style: AppTheme.displayBig,
+                style: AppTextStyles.displayBig,
               ),
             ],
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.lg),
           Expanded(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  _emailCard(),
-                  SizedBox(height: 16),
-                  _passwordCard(),
-                  SizedBox(height: 16),
-                  _ctaButton(),
-                ],
+            child: SingleChildScrollView(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _emailCard(),
+                    const SizedBox(height: AppSpacing.lg),
+                    _passwordCard(),
+                    const SizedBox(height: AppSpacing.lg),
+                    _ctaButton(),
+                    const SizedBox(height: AppSpacing.md),
+                    AuthSwitchLink(
+                      prompt: "Don't have an account?",
+                      actionLabel: 'Create account',
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          AppRoutes.registerRoute,
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.only(bottom: AppSpacing.sm),
               child: Container(
                 width: 128,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: subtleBottomPillColor,
+                height: AppSpacing.xs,
+                decoration: const BoxDecoration(
+                  color: AppColors.subtleBottomPillColor,
                   shape: BoxShape.circle,
                 ),
               ),
@@ -120,14 +135,14 @@ class _LoginScreenState extends State<LoginScreen> {
         Container(
           width: 64,
           height: 64,
-          decoration: BoxDecoration(
-            color: cardColor,
+          decoration: const BoxDecoration(
+            color: AppColors.cardColor,
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: shadowBlack10,
+                color: AppColors.shadowBlack10,
                 blurRadius: 6,
-                offset: const Offset(0, 4),
+                offset: Offset(0, 4),
               ),
             ],
           ),
@@ -137,15 +152,15 @@ class _LoginScreenState extends State<LoginScreen> {
               Container(
                 width: 48,
                 height: 48,
-                decoration: BoxDecoration(
-                  color: primaryColor,
+                decoration: const BoxDecoration(
+                  color: AppColors.primaryColor,
                   shape: BoxShape.circle,
                 ),
               ),
               SizedBox(
                 width: 19.5,
                 height: 19.5,
-                child: SvgPicture.asset('assets/icons/emblem_icon.svg'),
+                child: SvgPicture.asset(AppAssets.emblemIcon),
               ),
             ],
           ),
@@ -153,21 +168,21 @@ class _LoginScreenState extends State<LoginScreen> {
         Container(
           width: 24,
           height: 24,
-          decoration: BoxDecoration(
-            color: accentColor,
+          decoration: const BoxDecoration(
+            color: AppColors.accentColor,
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: shadowBlack05,
+                color: AppColors.shadowBlack05,
                 blurRadius: 1,
-                offset: const Offset(0, 1),
+                offset: Offset(0, 1),
               ),
             ],
           ),
           child: SizedBox(
             width: 12.833,
             height: 12.833,
-            child: SvgPicture.asset('assets/icons/emblem_ring.svg'),
+            child: SvgPicture.asset(AppAssets.emblemRing),
           ),
         ),
       ],
@@ -178,17 +193,8 @@ class _LoginScreenState extends State<LoginScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: TextStyle(fontFamily: 'PlusJakartaSans',
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            height: 16 / 12,
-            letterSpacing: 0.24,
-            color: mutedTextColor,
-          ),
-        ),
-        SizedBox(height: 6),
+        Text(label, style: AppTextStyles.fieldLabel),
+        const SizedBox(height: 6),
         field,
       ],
     );
@@ -198,15 +204,15 @@ class _LoginScreenState extends State<LoginScreen> {
     return _fieldCard(
       'Email address',
       Container(
-        height: 52,
-        decoration: BoxDecoration(
-          color: cardColor,
-          borderRadius: BorderRadius.circular(12),
+        height: AppSizes.inputHeight,
+        decoration: const BoxDecoration(
+          color: AppColors.cardColor,
+          borderRadius: BorderRadius.all(Radius.circular(AppRadius.sm)),
           boxShadow: [
             BoxShadow(
-              color: shadowBlack05,
+              color: AppColors.shadowBlack05,
               blurRadius: 1,
-              offset: const Offset(0, 1),
+              offset: Offset(0, 1),
             ),
           ],
         ),
@@ -216,24 +222,22 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               SizedBox(
                 width: 28.667,
-                child: SvgPicture.asset('assets/icons/email_left.svg'),
+                child: SvgPicture.asset(AppAssets.emailLeft),
               ),
               Expanded(
                 child: TextFormField(
                   controller: _emailController,
                   validator: _requiredEmail,
-                  style: TextStyle(fontFamily: 'PlusJakartaSans',
-                    fontSize: 16,
-                    height: 24 / 16,
-                    color: textColor,
+                  style: AppTextStyles.inputLarge,
+                  decoration: const InputDecoration.collapsed(
+                    hintText: 'omar.sayed@cairobrew.com',
                   ),
-                  decoration: const InputDecoration.collapsed(hintText: 'omar.sayed@cairobrew.com'),
                 ),
               ),
-              SizedBox(width: 15),
+              const SizedBox(width: 15),
               SizedBox(
                 width: 15,
-                child: SvgPicture.asset('assets/icons/email_right.svg'),
+                child: SvgPicture.asset(AppAssets.emailRight),
               ),
             ],
           ),
@@ -246,15 +250,15 @@ class _LoginScreenState extends State<LoginScreen> {
     return _fieldCard(
       'Password',
       Container(
-        height: 52,
-        decoration: BoxDecoration(
-          color: cardColor,
-          borderRadius: BorderRadius.circular(12),
+        height: AppSizes.inputHeight,
+        decoration: const BoxDecoration(
+          color: AppColors.cardColor,
+          borderRadius: BorderRadius.all(Radius.circular(AppRadius.sm)),
           boxShadow: [
             BoxShadow(
-              color: shadowBlack05,
+              color: AppColors.shadowBlack05,
               blurRadius: 1,
-              offset: const Offset(0, 1),
+              offset: Offset(0, 1),
             ),
           ],
         ),
@@ -264,9 +268,7 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               SizedBox(
                 width: 25.333,
-                child: SvgPicture.asset(
-                  'assets/icons/password_left.svg',
-                ),
+                child: SvgPicture.asset(AppAssets.passwordLeft),
               ),
               Expanded(
                 child: TextFormField(
@@ -274,21 +276,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   obscureText: _obscurePassword,
                   validator: _requiredPassword,
                   textInputAction: TextInputAction.done,
-                  style: TextStyle(fontFamily: 'PlusJakartaSans',
-                    fontSize: 16,
-                    height: 24 / 16,
-                    letterSpacing: 1.6,
-                    color: textColor,
+                  style: AppTextStyles.inputPasswordLarge,
+                  decoration: const InputDecoration.collapsed(
+                    hintText: 'Password',
                   ),
-                  decoration: const InputDecoration.collapsed(hintText: 'Password'),
                 ),
               ),
               InkWell(
-                onTap: () => setState(() => _obscurePassword = !_obscurePassword),
+                onTap: () => setState(
+                  () => _obscurePassword = !_obscurePassword,
+                ),
                 child: SizedBox(
                   width: 18.333,
                   height: 12.5,
-                  child: SvgPicture.asset('assets/icons/toggle_eye.svg'),
+                  child: SvgPicture.asset(AppAssets.toggleEye),
                 ),
               ),
             ],
@@ -302,42 +303,33 @@ class _LoginScreenState extends State<LoginScreen> {
     return InkWell(
       onTap: _login,
       child: Container(
-        height: 56,
+        height: AppSizes.buttonHeight,
         width: double.infinity,
-        decoration: BoxDecoration(
-          color: primaryColor,
-          borderRadius: BorderRadius.circular(9999),
+        decoration: const BoxDecoration(
+          color: AppColors.primaryColor,
+          borderRadius: BorderRadius.all(Radius.circular(AppRadius.pill)),
           boxShadow: [
             BoxShadow(
-              color: shadowBlack10,
+              color: AppColors.shadowBlack10,
               blurRadius: 15,
               spreadRadius: -3,
             ),
             BoxShadow(
-              color: shadowBlack10,
+              color: AppColors.shadowBlack10,
               blurRadius: 6,
               spreadRadius: -4,
-              offset: const Offset(0, 4),
+              offset: Offset(0, 4),
             ),
           ],
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Login',
-              style: TextStyle(fontFamily: 'PlusJakartaSans',
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                height: 20 / 14,
-                letterSpacing: 0.14,
-                color: Colors.white,
-              ),
-            ),
-            SizedBox(width: 8),
+            const Text('Login', style: AppTextStyles.buttonLabel),
+            const SizedBox(width: AppSpacing.sm),
             SizedBox(
               width: 13.333,
-              child: SvgPicture.asset('assets/icons/cta_arrow.svg'),
+              child: SvgPicture.asset(AppAssets.ctaArrow),
             ),
           ],
         ),

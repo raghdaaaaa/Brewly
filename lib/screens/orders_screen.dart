@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
-import '../dummy_data.dart';
+import '../core/theme/app_colors.dart';
+import '../core/theme/app_spacing.dart';
+import '../core/theme/app_text_styles.dart';
 import '../models/order.dart';
+import '../services/dummy/dummy_data.dart';
 
 class OrdersScreen extends StatelessWidget {
   const OrdersScreen({super.key});
@@ -25,25 +27,22 @@ class OrdersScreen extends StatelessWidget {
   Widget _buildEmptyState() {
     return const Center(
       child: Padding(
-        padding: EdgeInsets.all(32),
+        padding: EdgeInsets.all(AppSpacing.xxl),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.receipt_long_outlined, size: 48, color: mutedTextColor),
-            SizedBox(height: 16),
-            Text(
-              'No orders yet',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: textColor,
-              ),
+            Icon(
+              Icons.receipt_long_outlined,
+              size: 48,
+              color: AppColors.mutedTextColor,
             ),
-            SizedBox(height: 8),
+            SizedBox(height: AppSpacing.lg),
+            Text('No orders yet', style: AppTextStyles.titleLarge),
+            SizedBox(height: AppSpacing.sm),
             Text(
               'Place an order from the Cart screen.',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, color: mutedTextColor),
+              style: AppTextStyles.bodyMuted,
             ),
           ],
         ),
@@ -56,7 +55,10 @@ class OrdersScreen extends StatelessWidget {
     return InkWell(
       onTap: () => _showOrderDetails(context, order),
       child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        margin: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.lg,
+          vertical: AppSpacing.sm,
+        ),
         child: Padding(
           padding: const EdgeInsets.all(14),
           child: Column(
@@ -66,26 +68,16 @@ class OrdersScreen extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: Text(
-                      order.id,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: textColor,
-                      ),
-                    ),
+                    child: Text(order.id, style: AppTextStyles.title),
                   ),
                   _buildStatusChip(order.status),
                 ],
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: AppSpacing.sm),
 
               // Order date.
-              Text(
-                order.orderDate,
-                style: const TextStyle(fontSize: 12, color: mutedTextColor),
-              ),
-              const SizedBox(height: 8),
+              Text(order.orderDate, style: AppTextStyles.caption),
+              const SizedBox(height: AppSpacing.sm),
 
               // Item count + total.
               Row(
@@ -93,20 +85,12 @@ class OrdersScreen extends StatelessWidget {
                   Text(
                     '${order.items.length} '
                     '${order.items.length == 1 ? 'item' : 'items'}',
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: mutedTextColor,
-                    ),
+                    style: AppTextStyles.cardTitleMuted,
                   ),
                   const Spacer(),
                   Text(
                     '${order.total.toStringAsFixed(0)} EGP',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      color: textColor,
-                    ),
+                    style: AppTextStyles.priceTotal,
                   ),
                 ],
               ),
@@ -122,21 +106,26 @@ class OrdersScreen extends StatelessWidget {
     final isPreparation = status == 'In preparation';
     final isCancelled = status == 'Cancelled';
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 10,
+        vertical: AppSpacing.xs,
+      ),
       decoration: BoxDecoration(
         color: isCancelled
-            ? errorColor
+            ? AppColors.errorColor
             : isPreparation
-                ? emeraldTintColor
-                : borderColor,
-        borderRadius: BorderRadius.circular(999),
+                ? AppColors.emeraldTintColor
+                : AppColors.borderColor,
+        borderRadius: const BorderRadius.all(
+          Radius.circular(AppRadius.pill),
+        ),
       ),
       child: Text(
         status,
-        style: TextStyle(
-          fontSize: 10,
-          fontWeight: FontWeight.w600,
-          color: isCancelled || isPreparation ? onAccentColor : mutedTextColor,
+        style: AppTextStyles.statusPill.copyWith(
+          color: isCancelled || isPreparation
+              ? AppColors.onAccentColor
+              : AppColors.mutedTextColor,
         ),
       ),
     );
@@ -150,7 +139,9 @@ class OrdersScreen extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(AppRadius.lg),
+        ),
       ),
       builder: (sheetContext) {
         return ConstrainedBox(
@@ -170,71 +161,44 @@ class OrdersScreen extends StatelessWidget {
                       Expanded(
                         child: Text(
                           order.id,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                            color: textColor,
-                          ),
+                          style: AppTextStyles.titleLarge,
                         ),
                       ),
                       _buildStatusChip(order.status),
                     ],
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: AppSpacing.lg),
 
                   // Items.
                   for (final item in order.items)
                     _buildSheetItemRow(item),
 
-                  const SizedBox(height: 16),
+                  const SizedBox(height: AppSpacing.lg),
 
                   // Shipping address.
                   _buildSheetSectionTitle('Shipping address'),
                   Text(
                     '${dummyAddress.firstName} ${dummyAddress.lastName}',
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: textColor,
-                    ),
+                    style: AppTextStyles.cardTitle,
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    dummyAddress.street,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: mutedTextColor,
-                    ),
-                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  Text(dummyAddress.street, style: AppTextStyles.caption),
                   Text(
                     '${dummyAddress.city}, ${dummyAddress.country}',
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: mutedTextColor,
-                    ),
+                    style: AppTextStyles.caption,
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: AppSpacing.lg),
 
                   // Delivery method.
                   _buildSheetSectionTitle('Delivery method'),
-                  Text(
-                    delivery.shortName,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: textColor,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
+                  Text(delivery.shortName, style: AppTextStyles.cardTitle),
+                  const SizedBox(height: AppSpacing.xs),
                   Text(
                     '${delivery.deliveryTime} · '
                     '${delivery.cost == 0 ? 'Free' : '${delivery.cost.toStringAsFixed(0)} EGP'}',
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: mutedTextColor,
-                    ),
+                    style: AppTextStyles.caption,
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: AppSpacing.lg),
 
                   // Summary: subtotal, delivery cost and total.
                   _buildSheetSectionTitle('Summary'),
@@ -242,7 +206,7 @@ class OrdersScreen extends StatelessWidget {
                     'Subtotal',
                     '${order.subtotal.toStringAsFixed(0)} EGP',
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: AppSpacing.sm),
                   _buildSummaryRow(
                     'Delivery',
                     delivery.cost == 0
@@ -250,31 +214,20 @@ class OrdersScreen extends StatelessWidget {
                         : '${delivery.cost.toStringAsFixed(0)} EGP',
                   ),
                   const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 12),
+                    padding: EdgeInsets.symmetric(vertical: AppSpacing.md),
                     child: Divider(height: 1),
                   ),
                   Row(
                     children: [
-                      const Text(
-                        'Total',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: textColor,
-                        ),
-                      ),
+                      const Text('Total', style: AppTextStyles.subtitle),
                       const Spacer(),
                       Text(
                         '${order.total.toStringAsFixed(0)} EGP',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                          color: textColor,
-                        ),
+                        style: AppTextStyles.priceTotal,
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: AppSpacing.lg),
                 ],
               ),
             ),
@@ -292,7 +245,7 @@ class OrdersScreen extends StatelessWidget {
         children: [
           // Small product image.
           ClipRRect(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppRadius.sm),
             child: SizedBox(
               width: 48,
               height: 48,
@@ -301,11 +254,11 @@ class OrdersScreen extends StatelessWidget {
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
-                    color: softSurfaceColor,
+                    color: AppColors.softSurfaceColor,
                     child: const Icon(
                       Icons.local_cafe,
                       size: 18,
-                      color: mutedTextColor,
+                      color: AppColors.mutedTextColor,
                     ),
                   );
                 },
@@ -322,31 +275,17 @@ class OrdersScreen extends StatelessWidget {
                   item.name,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: textColor,
-                  ),
+                  style: AppTextStyles.cardTitle,
                 ),
                 const SizedBox(height: 2),
-                Text(
-                  'x${item.quantity}',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: mutedTextColor,
-                  ),
-                ),
+                Text('x${item.quantity}', style: AppTextStyles.caption),
               ],
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: AppSpacing.sm),
           Text(
             '${item.lineTotal.toStringAsFixed(0)} EGP',
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-              color: textColor,
-            ),
+            style: AppTextStyles.priceSmall,
           ),
         ],
       ),
@@ -354,29 +293,15 @@ class OrdersScreen extends StatelessWidget {
   }
 
   Widget _buildSheetSectionTitle(String title) {
-    return Text(
-      title,
-      style: const TextStyle(
-        fontSize: 12,
-        fontWeight: FontWeight.w600,
-        color: primaryColor,
-      ),
-    );
+    return Text(title, style: AppTextStyles.sectionLabel);
   }
 
   Widget _buildSummaryRow(String label, String value) {
     return Row(
       children: [
-        Text(label, style: const TextStyle(fontSize: 14, color: mutedTextColor)),
+        Text(label, style: AppTextStyles.bodyMuted),
         const Spacer(),
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: textColor,
-          ),
-        ),
+        Text(value, style: AppTextStyles.summaryValue),
       ],
     );
   }
