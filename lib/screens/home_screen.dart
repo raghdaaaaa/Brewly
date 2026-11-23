@@ -137,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Good evening, Omar ðŸ‘‹',
+                'Good evening, Omar 👋',
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: AppTextStyles.pageTitle,
@@ -257,7 +257,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Navigator.pushNamed(
               context,
               AppRoutes.detailsRoute,
-              arguments: product,
+              arguments: {'product': product, 'heroPrefix': 'home'},
             );
           },
         );

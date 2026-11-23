@@ -37,13 +37,13 @@ must fix.
       first `mainAxisExtent` product grid; product cards are the overlay design).
 - [x] **Explore** (Group 2; first pass).
 - [x] **Products List** (Group 2; first pass).
-- [ ] **Splash** – logo is still the default icon + text; add the AnimationController
-      fade/scale and the exported logo.
+- [x] **Splash** – explicit `AnimationController` fade + scale, disposed correctly, then navigates to Welcome with a named route (logo is still the Material coffee icon; no logo asset exists yet).
 - [ ] **Welcome** – replace `FractionallySizedBox(1.3123)` and the absolute offsets with
       `ClipRRect` + `AspectRatio`; verify hero and CTA against the frame.
-- [ ] **Login / Register** – first-pass layout, not the Figma frames. Register still
-      needs the password helper text and the real API RegExp. Phone field still shows
-      the flag instead of the approved "+20".
+- [ ] **Login / Register** – first-pass layout, not the Figma frames. Both now use the
+      shared `AppTextField` (beige filled, natural height for validation errors).
+      Register has the password helper text and the real API RegExp; the phone field
+      shows "+20" instead of the flag.
 - [x] **Product Details** (Group 3; structurally complete, overflow-proofed).
 - [x] **Cart** (Group 3; overflow-proofed).
 - [x] **Checkout** (Group 3; delivery cards replaced with overflow-proof rows,
@@ -58,8 +58,8 @@ must fix.
 
 ## Approved deviations still to apply
 
-- [ ] Register password helper text (12, muted) + RegExp validator (deviation 2).
-- [ ] Phone field: "+20" instead of the flag (deviation 5).
+- [x] Register password helper text (12, muted) + RegExp validator (deviation 2).
+- [x] Phone field: "+20" instead of the flag (deviation 5).
 - [ ] "Coming soon" SnackBar for visual-only buttons (deviation 8).
 
 ## Done

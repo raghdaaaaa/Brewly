@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart' show ValueNotifier;
+
 import '../../models/address.dart';
 import '../../models/basket.dart';
 import '../../models/category.dart';
@@ -151,6 +153,20 @@ final List<BasketItem> dummyBasketItems = [
     quantity: 1,
   ),
 ];
+
+/// Keeps the bottom-navigation cart badge in sync with the dummy basket.
+final ValueNotifier<int> dummyCartItemCount = ValueNotifier<int>(
+  dummyBasketItems.length,
+);
+
+void syncDummyCartItemCount() {
+  dummyCartItemCount.value = dummyBasketItems.length;
+}
+
+void clearDummyBasket() {
+  dummyBasketItems.clear();
+  syncDummyCartItemCount();
+}
 
 const Address dummyAddress = Address(
   firstName: 'Omar',

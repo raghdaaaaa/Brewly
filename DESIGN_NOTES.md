@@ -171,7 +171,9 @@ Approved deviations already applied:
 1. Login has "Don't have an account? Create account" under the button (opens Register);
    Register has "Already have an account? Login" under the button (opens Login).
 2. Login and Register are prefilled with `Cairo@12`, a password that satisfies the API
-   rule. Register still needs the helper text and the real RegExp validator (phase 2).
+   rule. Register shows the helper text and the real RegExp validator. All forms use the
+   shared `AppTextField` (beige filled, no fixed height, so errors push the next field
+   down).
 3. The Welcome "Get Started" button is unchanged.
 
 Implementation fix (not a design change): the Register brand mark is now a pill sized by

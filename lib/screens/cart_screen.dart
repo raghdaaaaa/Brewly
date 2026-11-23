@@ -71,7 +71,7 @@ class _CartScreenState extends State<CartScreen> {
               onPressed: () {
                 Navigator.pop(dialogContext);
                 setState(() {
-                  dummyBasketItems.clear();
+                  clearDummyBasket();
                 });
               },
               child: const Text('Clear', style: AppTextStyles.dangerAction),
@@ -273,6 +273,7 @@ class _CartScreenState extends State<CartScreen> {
             if (item.quantity > 1) {
               setState(() {
                 item.quantity--;
+                syncDummyCartItemCount();
               });
             }
           }),
@@ -288,6 +289,7 @@ class _CartScreenState extends State<CartScreen> {
             if (item.quantity < 10) {
               setState(() {
                 item.quantity++;
+                syncDummyCartItemCount();
               });
             }
           }),

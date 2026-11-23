@@ -19,16 +19,21 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   final _formKey = GlobalKey<FormState>();
 
   // The address form is prefilled with the saved address (dummy for now).
-  late final TextEditingController _firstNameController =
-      TextEditingController(text: dummyAddress.firstName);
-  late final TextEditingController _lastNameController =
-      TextEditingController(text: dummyAddress.lastName);
-  late final TextEditingController _streetController =
-      TextEditingController(text: dummyAddress.street);
-  late final TextEditingController _cityController =
-      TextEditingController(text: dummyAddress.city);
-  late final TextEditingController _countryController =
-      TextEditingController(text: dummyAddress.country);
+  late final TextEditingController _firstNameController = TextEditingController(
+    text: dummyAddress.firstName,
+  );
+  late final TextEditingController _lastNameController = TextEditingController(
+    text: dummyAddress.lastName,
+  );
+  late final TextEditingController _streetController = TextEditingController(
+    text: dummyAddress.street,
+  );
+  late final TextEditingController _cityController = TextEditingController(
+    text: dummyAddress.city,
+  );
+  late final TextEditingController _countryController = TextEditingController(
+    text: dummyAddress.country,
+  );
 
   // The delivery method selected with the radio buttons.
   int _selectedMethodId = dummyDeliveryMethods.first.id;
@@ -75,7 +80,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
     // Dummy: empty the basket after the order.
     // The API step will call POST /api/Orders and DELETE /api/Basket.
-    dummyBasketItems.clear();
+    clearDummyBasket();
 
     Navigator.pushNamedAndRemoveUntil(
       context,
@@ -102,10 +107,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // 1. Address.
-              const Text(
-                'Delivery address',
-                style: AppTextStyles.sectionTitle,
-              ),
+              const Text('Delivery address', style: AppTextStyles.sectionTitle),
               const SizedBox(height: AppSpacing.sm),
               Card(
                 child: Padding(
@@ -176,10 +178,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               const SizedBox(height: AppSpacing.xl),
 
               // 2. Delivery method.
-              const Text(
-                'Delivery method',
-                style: AppTextStyles.sectionTitle,
-              ),
+              const Text('Delivery method', style: AppTextStyles.sectionTitle),
               const SizedBox(height: AppSpacing.sm),
               Card(
                 child: Column(
@@ -247,10 +246,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               const SizedBox(height: AppSpacing.xl),
 
               // 3. Order summary.
-              const Text(
-                'Order summary',
-                style: AppTextStyles.sectionTitle,
-              ),
+              const Text('Order summary', style: AppTextStyles.sectionTitle),
               const SizedBox(height: AppSpacing.sm),
               Card(
                 child: Padding(

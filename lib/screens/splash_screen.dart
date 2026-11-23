@@ -12,34 +12,66 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _fadeAnimation;
+  late final Animation<double> _scaleAnimation;
+
   @override
   void initState() {
     super.initState();
 
-    // Wait 2 seconds, then open the Welcome screen.
-    // (The logo animation will be added in a later step.)
-    Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) {
-        Navigator.pushReplacementNamed(context, AppRoutes.welcomeRoute);
-      }
-    });
+    // Explicit animation: the brand mark fades in and grows slightly.
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    );
+    _fadeAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOut,
+    );
+    _scaleAnimation = Tween<double>(begin: 0.85, end: 1).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
+    );
+    _controller.forward();
+
+    // Keep the splash visible for 2 seconds, then open Welcome.
+    Future.delayed(const Duration(seconds: 2), _openWelcome);
+  }
+
+  void _openWelcome() {
+    if (!mounted) {
+      return;
+    }
+    Navigator.pushReplacementNamed(context, AppRoutes.welcomeRoute);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: AppColors.primaryColor,
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.coffee, size: 80, color: AppColors.cardColor),
-            SizedBox(height: AppSpacing.lg),
-            Text('Brewly', style: AppTextStyles.splashTitle),
-            SizedBox(height: AppSpacing.sm),
-            Text('Splash Screen', style: AppTextStyles.splashSubtitle),
-          ],
+        child: FadeTransition(
+          opacity: _fadeAnimation,
+          child: ScaleTransition(
+            scale: _scaleAnimation,
+            child: const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.coffee, size: 80, color: AppColors.cardColor),
+                SizedBox(height: AppSpacing.lg),
+                Text('Brewly', style: AppTextStyles.splashTitle),
+              ],
+            ),
+          ),
         ),
       ),
     );

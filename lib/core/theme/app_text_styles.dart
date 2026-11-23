@@ -73,6 +73,14 @@ class AppTextStyles {
     color: AppColors.textColor,
   );
 
+  /// 22 bold: name in the Profile header card.
+  static const TextStyle profileName = TextStyle(
+    fontFamily: fontFamily,
+    fontSize: 22,
+    fontWeight: FontWeight.w700,
+    color: AppColors.textColor,
+  );
+
   /// 20 semibold: large section headings ("Popular Right Now").
   static const TextStyle heading = TextStyle(
     fontFamily: fontFamily,

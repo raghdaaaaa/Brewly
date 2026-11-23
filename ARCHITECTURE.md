@@ -43,10 +43,13 @@ Splash → Welcome → Login / Register → Home shell (bottom nav)
 - The selected `Product` travels to Product Details as a named-route argument
   (`ModalRoute.of(context)!.settings.arguments`), never through a global variable.
 - Cart and Checkout read the shared dummy basket and delivery methods. Every total is
-  computed from the item line totals; nothing is hardcoded per screen.
+  computed from the item line totals; nothing is hardcoded per screen. `MainScreen`
+  listens to `dummyCartItemCount`, so the bottom-nav badge follows `clearDummyBasket()`
+  in Cart and Checkout.
 - Orders passes the `Order` to Order Details; Order Details shows items, address,
   delivery method and totals.
-- Profile and Checkout share the same address form widgets and dummy address.
+- Profile and Checkout share the same address form widgets and `AppTextField`, the single
+  text-field implementation in `widgets/app_text_field.dart` used by every form.
 - Explore and Products List both pump the shared `ProductGrid`/`ProductCard` and pass
   the tapped `Product` to Product Details as a route argument.
 - Order Success is pushed after checkout clears the cart and shows the new order id

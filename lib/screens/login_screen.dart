@@ -7,6 +7,7 @@ import '../core/theme/app_colors.dart';
 import '../core/theme/app_spacing.dart';
 import '../core/theme/app_text_styles.dart';
 import '../widgets/app_header.dart';
+import '../widgets/app_text_field.dart';
 import '../widgets/common/auth_switch_link.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -186,112 +187,45 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _fieldCard(String label, Widget field) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: AppTextStyles.fieldLabel),
-        const SizedBox(height: AppSpacing.sm),
-        field,
-      ],
-    );
-  }
-
   Widget _emailCard() {
-    return _fieldCard(
-      'Email address',
-      Container(
-        height: AppSizes.inputHeight,
-        decoration: const BoxDecoration(
-          color: AppColors.cardColor,
-          borderRadius: BorderRadius.all(Radius.circular(AppRadius.sm)),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.shadowBlack05,
-              blurRadius: 1,
-              offset: Offset(0, 1),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14),
-          child: Row(
-            children: [
-              SizedBox(
-                width: 28.667,
-                child: SvgPicture.asset(AppAssets.emailLeft),
-              ),
-              Expanded(
-                child: TextFormField(
-                  controller: _emailController,
-                  validator: _requiredEmail,
-                  style: AppTextStyles.inputLarge,
-                  decoration: const InputDecoration.collapsed(
-                    hintText: 'omar.sayed@cairobrew.com',
-                  ),
-                ),
-              ),
-              const SizedBox(width: 15),
-              SizedBox(
-                width: 15,
-                child: SvgPicture.asset(AppAssets.emailRight),
-              ),
-            ],
-          ),
-        ),
+    return AppTextField(
+      label: 'Email address',
+      hint: 'omar.sayed@cairobrew.com',
+      controller: _emailController,
+      validator: _requiredEmail,
+      textInputAction: TextInputAction.next,
+      textStyle: AppTextStyles.inputLarge,
+      prefixIcon: SizedBox(
+        width: 28.667,
+        child: SvgPicture.asset(AppAssets.emailLeft),
+      ),
+      suffixIcon: SizedBox(
+        width: 15,
+        child: SvgPicture.asset(AppAssets.emailRight),
       ),
     );
   }
 
   Widget _passwordCard() {
-    return _fieldCard(
-      'Password',
-      Container(
-        height: AppSizes.inputHeight,
-        decoration: const BoxDecoration(
-          color: AppColors.cardColor,
-          borderRadius: BorderRadius.all(Radius.circular(AppRadius.sm)),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.shadowBlack05,
-              blurRadius: 1,
-              offset: Offset(0, 1),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14),
-          child: Row(
-            children: [
-              SizedBox(
-                width: 25.333,
-                child: SvgPicture.asset(AppAssets.passwordLeft),
-              ),
-              Expanded(
-                child: TextFormField(
-                  controller: _passwordController,
-                  obscureText: _obscurePassword,
-                  validator: _requiredPassword,
-                  textInputAction: TextInputAction.done,
-                  style: AppTextStyles.inputPasswordLarge,
-                  decoration: const InputDecoration.collapsed(
-                    hintText: 'Password',
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () => setState(
-                  () => _obscurePassword = !_obscurePassword,
-                ),
-                child: SizedBox(
-                  width: 18.333,
-                  height: 12.5,
-                  child: SvgPicture.asset(AppAssets.toggleEye),
-                ),
-              ),
-            ],
-          ),
-        ),
+    return AppTextField(
+      label: 'Password',
+      hint: 'Password',
+      controller: _passwordController,
+      obscureText: _obscurePassword,
+      validator: _requiredPassword,
+      textInputAction: TextInputAction.done,
+      textStyle: AppTextStyles.inputPasswordLarge,
+      prefixIcon: SizedBox(
+        width: 25.333,
+        child: SvgPicture.asset(AppAssets.passwordLeft),
+      ),
+      suffixIcon: SizedBox(
+        width: 18.333,
+        height: 12.5,
+        child: SvgPicture.asset(AppAssets.toggleEye),
+      ),
+      onSuffixTap: () => setState(
+        () => _obscurePassword = !_obscurePassword,
       ),
     );
   }

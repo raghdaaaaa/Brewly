@@ -40,7 +40,7 @@ class ProfileLogoutCard extends StatelessWidget {
               width: 44,
               height: 44,
               decoration: BoxDecoration(
-                color: const Color(0xFFFDE8E8),
+                color: AppColors.logoutIconBackground,
                 borderRadius: BorderRadius.circular(AppRadius.sm),
               ),
               child: const Center(
@@ -55,12 +55,7 @@ class ProfileLogoutCard extends StatelessWidget {
             const Expanded(
               child: Text(
                 'Log out',
-                style: TextStyle(
-                  fontFamily: AppTextStyles.fontFamily,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.errorColor,
-                ),
+                style: AppTextStyles.dangerLabel,
               ),
             ),
             const Icon(

@@ -24,4 +24,10 @@ class AppColors {
   // White fade over the Welcome hero image.
   static const Color heroFadeStart = Color(0xE6FFFFFF);
   static const Color heroFadeEnd = Color(0x00FFFFFF);
+
+  // Profile cards.
+  static const Color profileGradientStart = Color(0xFFFFFDF8);
+  static const Color profileGradientEnd = Color(0xFFF0F9F5);
+  static const Color logoutIconBackground = Color(0xFFFDE8E8);
+  static const Color chevronColor = Color(0xFFC7C0B8);
 }

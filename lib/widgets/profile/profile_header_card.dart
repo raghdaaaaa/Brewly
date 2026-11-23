@@ -31,9 +31,9 @@ class ProfileHeaderCard extends StatelessWidget {
           begin: Alignment.bottomLeft,
           end: Alignment.topRight,
           colors: [
-            Color(0xFFFFFDF8),
+            AppColors.profileGradientStart,
             AppColors.cardColor,
-            Color(0xFFF0F9F5),
+            AppColors.profileGradientEnd,
           ],
         ),
         boxShadow: [
@@ -89,7 +89,7 @@ class ProfileHeaderCard extends StatelessWidget {
                   child: const Icon(
                     Icons.local_cafe_rounded,
                     size: 14,
-                    color: Colors.white,
+                    color: AppColors.cardColor,
                   ),
                 ),
               ),
@@ -98,22 +98,12 @@ class ProfileHeaderCard extends StatelessWidget {
           const SizedBox(height: AppSpacing.lg),
           Text(
             name,
-            style: const TextStyle(
-              fontFamily: AppTextStyles.fontFamily,
-              fontSize: 22,
-              fontWeight: FontWeight.w700,
-              color: AppColors.textColor,
-            ),
+            style: AppTextStyles.profileName,
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
             email,
-            style: const TextStyle(
-              fontFamily: AppTextStyles.fontFamily,
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              color: AppColors.mutedTextColor,
-            ),
+            style: AppTextStyles.bodyMuted,
           ),
         ],
       ),

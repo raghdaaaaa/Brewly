@@ -6,6 +6,7 @@ import '../core/routes/app_routes.dart';
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_spacing.dart';
 import '../core/theme/app_text_styles.dart';
+import '../widgets/app_text_field.dart';
 import '../widgets/common/auth_switch_link.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -28,6 +29,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _passwordController = TextEditingController(text: 'Cairo@12');
 
   bool _obscurePassword = true;
+
+  // The API password rule: 6-10 chars with upper, lower, digit and symbol.
+  static final RegExp _passwordPattern = RegExp(
+    r'^(?=.{6,10}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9]).*$',
+  );
 
   @override
   void dispose() {
@@ -191,91 +197,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Text(label, style: AppTextStyles.fieldLabelStrong);
   }
 
-  Widget _fieldInput({
-    required TextEditingController controller,
-    String? hint,
-    bool obscure = false,
-    TextInputAction? action,
-    String? Function(String?)? validator,
-    bool showRightIcon = false,
-    double rightIconSize = 16.667,
-    String? rightIconPath,
-  }) {
-    return Container(
-      height: AppSizes.inputHeight,
-      decoration: const BoxDecoration(
-        color: AppColors.softSurfaceColor,
-        borderRadius: BorderRadius.all(Radius.circular(AppRadius.sm)),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.lg,
-                vertical: 17,
-              ),
-              child: TextFormField(
-                controller: controller,
-                obscureText: obscure,
-                textInputAction: action,
-                validator: validator,
-                style: AppTextStyles.input,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: hint,
-                  hintStyle: AppTextStyles.input,
-                ),
-              ),
-            ),
-          ),
-          if (showRightIcon && rightIconPath != null)
-            SizedBox(
-              width: 14,
-              child: Center(
-                child: SvgPicture.asset(
-                  rightIconPath,
-                  width: rightIconSize,
-                  height: rightIconSize,
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-
   Widget _displayNameField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _fieldLabel('Display Name'),
-        const SizedBox(height: 6),
-        _fieldInput(
-          controller: _displayNameController,
-          action: TextInputAction.next,
-          validator: _validateName,
-          showRightIcon: true,
-          rightIconPath: AppAssets.registerInputRight,
-        ),
-      ],
+    return AppTextField(
+      label: 'Display Name',
+      controller: _displayNameController,
+      textInputAction: TextInputAction.next,
+      validator: _validateName,
+      labelStyle: AppTextStyles.fieldLabelStrong,
+      suffixIcon: SizedBox(
+        width: 16.667,
+        height: 16.667,
+        child: SvgPicture.asset(AppAssets.registerInputRight),
+      ),
     );
   }
 
   Widget _emailField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _fieldLabel('Email Address'),
-        const SizedBox(height: 6),
-        _fieldInput(
-          controller: _emailController,
-          action: TextInputAction.next,
-          validator: _validateEmail,
-          showRightIcon: true,
-          rightIconPath: AppAssets.registerInputRight,
-        ),
-      ],
+    return AppTextField(
+      label: 'Email Address',
+      controller: _emailController,
+      textInputAction: TextInputAction.next,
+      validator: _validateEmail,
+      labelStyle: AppTextStyles.fieldLabelStrong,
+      suffixIcon: SizedBox(
+        width: 16.667,
+        height: 16.667,
+        child: SvgPicture.asset(AppAssets.registerInputRight),
+      ),
     );
   }
 
@@ -287,16 +235,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
         const SizedBox(height: 6),
         Row(
           spacing: AppSpacing.sm,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _countryPrefixPill(),
             Expanded(
-              child: _fieldInput(
+              child: AppTextField(
                 controller: _phoneController,
-                action: TextInputAction.next,
+                textInputAction: TextInputAction.next,
                 validator: _validatePhone,
-                showRightIcon: true,
-                rightIconPath: AppAssets.registerPhoneRight,
-                rightIconSize: 11.25,
+                suffixIcon: SizedBox(
+                  width: 11.25,
+                  height: 16.5,
+                  child: SvgPicture.asset(AppAssets.registerPhoneRight),
+                ),
               ),
             ),
           ],
@@ -315,12 +266,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(14, 16, 14, 17),
         child: Row(
-          spacing: 6,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              '🇪🇬',
-              style: TextStyle(fontSize: 16, color: AppColors.textColor),
-            ),
             const Text('+20', style: AppTextStyles.prefixLabel),
             const SizedBox(width: 2),
             SizedBox(
@@ -334,57 +281,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Widget _passwordField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _fieldLabel('Password'),
-        const SizedBox(height: 6),
-        Container(
-          height: AppSizes.inputHeight,
-          decoration: const BoxDecoration(
-            color: AppColors.softSurfaceColor,
-            borderRadius: BorderRadius.all(Radius.circular(AppRadius.sm)),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 17, 48, 17),
-                  child: TextFormField(
-                    controller: _passwordController,
-                    obscureText: _obscurePassword,
-                    textInputAction: TextInputAction.done,
-                    validator: _validatePassword,
-                    style: AppTextStyles.inputPassword,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintStyle: AppTextStyles.input,
-                    ),
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () =>
-                    setState(() => _obscurePassword = !_obscurePassword),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(AppRadius.sm),
-                ),
-                child: SizedBox(
-                  width: AppSpacing.xxl,
-                  height: AppSpacing.xxl,
-                  child: Center(
-                    child: SvgPicture.asset(
-                      AppAssets.registerToggleEye,
-                      width: 18.333,
-                      height: 12.5,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
+    return AppTextField(
+      label: 'Password',
+      controller: _passwordController,
+      obscureText: _obscurePassword,
+      textInputAction: TextInputAction.done,
+      validator: _validatePassword,
+      textStyle: AppTextStyles.inputPassword,
+      labelStyle: AppTextStyles.fieldLabelStrong,
+      helperText: '6-10 characters with upper, lower, digit and symbol.',
+      onSuffixTap: () =>
+          setState(() => _obscurePassword = !_obscurePassword),
+      suffixIcon: SizedBox(
+        width: 18.333,
+        height: 12.5,
+        child: SvgPicture.asset(AppAssets.registerToggleEye),
+      ),
     );
   }
 
@@ -455,6 +367,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String? _validatePassword(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter a password';
+    }
+    if (!_passwordPattern.hasMatch(value)) {
+      return 'Use 6-10 characters with upper, lower, digit and symbol';
     }
     return null;
   }

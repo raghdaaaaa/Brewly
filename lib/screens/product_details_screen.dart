@@ -6,9 +6,16 @@ import '../core/theme/app_text_styles.dart';
 import '../models/product.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
-  const ProductDetailsScreen({super.key, this.product});
+  const ProductDetailsScreen({
+    super.key,
+    this.product,
+    this.heroPrefix = 'home',
+  });
 
   final Product? product;
+
+  /// Keeps the Hero tag unique to the screen the product was opened from.
+  final String heroPrefix;
 
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
@@ -30,10 +37,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     Product? product = widget.product;
+    String heroPrefix = widget.heroPrefix;
     if (product == null) {
       final arguments = ModalRoute.of(context)?.settings.arguments;
-      if (arguments is Product) {
-        product = arguments;
+      if (arguments is Map) {
+        product = arguments['product'] as Product?;
+        heroPrefix = arguments['heroPrefix'] as String? ?? 'home';
       }
     }
 
@@ -63,13 +72,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Hero image (same tag as the Home card).
+            // Hero image (same tag as the product card).
             ClipRRect(
               borderRadius: BorderRadius.circular(AppRadius.lg),
               child: AspectRatio(
                 aspectRatio: 358 / 269,
                 child: Hero(
-                  tag: 'product_${product.id}',
+                  tag: '${heroPrefix}_product_${details.id}',
                   child: Image.network(
                     product.pictureUrl,
                     fit: BoxFit.cover,

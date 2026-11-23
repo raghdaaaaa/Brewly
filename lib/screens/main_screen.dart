@@ -40,10 +40,15 @@ class _MainScreenState extends State<MainScreen> {
           const ProfileScreen(),
         ],
       ),
-      bottomNavigationBar: AppBottomNav(
-        currentIndex: _currentIndex,
-        onTap: _selectTab,
-        cartCount: dummyBasketItems.length,
+      bottomNavigationBar: ValueListenableBuilder<int>(
+        valueListenable: dummyCartItemCount,
+        builder: (context, cartCount, child) {
+          return AppBottomNav(
+            currentIndex: _currentIndex,
+            onTap: _selectTab,
+            cartCount: cartCount,
+          );
+        },
       ),
     );
   }

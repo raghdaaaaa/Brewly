@@ -133,18 +133,13 @@ class _MenuItemRow extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: const TextStyle(
-                  fontFamily: AppTextStyles.fontFamily,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textColor,
-                ),
+                style: AppTextStyles.subtitle,
               ),
             ),
             const Icon(
               Icons.chevron_right_rounded,
               size: 20,
-              color: Color(0xFFC7C0B8),
+              color: AppColors.chevronColor,
             ),
           ],
         ),
