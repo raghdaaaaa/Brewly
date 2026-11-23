@@ -48,109 +48,99 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(height: AppSpacing.sm),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                    onTap: () => Navigator.pop(context),
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: const BoxDecoration(
-                        color: AppColors.softSurfaceColor,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.shadowBlack05,
-                            blurRadius: 1,
-                            offset: Offset(0, 1),
-                          ),
-                        ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: AppSpacing.sm),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      onTap: () => Navigator.pop(context),
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(AppRadius.pill),
                       ),
-                      child: Center(
-                        child: SvgPicture.asset(
-                          AppAssets.registerBackArrow,
-                          width: 13.333,
-                          height: 13.333,
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: const BoxDecoration(
+                          color: AppColors.softSurfaceColor,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.shadowBlack05,
+                              blurRadius: 1,
+                              offset: Offset(0, 1),
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: SvgPicture.asset(
+                            AppAssets.registerBackArrow,
+                            width: 13.333,
+                            height: 13.333,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  _brandChip(),
-                  const SizedBox(width: 40),
-                ],
-              ),
-              const SizedBox(height: AppSpacing.lg),
-              const Text(
-                'Create Account',
-                style: AppTextStyles.displayBig,
-              ),
-              const SizedBox(height: AppSpacing.lg),
-              Container(
-                decoration: const BoxDecoration(
-                  color: AppColors.cardColor,
-                  borderRadius: BorderRadius.all(Radius.circular(AppRadius.md)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.shadowBlack05,
-                      blurRadius: 1,
-                      offset: Offset(0, 1),
-                    ),
+                    _brandChip(),
+                    const SizedBox(width: 40),
                   ],
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(AppSpacing.lg),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _displayNameField(),
-                      const SizedBox(height: AppSpacing.lg),
-                      _emailField(),
-                      const SizedBox(height: AppSpacing.lg),
-                      _phoneField(),
-                      const SizedBox(height: AppSpacing.lg),
-                      _passwordField(),
-                      const SizedBox(height: AppSpacing.sm),
-                      _ctaButton(),
-                      const SizedBox(height: AppSpacing.md),
-                      AuthSwitchLink(
-                        prompt: 'Already have an account?',
-                        actionLabel: 'Login',
-                        onTap: () {
-                          Navigator.pushReplacementNamed(
-                            context,
-                            AppRoutes.loginRoute,
-                          );
-                        },
+                const SizedBox(height: AppSpacing.lg),
+                const Text('Create Account', style: AppTextStyles.displayBig),
+                const SizedBox(height: AppSpacing.lg),
+                Container(
+                  decoration: const BoxDecoration(
+                    color: AppColors.cardColor,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(AppRadius.md),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.shadowBlack05,
+                        blurRadius: 1,
+                        offset: Offset(0, 1),
                       ),
                     ],
                   ),
-                ),
-              ),
-              const SizedBox(height: AppSpacing.xl),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: AppSpacing.sm),
-                  child: Container(
-                    width: 128,
-                    height: AppSpacing.xs,
-                    decoration: const BoxDecoration(
-                      color: AppColors.subtleBottomPillColor,
-                      shape: BoxShape.circle,
+                  child: Padding(
+                    padding: const EdgeInsets.all(AppSpacing.lg),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _displayNameField(),
+                        const SizedBox(height: AppSpacing.lg),
+                        _emailField(),
+                        const SizedBox(height: AppSpacing.lg),
+                        _phoneField(),
+                        const SizedBox(height: AppSpacing.lg),
+                        _passwordField(),
+                        const SizedBox(height: AppSpacing.xl),
+                        _ctaButton(),
+                        const SizedBox(height: AppSpacing.md),
+                        AuthSwitchLink(
+                          prompt: 'Already have an account?',
+                          actionLabel: 'Login',
+                          onTap: () {
+                            Navigator.pushReplacementNamed(
+                              context,
+                              AppRoutes.loginRoute,
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(height: AppSpacing.xl),
+              ],
+            ),
           ),
         ),
       ),
@@ -374,13 +364,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ),
               InkWell(
-                onTap: () => setState(
-                  () => _obscurePassword = !_obscurePassword,
+                onTap: () =>
+                    setState(() => _obscurePassword = !_obscurePassword),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(AppRadius.sm),
                 ),
                 child: SizedBox(
                   width: AppSpacing.xxl,
                   height: AppSpacing.xxl,
-                  child: SvgPicture.asset(AppAssets.registerToggleEye),
+                  child: Center(
+                    child: SvgPicture.asset(
+                      AppAssets.registerToggleEye,
+                      width: 18.333,
+                      height: 12.5,
+                    ),
+                  ),
                 ),
               ),
             ],

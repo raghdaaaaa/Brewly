@@ -294,7 +294,9 @@ class AppTextStyles {
   static const TextStyle inputLarge = TextStyle(
     fontFamily: fontFamily,
     fontSize: 16,
+    fontWeight: FontWeight.w400,
     height: 24 / 16,
+    letterSpacing: 0,
     color: AppColors.textColor,
   );
 

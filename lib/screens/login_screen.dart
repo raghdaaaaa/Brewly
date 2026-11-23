@@ -59,71 +59,68 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
-            child: AppHeaderBack(),
-          ),
-          const SizedBox(height: AppSpacing.xl),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _emblem(),
-              const SizedBox(height: AppSpacing.sm),
-              const Text(
-                'Welcome Back',
-                textAlign: TextAlign.center,
-                style: AppTextStyles.displayBig,
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Padding(
+              padding: EdgeInsets.fromLTRB(
+                AppSpacing.lg,
+                AppSpacing.lg,
+                AppSpacing.lg,
+                0,
               ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.lg),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _emailCard(),
-                    const SizedBox(height: AppSpacing.lg),
-                    _passwordCard(),
-                    const SizedBox(height: AppSpacing.lg),
-                    _ctaButton(),
-                    const SizedBox(height: AppSpacing.md),
-                    AuthSwitchLink(
-                      prompt: "Don't have an account?",
-                      actionLabel: 'Create account',
-                      onTap: () {
-                        Navigator.pushNamed(
-                          context,
-                          AppRoutes.registerRoute,
-                        );
-                      },
-                    ),
-                  ],
+              child: AppHeaderBack(),
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _emblem(),
+                const SizedBox(height: AppSpacing.sm),
+                const Text(
+                  'Welcome Back',
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.displayBig,
+                ),
+              ],
+            ),
+            // Figma: title to the first field label.
+            const SizedBox(height: 40),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.lg,
+                  0,
+                  AppSpacing.lg,
+                  AppSpacing.lg,
+                ),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _emailCard(),
+                      const SizedBox(height: AppSpacing.xl),
+                      _passwordCard(),
+                      const SizedBox(height: AppSpacing.xl),
+                      _ctaButton(),
+                      const SizedBox(height: AppSpacing.md),
+                      AuthSwitchLink(
+                        prompt: "Don't have an account?",
+                        actionLabel: 'Create account',
+                        onTap: () {
+                          Navigator.pushNamed(context, AppRoutes.registerRoute);
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: AppSpacing.sm),
-              child: Container(
-                width: 128,
-                height: AppSpacing.xs,
-                decoration: const BoxDecoration(
-                  color: AppColors.subtleBottomPillColor,
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -194,7 +191,7 @@ class _LoginScreenState extends State<LoginScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label, style: AppTextStyles.fieldLabel),
-        const SizedBox(height: 6),
+        const SizedBox(height: AppSpacing.sm),
         field,
       ],
     );
