@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../constants.dart';
 
@@ -17,7 +16,7 @@ class WelcomeScreen extends StatelessWidget {
           children: [
             _topBrandHeader(),
             _heroCard(),
-            _getStartedButton(),
+            _getStartedButton(context),
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
@@ -106,7 +105,8 @@ class WelcomeScreen extends StatelessWidget {
           children: [
             Text(
               'Brewly',
-              style: GoogleFonts.plusJakartaSans(
+              style: TextStyle(
+                fontFamily: 'PlusJakartaSans',
                 fontSize: 24,
                 fontWeight: FontWeight.w700,
                 height: 32 / 24,
@@ -172,10 +172,7 @@ class WelcomeScreen extends StatelessWidget {
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,
                           stops: [0.5, 1.0],
-                          colors: [
-                            Color(0xE6FFFFFF),
-                            Color(0x00FFFFFF),
-                          ],
+                          colors: [Color(0xE6FFFFFF), Color(0x00FFFFFF)],
                         ),
                       ),
                       child: SizedBox.expand(),
@@ -192,7 +189,8 @@ class WelcomeScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Artisanal Coffee & Pastries,',
-                    style: GoogleFonts.plusJakartaSans(
+                    style: TextStyle(
+                      fontFamily: 'PlusJakartaSans',
                       fontSize: 24,
                       fontWeight: FontWeight.w700,
                       height: 30 / 24,
@@ -203,7 +201,8 @@ class WelcomeScreen extends StatelessWidget {
                   SizedBox(height: 2),
                   Text(
                     'Delivered Fresh.',
-                    style: GoogleFonts.plusJakartaSans(
+                    style: TextStyle(
+                      fontFamily: 'PlusJakartaSans',
                       fontSize: 24,
                       fontWeight: FontWeight.w700,
                       height: 32 / 24,
@@ -220,41 +219,47 @@ class WelcomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _getStartedButton() {
-    return Container(
-      height: 56,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: primaryColor,
-        borderRadius: BorderRadius.circular(9999),
-        boxShadow: [
-          BoxShadow(
-            color: Color.fromRGBO(0, 81, 58, 0.25),
-            blurRadius: 6,
-            spreadRadius: -4,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Get Started',
-            style: GoogleFonts.plusJakartaSans(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              height: 20 / 14,
-              letterSpacing: 0.14,
-              color: Colors.white,
+  Widget _getStartedButton(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushReplacementNamed(context, loginRoute);
+      },
+      child: Container(
+        height: 56,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: primaryColor,
+          borderRadius: BorderRadius.circular(9999),
+          boxShadow: [
+            BoxShadow(
+              color: Color.fromRGBO(0, 81, 58, 0.25),
+              blurRadius: 6,
+              spreadRadius: -4,
+              offset: const Offset(0, 4),
             ),
-          ),
-          SizedBox(width: 8),
-          SizedBox(
-            width: 13.333,
-            child: SvgPicture.asset('assets/icons/welcome_cta_arrow.svg'),
-          ),
-        ],
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Get Started',
+              style: TextStyle(
+                fontFamily: 'PlusJakartaSans',
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                height: 20 / 14,
+                letterSpacing: 0.14,
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(width: 8),
+            SizedBox(
+              width: 13.333,
+              child: SvgPicture.asset('assets/icons/welcome_cta_arrow.svg'),
+            ),
+          ],
+        ),
       ),
     );
   }

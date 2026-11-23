@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../constants.dart';
 
@@ -83,7 +82,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               SizedBox(height: 16),
               Text(
                 'Create Account',
-                style: GoogleFonts.plusJakartaSans(
+                style: TextStyle(fontFamily: 'PlusJakartaSans',
                   fontSize: 30,
                   fontWeight: FontWeight.w700,
                   height: 38 / 30,
@@ -180,7 +179,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           SizedBox(width: 6),
           Text(
             'BREWLY',
-            style: GoogleFonts.plusJakartaSans(
+            style: TextStyle(fontFamily: 'PlusJakartaSans',
               fontSize: 12,
               fontWeight: FontWeight.w700,
               height: 16 / 12,
@@ -196,7 +195,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _fieldLabel(String label) {
     return Text(
       label,
-      style: GoogleFonts.plusJakartaSans(
+      style: TextStyle(fontFamily: 'PlusJakartaSans',
         fontSize: 12,
         fontWeight: FontWeight.w600,
         height: 16 / 12,
@@ -232,14 +231,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 obscureText: obscure,
                 textInputAction: action,
                 validator: validator,
-                style: GoogleFonts.plusJakartaSans(
+                style: TextStyle(fontFamily: 'PlusJakartaSans',
                   fontSize: 14,
                   color: textColor,
                 ),
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: hint,
-                  hintStyle: GoogleFonts.plusJakartaSans(
+                  hintStyle: TextStyle(fontFamily: 'PlusJakartaSans',
                     fontSize: 14,
                     color: textColor,
                   ),
@@ -341,7 +340,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             Text(
               '+20',
-              style: GoogleFonts.plusJakartaSans(
+              style: TextStyle(fontFamily: 'PlusJakartaSans',
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
                 height: 16 / 12,
@@ -382,14 +381,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     obscureText: _obscurePassword,
                     textInputAction: TextInputAction.done,
                     validator: _validatePassword,
-                    style: GoogleFonts.plusJakartaSans(
+                    style: TextStyle(fontFamily: 'PlusJakartaSans',
                       fontSize: 14,
                       letterSpacing: 0.7,
                       color: textColor,
                     ),
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintStyle: GoogleFonts.plusJakartaSans(
+                      hintStyle: TextStyle(fontFamily: 'PlusJakartaSans',
                         fontSize: 14,
                         color: textColor,
                       ),
@@ -435,7 +434,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           children: [
             Text(
               'Create account',
-              style: GoogleFonts.plusJakartaSans(
+              style: TextStyle(fontFamily: 'PlusJakartaSans',
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
                 height: 20 / 14,

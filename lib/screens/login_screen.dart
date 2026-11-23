@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../constants.dart';
 import '../widgets/app_header.dart';
@@ -72,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Text(
                 'Welcome Back',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.plusJakartaSans(
+                style: TextStyle(fontFamily: 'PlusJakartaSans',
                   fontSize: 30,
                   fontWeight: FontWeight.w700,
                   height: 38 / 30,
@@ -184,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
       children: [
         Text(
           label,
-          style: GoogleFonts.plusJakartaSans(
+          style: TextStyle(fontFamily: 'PlusJakartaSans',
             fontSize: 12,
             fontWeight: FontWeight.w600,
             height: 16 / 12,
@@ -226,7 +225,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: TextFormField(
                   controller: _emailController,
                   validator: _requiredEmail,
-                  style: GoogleFonts.plusJakartaSans(
+                  style: TextStyle(fontFamily: 'PlusJakartaSans',
                     fontSize: 16,
                     height: 24 / 16,
                     color: textColor,
@@ -278,7 +277,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   obscureText: _obscurePassword,
                   validator: _requiredPassword,
                   textInputAction: TextInputAction.done,
-                  style: GoogleFonts.plusJakartaSans(
+                  style: TextStyle(fontFamily: 'PlusJakartaSans',
                     fontSize: 16,
                     height: 24 / 16,
                     letterSpacing: 1.6,
@@ -330,7 +329,7 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             Text(
               'Login',
-              style: GoogleFonts.plusJakartaSans(
+              style: TextStyle(fontFamily: 'PlusJakartaSans',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 height: 20 / 14,

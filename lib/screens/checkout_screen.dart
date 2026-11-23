@@ -74,7 +74,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     // Back to Main, with the Orders tab open.
     Navigator.pushNamedAndRemoveUntil(
       context,
-      mainRoute,
+      homeRoute,
       (route) => false,
       arguments: 2,
     );

@@ -7,7 +7,7 @@ import 'package:brewly/screens/main_screen.dart';
 import 'package:brewly/screens/product_details_screen.dart';
 
 void main() {
-  testWidgets('Splash screen shows, then opens the Login screen', (
+  testWidgets('Splash screen shows, then opens the Welcome screen', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(const BrewlyApp());
@@ -19,8 +19,8 @@ void main() {
     await tester.pump(const Duration(seconds: 2));
     await tester.pumpAndSettle();
 
-    // After the splash we are on the Login screen.
-    expect(find.text('Welcome Back'), findsOneWidget);
+    // After the splash we are on the Welcome screen.
+    expect(find.text('Artisanal Coffee & Pastries,'), findsOneWidget);
   });
 
   testWidgets('Home loads the dummy products without overflow', (
