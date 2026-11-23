@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../constants.dart';
+import '../core/app_assets.dart';
+import '../core/app_colors.dart';
+import '../core/app_routes.dart';
+import '../core/app_theme.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});

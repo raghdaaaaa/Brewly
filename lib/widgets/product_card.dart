@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
+import '../core/app_colors.dart';
 import '../models/product.dart';
 
 /// One product inside the Home grid.

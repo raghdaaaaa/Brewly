@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
+import '../core/app_colors.dart';
 
 /// A text field with a small label above it.
 /// Used by Login, Register, Checkout and Profile so every form looks the same.

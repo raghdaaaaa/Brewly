@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
+import '../core/app_colors.dart';
 
 /// One selectable category pill.
 /// The color change is animated with AnimatedContainer.

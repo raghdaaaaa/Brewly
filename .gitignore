@@ -62,3 +62,6 @@ coverage/
 
 # OpenCode
 opencode.json
+
+.idea/
+*.iml

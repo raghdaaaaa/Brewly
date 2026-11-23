@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
+import '../core/app_colors.dart';
 
 /// Shows an error message with a Retry button.
 /// Used everywhere the data can fail to load.

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
+import '../core/app_colors.dart';
 
 /// A simple centered loading spinner.
 /// Used by FutureBuilder while the data is loading.

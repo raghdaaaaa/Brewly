@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../constants.dart';
+import '../core/app_assets.dart';
+import '../core/app_colors.dart';
+import '../core/app_routes.dart';
+import '../core/app_theme.dart';
 import '../widgets/app_header.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -71,13 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Text(
                 'Welcome Back',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontFamily: 'PlusJakartaSans',
-                  fontSize: 30,
-                  fontWeight: FontWeight.w700,
-                  height: 38 / 30,
-                  letterSpacing: -0.6,
-                  color: textColor,
-                ),
+                style: AppTheme.displayBig,
               ),
             ],
           ),

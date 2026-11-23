@@ -1,9 +1,9 @@
-import 'models/address.dart';
-import 'models/basket.dart';
-import 'models/category.dart';
-import 'models/delivery_method.dart';
-import 'models/order.dart';
-import 'models/product.dart';
+import '../../models/address.dart';
+import '../../models/basket.dart';
+import '../../models/category.dart';
+import '../../models/delivery_method.dart';
+import '../../models/order.dart';
+import '../../models/product.dart';
 
 // ---------------------------------------------------------------
 // Hardcoded data. It is replaced by the real API in a later step.
