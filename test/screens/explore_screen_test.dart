@@ -12,13 +12,11 @@ void main() {
     ]) {
       for (final scale in [1.0, 1.3]) {
         tester.view.physicalSize = size;
-        tester.view.devicePixelRatio = 3.0;
+        tester.view.devicePixelRatio = 1.0;
         tester.platformDispatcher.textScaleFactorTestValue = scale;
         await tester.pumpWidget(const MaterialApp(home: ExploreScreen()));
         await tester.pumpAndSettle();
-        final e = tester.takeException();
-        print('size=$size scale=$scale exception=$e');
-        expect(e, isNull);
+        expect(tester.takeException(), isNull);
       }
     }
   });

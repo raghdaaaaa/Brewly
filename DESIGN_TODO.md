@@ -3,8 +3,24 @@
 Screens are not Figma-final yet. This file tracks what still differs and what phase 2
 must fix.
 
+## Log
+
+- Figma MCP tool-call limit reached on the Starter plan (checked with whoami).
+  Frames NOT read: Home 9:1158, Explore 9:1046, Products List 9:847, Product Details
+  9:785, Cart 9:639, Checkout 9:478, Order Success 9:427, My Orders 9:214,
+  Order Details 9:329, Profile 9:2, My Address 9:123.
+- Group 2 (Home, Explore, Products List) built from `DESIGN_NOTES.md` + new tokens
+  (no `DESIGN_SPEC/` files for them yet). `ProductCard` structure: the old
+  `Expanded(child: Stack(...))` is rejected by the SDK ("Expanded wants FlexParentData,
+  Stack accepts StackParentData") — rewritten as `Card > InkWell > Stack(fit: expand)`
+  with the name/price overlay at the bottom of the image.
+- AppBottomNav 5-tab pill bar: the cart tab is a plain `InkWell` inside an
+  `Expanded` (the badge `Stack` around it rejects an `Expanded` child).
+
 ## Global (phase 2 screen rebuild)
 
+- [ ] Add `DESIGN_SPEC/<screen>.md` for: Home, Explore, Products List, Product Details,
+      Cart, Checkout, Order Success, My Orders, Order Details, Profile, My Address.
 - [ ] Replace the remaining raw spacing / radius / size numbers in screens with
       `AppSpacing`, `AppRadius`, `AppSizes`.
 - [ ] Replace `Widget _buildSomething()` helpers with `StatelessWidget` classes in their
@@ -12,14 +28,15 @@ must fix.
 - [ ] Add `SafeArea` to Login, Register and Welcome; keep forms usable with the keyboard
       open.
 - [ ] Move feature widgets to `widgets/<feature>/` and shared ones to `widgets/common/`.
-- [ ] Bottom nav needs 5 tabs exactly like Figma: Home, Explore, Cart (count badge),
-      Orders, Profile. Current code has 4 and no badge.
-- [ ] Add the per-screen `DESIGN_SPEC/<screen>.md` files (only `DESIGN_NOTES.md` exists).
-- [ ] Add `test/screens/<screen>_test.dart` at 320×640, 360×800, 390×844, 430×932 with
-      text scale 1.0 and 1.3.
+- [ ] Add the per-screen `test/screens/<screen>_test.dart` at 320×640, 360×800, 390×844,
+      430×932 with text scale 1.0 and 1.3.
 
 ## Screens
 
+- [x] **Home** (Group 2, first pass from DESIGN_NOTES; no promo card / brand pills yet,
+      first `mainAxisExtent` product grid; product cards are the overlay design).
+- [x] **Explore** (Group 2; first pass).
+- [x] **Products List** (Group 2; first pass).
 - [ ] **Splash** – logo is still the default icon + text; add the AnimationController
       fade/scale and the exported logo.
 - [ ] **Welcome** – replace `FractionallySizedBox(1.3123)` and the absolute offsets with
@@ -27,8 +44,6 @@ must fix.
 - [ ] **Login / Register** – first-pass layout, not the Figma frames. Register still
       needs the password helper text and the real API RegExp. Phone field still shows
       the flag instead of the approved "+20".
-- [ ] **Home** – missing promo card and brand pills; product grid uses
-      `childAspectRatio: 0.70`, switch to `mainAxisExtent`; no Explore tab yet.
 - [ ] **Product Details** – structure is close; verify image ratio, quantity stepper and
       sticky bar against the frame.
 - [ ] **Cart** – summary is not a Figma card yet; empty state and item cards need the
@@ -46,14 +61,9 @@ must fix.
 
 - [ ] Register password helper text (12, muted) + RegExp validator (deviation 2).
 - [ ] Phone field: "+20" instead of the flag (deviation 5).
-- [ ] Cart badge on the bottom nav (deviation 4).
 - [ ] "Coming soon" SnackBar for visual-only buttons (deviation 8).
 
-## Done in phase 1
+## Done
 
-- [x] Core folders: `theme/`, `routes/`, `constants/`.
-- [x] `AppTextStyles`, `AppSpacing`, `AppRadius`, `AppSizes`.
-- [x] `constants.dart` removed; all colors, routes and asset paths use tokens.
-- [x] Dummy data moved to `lib/services/dummy/dummy_data.dart`.
-- [x] Auth switch links (Login ↔ Register) and `Cairo@12` sample password.
-- [x] Register brand mark no longer overflows (pill instead of a 40 px circle).
+- [x] Group 1: bugs + core refactor (Group 1 commit).
+- [x] Group 2: Home, Explore, Products List.

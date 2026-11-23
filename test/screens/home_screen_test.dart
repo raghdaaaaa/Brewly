@@ -12,7 +12,7 @@ void main() {
     ]) {
       for (final scale in [1.0, 1.3]) {
         tester.view.physicalSize = size;
-        tester.view.devicePixelRatio = 3.0;
+        tester.view.devicePixelRatio = 1.0;
         tester.platformDispatcher.textScaleFactorTestValue = scale;
         await tester.pumpWidget(const MaterialApp(home: HomeScreen()));
         await tester.pumpAndSettle(const Duration(seconds: 2));

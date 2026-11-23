@@ -30,6 +30,7 @@ class AppBottomNav extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
         child: Container(
+          height: AppSizes.navBarHeight,
           decoration: BoxDecoration(
             color: AppColors.cardColor,
             borderRadius: BorderRadius.circular(AppRadius.pill),
@@ -47,31 +48,7 @@ class AppBottomNav extends StatelessWidget {
               children: [
                 _tab(0, _tabIcons[0]),
                 _tab(1, _tabIcons[1]),
-                Stack(
-                  alignment: Alignment.topRight,
-                  children: [
-                    _tab(2, _tabIcons[2]),
-                    if (cartCount > 0)
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 1,
-                        ),
-                        decoration: const BoxDecoration(
-                          color: AppColors.primaryColor,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Text(
-                          cartCount.toString(),
-                          style: const TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
+                _cartTab(),
                 _tab(3, _tabIcons[3]),
                 _tab(4, _tabIcons[4]),
               ],
@@ -91,12 +68,80 @@ class AppBottomNav extends StatelessWidget {
         child: Center(
           child: active
               ? Container(
-                  width: 32,
-                  height: 32,
-                  decoration: const BoxDecoration(color: AppColors.primaryColor, shape: BoxShape.circle),
+                  width: 36,
+                  height: 36,
+                  decoration: const BoxDecoration(
+                    color: AppColors.primaryColor,
+                    shape: BoxShape.circle,
+                  ),
                   child: Icon(icon, size: 20, color: Colors.white),
                 )
               : Icon(icon, size: 20, color: AppColors.mutedTextColor),
+        ),
+      ),
+    );
+  }
+
+  Widget _cartTab() {
+    final active = currentIndex == 2;
+    return Expanded(
+      child: InkWell(
+        onTap: () => onTap(2),
+        borderRadius: BorderRadius.circular(AppRadius.pill),
+        child: Center(
+          child: SizedBox(
+            width: 36,
+            height: 36,
+            child: Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.center,
+              children: [
+                if (active)
+                  Container(
+                    width: 36,
+                    height: 36,
+                    decoration: const BoxDecoration(
+                      color: AppColors.primaryColor,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.shopping_cart_outlined,
+                      size: 20,
+                      color: Colors.white,
+                    ),
+                  )
+                else
+                  const Icon(
+                    Icons.shopping_cart_outlined,
+                    size: 20,
+                    color: AppColors.mutedTextColor,
+                  ),
+                if (cartCount > 0)
+                  Positioned(
+                    top: -2,
+                    right: -2,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5,
+                        vertical: 1,
+                      ),
+                      decoration: BoxDecoration(
+                        color: active ? AppColors.accentColor : AppColors.primaryColor,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Text(
+                        cartCount.toString(),
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                          color: active ? AppColors.onAccentColor : Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
         ),
       ),
     );

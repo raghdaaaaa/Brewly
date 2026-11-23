@@ -29,7 +29,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
   }
 
   void _openProduct(Product product) {
-    Navigator.pushNamed(context, AppRoutes.detailsRoute, arguments: product);
+    Navigator.pushNamed(
+      context,
+      AppRoutes.detailsRoute,
+      arguments: {'product': product, 'heroPrefix': 'explore'},
+    );
   }
 
   @override
@@ -44,6 +48,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
             AppSpacing.xl,
           ),
           children: [
+            const AppHeaderTop(),
             const SizedBox(height: AppSpacing.sm),
             const Text('Popular Right Now', style: AppTextStyles.heading),
             const SizedBox(height: AppSpacing.md),
@@ -52,6 +57,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
               favorites: _favoriteIds,
               onFavoriteTap: _toggleFavorite,
               onTap: _openProduct,
+              heroPrefix: 'explore',
             ),
           ],
         ),

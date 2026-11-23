@@ -29,7 +29,11 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
   }
 
   void _openProduct(Product product) {
-    Navigator.pushNamed(context, AppRoutes.detailsRoute, arguments: product);
+    Navigator.pushNamed(
+      context,
+      AppRoutes.detailsRoute,
+      arguments: {'product': product, 'heroPrefix': 'list'},
+    );
   }
 
   @override
@@ -48,6 +52,7 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
               favorites: _favoriteIds,
               onFavoriteTap: _toggleFavorite,
               onTap: _openProduct,
+              heroPrefix: 'list',
             ),
           ],
         ),

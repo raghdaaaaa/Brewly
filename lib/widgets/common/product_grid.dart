@@ -13,12 +13,15 @@ class ProductGrid extends StatelessWidget {
     required this.favorites,
     required this.onFavoriteTap,
     required this.onTap,
+    this.heroPrefix = 'home',
   });
 
   final List<Product> products;
   final Set<int> favorites;
   final ValueChanged<int> onFavoriteTap;
   final void Function(Product product) onTap;
+  /// Prefix forwarded to [ProductCard] to keep Hero tags unique across tabs.
+  final String heroPrefix;
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +54,7 @@ class ProductGrid extends StatelessWidget {
           isFavorite: favorites.contains(product.id),
           onFavoriteTap: () => onFavoriteTap(product.id),
           onTap: () => onTap(product),
+          heroPrefix: heroPrefix,
         );
       },
     );

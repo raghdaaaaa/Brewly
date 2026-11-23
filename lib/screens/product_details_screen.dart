@@ -27,9 +27,21 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // The product is passed from Home with Navigator.pushNamed arguments.
+    // Arguments can be a plain Product (old callers) or a Map with
+    // 'product' and 'heroPrefix' (screens that use IndexedStack).
     final arguments = ModalRoute.of(context)?.settings.arguments;
-    final product = arguments is Product ? arguments : null;
+    final Product? product;
+    final String heroPrefix;
+    if (arguments is Map) {
+      product = arguments['product'] as Product?;
+      heroPrefix = (arguments['heroPrefix'] as String?) ?? 'home';
+    } else if (arguments is Product) {
+      product = arguments;
+      heroPrefix = 'home';
+    } else {
+      product = null;
+      heroPrefix = 'home';
+    }
 
     if (product == null) {
       return Scaffold(
@@ -42,6 +54,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         ),
       );
     }
+
+    final Product details = product;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Product Detail')),
@@ -61,7 +75,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               child: AspectRatio(
                 aspectRatio: 358 / 269,
                 child: Hero(
-                  tag: 'product_${product.id}',
+                  tag: '${heroPrefix}_product_${product.id}',
                   child: Image.network(
                     product.pictureUrl,
                     fit: BoxFit.cover,
@@ -251,7 +265,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               const SizedBox(width: AppSpacing.lg),
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () => _addToCart(product),
+                  onPressed: () => _addToCart(details),
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

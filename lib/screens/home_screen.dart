@@ -257,7 +257,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Navigator.pushNamed(
               context,
               AppRoutes.detailsRoute,
-              arguments: product,
+              arguments: {'product': product, 'heroPrefix': 'home'},
             );
           },
         );

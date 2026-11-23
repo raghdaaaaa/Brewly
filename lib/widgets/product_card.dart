@@ -7,6 +7,9 @@ import '../models/product.dart';
 
 /// One product inside the Home grid.
 /// The heart is local only: Home keeps the list of favorite ids.
+///
+/// [heroPrefix] disambiguates Hero tags when two grids (e.g. Home and Explore)
+/// are alive in the same [IndexedStack] at the same time.
 class ProductCard extends StatelessWidget {
   const ProductCard({
     super.key,
@@ -14,16 +17,24 @@ class ProductCard extends StatelessWidget {
     required this.isFavorite,
     required this.onFavoriteTap,
     required this.onTap,
+    this.heroPrefix = 'home',
   });
 
   final Product product;
   final bool isFavorite;
   final VoidCallback onFavoriteTap;
   final VoidCallback onTap;
+  /// Prefix that makes the Hero tag unique across tabs.
+  final String heroPrefix;
 
   @override
   Widget build(BuildContext context) {
     return Card(
+      elevation: 0,
+      color: AppColors.cardColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+      ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
@@ -33,32 +44,29 @@ class ProductCard extends StatelessWidget {
             // Image + favorite heart.
             Expanded(
               child: Stack(
+                fit: StackFit.expand,
                 children: [
-                  Positioned.fill(
-                    child: Hero(
-                      // The same tag is used on the Details screen.
-                      tag: 'product_${product.id}',
-                      child: Image.network(
-                        product.pictureUrl,
-                        fit: BoxFit.cover,
-                        // Gray box with an icon if the image cannot load.
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            color: AppColors.softSurfaceColor,
-                            child: const Icon(
-                              Icons.local_cafe,
-                              size: 32,
-                              color: AppColors.mutedTextColor,
-                            ),
-                          );
-                        },
-                        loadingBuilder: (context, child, progress) {
-                          if (progress == null) {
-                            return child;
-                          }
-                          return Container(color: AppColors.softSurfaceColor);
-                        },
-                      ),
+                  Hero(
+                    tag: '${heroPrefix}_product_${product.id}',
+                    child: Image.network(
+                      product.pictureUrl,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          color: AppColors.softSurfaceColor,
+                          child: const Icon(
+                            Icons.local_cafe,
+                            size: 32,
+                            color: AppColors.mutedTextColor,
+                          ),
+                        );
+                      },
+                      loadingBuilder: (context, child, progress) {
+                        if (progress == null) {
+                          return child;
+                        }
+                        return Container(color: AppColors.softSurfaceColor);
+                      },
                     ),
                   ),
                   Positioned(
@@ -85,7 +93,6 @@ class ProductCard extends StatelessWidget {
                             isFavorite
                                 ? Icons.favorite
                                 : Icons.favorite_border,
-                            // The key makes AnimatedSwitcher animate the change.
                             key: ValueKey(isFavorite),
                             size: 18,
                             color: isFavorite
@@ -99,8 +106,7 @@ class ProductCard extends StatelessWidget {
                 ],
               ),
             ),
-
-            // Name and price.
+            // Name and price below image.
             Padding(
               padding: const EdgeInsets.all(12),
               child: Column(
@@ -112,7 +118,7 @@ class ProductCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: AppTextStyles.cardTitle,
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 4),
                   Text(
                     '${product.price.toStringAsFixed(0)} EGP',
                     style: AppTextStyles.priceMedium,
