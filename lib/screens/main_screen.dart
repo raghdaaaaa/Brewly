@@ -44,7 +44,7 @@ class _MainScreenState extends State<MainScreen> {
           const ExploreScreen(),
           CartScreen(onBrowseMenu: () => _selectTab(0)),
           const OrdersScreen(),
-          const ProfileScreen(),
+          ProfileScreen(onOrdersTap: () => _selectTab(3)),
         ],
       ),
       bottomNavigationBar: ValueListenableBuilder<int>(

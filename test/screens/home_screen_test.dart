@@ -1,4 +1,6 @@
+import 'package:brewly/models/address.dart';
 import 'package:brewly/screens/home_screen.dart';
+import 'package:brewly/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -52,5 +54,45 @@ void main() {
         expect(tester.takeException(), isNull);
       }
     }
+  });
+
+  testWidgets('home screen displays and updates saved address', (tester) async {
+    addTearDown(() => AuthService.savedAddress.value = null);
+    AuthService.savedAddress.value = const Address(
+      firstName: 'Nour',
+      lastName: 'Hassan',
+      street: '10 Tahrir Sq',
+      city: 'Cairo',
+      country: 'Egypt',
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: HomeScreen(
+          productService: FakeProductService(
+            products: buildTestProducts(),
+            categories: testCategories,
+            brands: testBrands,
+          ),
+          basketService: FakeBasketService(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('10 Tahrir Sq, Cairo, Egypt'), findsOneWidget);
+    expect(find.text('Cairo, Egypt'), findsOneWidget);
+
+    AuthService.savedAddress.value = const Address(
+      firstName: 'Nour',
+      lastName: 'Hassan',
+      street: '99 Corniche',
+      city: 'Alexandria',
+      country: 'Egypt',
+    );
+    await tester.pump();
+
+    expect(find.text('99 Corniche, Alexandria, Egypt'), findsOneWidget);
+    expect(find.text('Alexandria, Egypt'), findsOneWidget);
   });
 }

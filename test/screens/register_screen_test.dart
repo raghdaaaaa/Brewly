@@ -22,6 +22,10 @@ void main() {
         expect(find.text('BREWLY'), findsOneWidget);
         expect(find.text('Egyptian Phone Number'), findsOneWidget);
         expect(find.text('+20'), findsOneWidget);
+        final fields = tester.widgetList<TextFormField>(find.byType(TextFormField));
+        for (final field in fields) {
+          expect(field.controller?.text, isEmpty);
+        }
         expect(find.text('Create account'), findsOneWidget);
         expect(tester.takeException(), isNull);
       }

@@ -4,6 +4,7 @@ import '../core/routes/app_routes.dart';
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_spacing.dart';
 import '../core/theme/app_text_styles.dart';
+import '../services/auth_service.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -22,7 +23,6 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
 
-    // Explicit animation: the brand mark fades in and grows slightly.
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 900),
@@ -36,15 +36,20 @@ class _SplashScreenState extends State<SplashScreen>
     );
     _controller.forward();
 
-    // Keep the splash visible for 2 seconds, then open Welcome.
-    Future.delayed(const Duration(seconds: 2), _openWelcome);
+    _startApp();
   }
 
-  void _openWelcome() {
+  Future<void> _startApp() async {
+    final delayFuture = Future<void>.delayed(const Duration(seconds: 2));
+    final restored = await AuthService.instance.restoreSession();
+    await delayFuture;
     if (!mounted) {
       return;
     }
-    Navigator.pushReplacementNamed(context, AppRoutes.welcomeRoute);
+    Navigator.pushReplacementNamed(
+      context,
+      restored ? AppRoutes.homeRoute : AppRoutes.welcomeRoute,
+    );
   }
 
   @override

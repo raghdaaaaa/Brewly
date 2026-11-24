@@ -72,6 +72,7 @@ class RegisterFormCard extends StatelessWidget {
               children: [
                 AppTextField(
                   label: 'Display Name',
+                  hint: 'Omar El-Sayed',
                   controller: displayNameController,
                   validator: (value) => Validators.requiredText(
                     value,
@@ -93,6 +94,7 @@ class RegisterFormCard extends StatelessWidget {
                 const SizedBox(height: AppSpacing.lg),
                 AppTextField(
                   label: 'Email Address',
+                  hint: 'omar.sayed@cairobrew.com',
                   controller: emailController,
                   validator: emailValidator,
                   keyboardType: TextInputType.emailAddress,
@@ -113,6 +115,7 @@ class RegisterFormCard extends StatelessWidget {
                 const SizedBox(height: AppSpacing.lg),
                 AppTextField(
                   label: 'Password',
+                  hint: 'Password',
                   controller: passwordController,
                   obscureText: obscurePassword,
                   validator: Validators.password,

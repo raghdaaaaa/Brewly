@@ -20,21 +20,16 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  final _emailController = TextEditingController(
-    text: 'omar.sayed@cairobrew.com',
-  );
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
-  // Sample password that satisfies the API password rule.
-  final _passwordController = TextEditingController(text: 'Cairo@12');
-
-  late bool _emailIsValid;
+  bool _emailIsValid = false;
   bool _obscurePassword = true;
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    _emailIsValid = Validators.email(_emailController.text) == null;
   }
 
   @override

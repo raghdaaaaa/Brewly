@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:brewly/core/routes/app_routes.dart';
 import 'package:brewly/main.dart';
@@ -13,6 +14,7 @@ void main() {
   testWidgets('Splash screen shows, then opens the Welcome screen', (
     WidgetTester tester,
   ) async {
+    SharedPreferences.setMockInitialValues({});
     await tester.pumpWidget(const BrewlyApp());
 
     // The splash screen is shown first.

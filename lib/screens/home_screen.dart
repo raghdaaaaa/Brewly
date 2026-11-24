@@ -4,10 +4,12 @@ import 'package:flutter/services.dart';
 import '../core/errors/app_exception.dart';
 import '../core/routes/app_routes.dart';
 import '../core/theme/app_spacing.dart';
+import '../models/address.dart';
 import '../models/brand.dart';
 import '../models/category.dart';
 import '../models/product.dart';
 import '../models/product_page.dart';
+import '../models/user.dart';
 import '../services/auth_service.dart';
 import '../services/basket_service.dart';
 import '../services/dummy/dummy_data.dart';
@@ -54,6 +56,10 @@ class _HomeScreenState extends State<HomeScreen> {
     _loadCategories();
     _loadBrands();
     _loadProducts();
+    if (AuthService.instance.isLoggedIn &&
+        AuthService.savedAddress.value == null) {
+      AuthService.instance.getAddress().ignore();
+    }
   }
 
   @override
@@ -74,13 +80,27 @@ class _HomeScreenState extends State<HomeScreen> {
     _productsFuture = _productService.getProducts(pageSize: 4);
   }
 
-  String get _firstName {
-    final displayName =
-        AuthService.instance.currentUser?.displayName.trim() ?? '';
+  String _firstName(User? user) {
+    final displayName = user?.displayName.trim() ?? '';
     if (displayName.isEmpty) {
-      return 'Omar';
+      return 'there';
     }
     return displayName.split(' ').first;
+  }
+
+  String _formatAddress(Address? address) {
+    if (address == null) {
+      return 'Add delivery address';
+    }
+    final parts = [
+      address.street.trim(),
+      address.city.trim(),
+      address.country.trim(),
+    ].where((part) => part.isNotEmpty).toList();
+    if (parts.isEmpty) {
+      return 'Add delivery address';
+    }
+    return parts.join(', ');
   }
 
   void _openProducts([Map<String, Object?>? arguments]) {
@@ -172,11 +192,24 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               const AppHeaderTop(),
               const SizedBox(height: AppSpacing.lg),
-              HomeGreeting(name: _firstName, points: dummyLoyaltyPoints),
+              ValueListenableBuilder<User?>(
+                valueListenable: AuthService.currentUserNotifier,
+                builder: (context, user, child) {
+                  return HomeGreeting(
+                    name: _firstName(user),
+                    points: dummyLoyaltyPoints,
+                  );
+                },
+              ),
               const SizedBox(height: AppSpacing.lg),
-              DeliveryCard(
-                address: dummyDeliveryLabel,
-                onTap: () => _showMessage('Address editing is coming soon'),
+              ValueListenableBuilder<Address?>(
+                valueListenable: AuthService.savedAddress,
+                builder: (context, address, child) {
+                  return DeliveryCard(
+                    address: _formatAddress(address),
+                    onTap: () => Navigator.pushNamed(context, AppRoutes.addressRoute),
+                  );
+                },
               ),
               const SizedBox(height: AppSpacing.lg),
               AppSearchField(

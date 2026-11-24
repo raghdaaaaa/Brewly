@@ -64,11 +64,33 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     _loadCheckoutData();
   }
 
+  void _applySavedAddress(Address saved) {
+    if (_firstNameController.text.isEmpty) {
+      _firstNameController.text = saved.firstName;
+    }
+    if (_lastNameController.text.isEmpty) {
+      _lastNameController.text = saved.lastName;
+    }
+    if (_streetController.text.isEmpty) {
+      _streetController.text = saved.street;
+    }
+    if (_cityController.text.isEmpty) {
+      _cityController.text = saved.city;
+    }
+    if (saved.country.isNotEmpty) {
+      _countryController.text = saved.country;
+    }
+  }
+
   Future<void> _loadCheckoutData() async {
     setState(() {
       _isLoading = true;
       _errorMessage = null;
     });
+    final cachedAddress = AuthService.savedAddress.value;
+    if (cachedAddress != null) {
+      _applySavedAddress(cachedAddress);
+    }
     try {
       final basketFuture = _basketService.getBasket();
       final methodsFuture = _orderService.getDeliveryMethods();
@@ -79,21 +101,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         try {
           final saved = await AuthService.instance.getAddress();
           if (saved != null && mounted) {
-            if (_firstNameController.text.isEmpty) {
-              _firstNameController.text = saved.firstName;
-            }
-            if (_lastNameController.text.isEmpty) {
-              _lastNameController.text = saved.lastName;
-            }
-            if (_streetController.text.isEmpty) {
-              _streetController.text = saved.street;
-            }
-            if (_cityController.text.isEmpty) {
-              _cityController.text = saved.city;
-            }
-            if (saved.country.isNotEmpty) {
-              _countryController.text = saved.country;
-            }
+            _applySavedAddress(saved);
           }
         } catch (_) {}
       }

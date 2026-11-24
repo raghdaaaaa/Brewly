@@ -20,6 +20,10 @@ void main() {
 
         expect(find.text('Welcome Back'), findsOneWidget);
         expect(find.byType(TextFormField), findsNWidgets(2));
+        final fields = tester.widgetList<TextFormField>(find.byType(TextFormField));
+        for (final field in fields) {
+          expect(field.controller?.text, isEmpty);
+        }
         expect(find.text('Login'), findsOneWidget);
         expect(find.text('Create account'), findsOneWidget);
         expect(tester.takeException(), isNull);

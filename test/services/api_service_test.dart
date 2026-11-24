@@ -4,12 +4,14 @@ import 'package:brewly/core/errors/app_exception.dart';
 import 'package:brewly/models/address.dart';
 import 'package:brewly/services/api_client.dart';
 import 'package:brewly/services/api_service.dart';
+import 'package:brewly/services/auth_service.dart';
 import 'package:brewly/services/basket_service.dart';
 import 'package:brewly/services/order_service.dart';
 import 'package:brewly/services/product_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   group('ApiService', () {
@@ -403,6 +405,98 @@ void main() {
       );
       expect(order.id, '42');
       expect(order.total, 250);
+    });
+
+    test('AuthService persists session, restores valid token, clears on 401/404, and clears on logout', () async {
+      SharedPreferences.setMockInitialValues({});
+
+      final mock = MockClient((request) async {
+        if (request.url.path == '/api/Account/Login') {
+          return http.Response(
+            jsonEncode({
+              'displayName': 'Nour Hassan',
+              'email': 'nour@example.com',
+              'token': 'valid-jwt-token',
+            }),
+            200,
+            headers: {'content-type': 'application/json'},
+          );
+        }
+        if (request.url.path == '/api/Account') {
+          if (request.headers['Authorization'] == 'Bearer valid-jwt-token') {
+            return http.Response(
+              jsonEncode({
+                'displayName': 'Nour Hassan',
+                'email': 'nour@example.com',
+                'token': 'valid-jwt-token',
+              }),
+              200,
+              headers: {'content-type': 'application/json'},
+            );
+          }
+          return http.Response('', 404);
+        }
+        if (request.url.path == '/api/Account/Address' && request.method == 'PUT') {
+          return http.Response(
+            request.body,
+            200,
+            headers: {'content-type': 'application/json'},
+          );
+        }
+        if (request.url.path == '/api/Account/Address' && request.method == 'GET') {
+          return http.Response(
+            jsonEncode({
+              'firstName': 'Nour',
+              'lastName': 'Hassan',
+              'street': '22 Nile St',
+              'city': 'Giza',
+              'country': 'Egypt',
+            }),
+            200,
+            headers: {'content-type': 'application/json'},
+          );
+        }
+        return http.Response('', 200);
+      });
+
+      final client = ApiClient(httpClient: mock, baseUrl: 'https://example.test');
+      final apiService = ApiService(client: client);
+      final auth1 = AuthService(apiService: apiService);
+
+      await auth1.login(email: 'nour@example.com', password: 'Password@1');
+      expect(auth1.isLoggedIn, isTrue);
+
+      final prefs = await SharedPreferences.getInstance();
+      expect(prefs.getString('auth_token'), 'valid-jwt-token');
+
+      final updated = await auth1.updateAddress(
+        const Address(
+          firstName: 'Nour',
+          lastName: 'Hassan',
+          street: '22 Nile St',
+          city: 'Giza',
+          country: 'Egypt',
+        ),
+      );
+      expect(updated.street, '22 Nile St');
+      expect(AuthService.savedAddress.value?.city, 'Giza');
+
+      final auth2 = AuthService(apiService: ApiService(client: client));
+      final restored = await auth2.restoreSession();
+      expect(restored, isTrue);
+      expect(auth2.currentUser?.displayName, 'Nour Hassan');
+      expect(AuthService.savedAddress.value?.street, '22 Nile St');
+
+      await auth2.logout();
+      expect(auth2.isLoggedIn, isFalse);
+      expect(AuthService.savedAddress.value, isNull);
+      expect(prefs.getString('auth_token'), isNull);
+
+      await prefs.setString('auth_token', 'expired-token');
+      final auth3 = AuthService(apiService: ApiService(client: client));
+      final restoredExpired = await auth3.restoreSession();
+      expect(restoredExpired, isFalse);
+      expect(prefs.getString('auth_token'), isNull);
     });
   });
 }

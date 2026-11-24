@@ -21,17 +21,13 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  final _displayNameController = TextEditingController(
-    text: 'Omar El-Sayed',
-  );
-  final _emailController = TextEditingController(
-    text: 'omar.sayed@cairobrew.com',
-  );
-  final _phoneController = TextEditingController(text: '10 2345 6789');
-  final _passwordController = TextEditingController(text: 'Cairo@12');
+  final _displayNameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _passwordController = TextEditingController();
 
-  late bool _displayNameIsValid;
-  late bool _emailIsValid;
+  bool _displayNameIsValid = false;
+  bool _emailIsValid = false;
   bool _obscurePassword = true;
   bool _isLoading = false;
   bool _emailTaken = false;
@@ -39,8 +35,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   void initState() {
     super.initState();
-    _displayNameIsValid = _displayNameController.text.trim().isNotEmpty;
-    _emailIsValid = Validators.email(_emailController.text) == null;
   }
 
   @override
