@@ -6,7 +6,6 @@ import '../core/theme/app_spacing.dart';
 import '../core/theme/app_text_styles.dart';
 import '../models/basket.dart';
 import '../services/basket_service.dart';
-import '../services/dummy/dummy_data.dart';
 import '../widgets/app_header.dart';
 import '../widgets/cart/cart_checkout_button.dart';
 import '../widgets/cart/cart_item_card.dart';
@@ -47,15 +46,13 @@ class _CartScreenState extends State<CartScreen> {
       final basket = await _basketService.getBasket();
       if (!mounted) return;
       setState(() {
-        _items = basket.items.isNotEmpty
-            ? basket.items
-            : List.of(dummyBasketItems);
+        _items = basket.items;
         _isLoading = false;
       });
     } catch (_) {
       if (!mounted) return;
       setState(() {
-        _items = List.of(dummyBasketItems);
+        _items = [];
         _isLoading = false;
       });
     }
@@ -102,7 +99,6 @@ class _CartScreenState extends State<CartScreen> {
                 Navigator.pop(dialogContext);
                 setState(() {
                   _items.clear();
-                  clearDummyBasket();
                 });
                 _basketService.clearBasket().ignore();
               },
