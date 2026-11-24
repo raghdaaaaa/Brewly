@@ -66,7 +66,9 @@ class AppHeaderBack extends StatelessWidget {
 
 /// Top navigation bar (brand + location + bell + avatar).
 class AppHeaderTop extends StatelessWidget {
-  const AppHeaderTop({super.key});
+  const AppHeaderTop({super.key, this.showLocation = true});
+
+  final bool showLocation;
 
   @override
   Widget build(BuildContext context) {
@@ -83,43 +85,48 @@ class AppHeaderTop extends StatelessWidget {
                   'BREWLY\nROASTERS',
                   style: AppTextStyles.wordmark,
                 ),
-                const SizedBox(height: 2),
-                InkWell(
-                  onTap: () => Navigator.pushNamed(context, AppRoutes.addressRoute),
-                  borderRadius: BorderRadius.circular(AppRadius.sm),
-                  child: ValueListenableBuilder<Address?>(
-                    valueListenable: AuthService.savedAddress,
-                    builder: (context, address, child) {
-                      final parts = address == null
-                          ? const <String>[]
-                          : [
-                              address.city.trim(),
-                              address.country.trim(),
-                            ].where((part) => part.isNotEmpty).toList();
-                      final locationText =
-                          parts.isEmpty ? 'Cairo, Egypt' : parts.join(', ');
-                      return Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Flexible(
-                            child: Text(
-                              locationText,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: AppTextStyles.locationTitle,
+                if (showLocation) ...[
+                  const SizedBox(height: 2),
+                  InkWell(
+                    onTap: () => Navigator.pushNamed(
+                      context,
+                      AppRoutes.addressRoute,
+                    ),
+                    borderRadius: BorderRadius.circular(AppRadius.sm),
+                    child: ValueListenableBuilder<Address?>(
+                      valueListenable: AuthService.savedAddress,
+                      builder: (context, address, child) {
+                        final parts = address == null
+                            ? const <String>[]
+                            : [
+                                address.city.trim(),
+                                address.country.trim(),
+                              ].where((part) => part.isNotEmpty).toList();
+                        final locationText =
+                            parts.isEmpty ? 'Cairo, Egypt' : parts.join(', ');
+                        return Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Flexible(
+                              child: Text(
+                                locationText,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTextStyles.locationTitle,
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 2),
-                          const Icon(
-                            Icons.keyboard_arrow_down_rounded,
-                            size: 20,
-                            color: AppColors.mutedTextColor,
-                          ),
-                        ],
-                      );
-                    },
+                            const SizedBox(width: 2),
+                            const Icon(
+                              Icons.keyboard_arrow_down_rounded,
+                              size: 20,
+                              color: AppColors.mutedTextColor,
+                            ),
+                          ],
+                        );
+                      },
+                    ),
                   ),
-                ),
+                ],
               ],
             ),
           ),

@@ -42,7 +42,11 @@ void main() {
         );
         await tester.pumpAndSettle();
 
-        expect(find.text('Cairo • Zamalek Roastery'), findsOneWidget);
+        expect(find.text('BREWLY\nROASTERS'), findsOneWidget);
+        expect(find.text('Cairo • Zamalek Roastery'), findsNothing);
+        expect(find.text('DELIVERY NOW (~25 MIN)'), findsOneWidget);
+        expect(find.textContaining('Good evening,'), findsOneWidget);
+        expect(find.byIcon(Icons.notifications_none_rounded), findsOneWidget);
 
         // Build the rest of the list so every card is checked for overflow.
         await tester.drag(
@@ -81,7 +85,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('10 Tahrir Sq, Cairo, Egypt'), findsOneWidget);
-    expect(find.text('Cairo, Egypt'), findsOneWidget);
+    expect(find.text('Cairo, Egypt'), findsNothing);
 
     AuthService.savedAddress.value = const Address(
       firstName: 'Nour',
@@ -93,6 +97,6 @@ void main() {
     await tester.pump();
 
     expect(find.text('99 Corniche, Alexandria, Egypt'), findsOneWidget);
-    expect(find.text('Alexandria, Egypt'), findsOneWidget);
+    expect(find.text('Alexandria, Egypt'), findsNothing);
   });
 }

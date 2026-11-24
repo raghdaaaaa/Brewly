@@ -181,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const AppHeaderTop(),
+              const AppHeaderTop(showLocation: false),
               const SizedBox(height: AppSpacing.sm),
               ValueListenableBuilder<User?>(
                 valueListenable: AuthService.currentUserNotifier,

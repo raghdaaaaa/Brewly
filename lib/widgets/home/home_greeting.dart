@@ -4,7 +4,6 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import 'points_pill.dart';
 
-/// "Cairo • Zamalek Roastery" and the greeting with the points pill.
 class HomeGreeting extends StatelessWidget {
   const HomeGreeting({
     super.key,
@@ -20,13 +19,6 @@ class HomeGreeting extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Cairo • Zamalek Roastery',
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: AppTextStyles.eyebrow,
-        ),
-        const SizedBox(height: 6),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
