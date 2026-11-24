@@ -21,7 +21,7 @@ class ProfileHeaderCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(
-        vertical: AppSpacing.xxl,
+        vertical: AppSpacing.xl,
         horizontal: AppSpacing.lg,
       ),
       decoration: BoxDecoration(

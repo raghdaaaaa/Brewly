@@ -208,7 +208,7 @@ class _CartScreenState extends State<CartScreen> {
                                 AppSpacing.lg,
                                 AppSpacing.sm,
                                 AppSpacing.lg,
-                                100,
+                                AppSpacing.xxl,
                               ),
                               children: [
                                 Row(

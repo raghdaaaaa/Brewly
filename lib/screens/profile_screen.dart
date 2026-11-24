@@ -81,7 +81,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 AppSpacing.lg,
                 AppSpacing.sm,
                 AppSpacing.lg,
-                100,
+                AppSpacing.xxl,
               ),
               children: [
                 const AppHeaderTop(),
