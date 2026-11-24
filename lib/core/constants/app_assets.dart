@@ -14,6 +14,8 @@ class AppAssets {
   static const String registerPhonePrefix = 'assets/icons/register_phone_prefix.svg';
   static const String registerPhoneRight = 'assets/icons/register_phone_right.svg';
   static const String registerToggleEye = 'assets/icons/register_toggle_eye.svg';
+
+  static const String promoImage = 'assets/images/welcome_hero.jpg';
   static const String welcomeCtaArrow = 'assets/icons/welcome_cta_arrow.svg';
   static const String welcomeSteamIcon = 'assets/icons/welcome_steam.svg';
   static const String welcomeHeroImage = 'assets/images/welcome_hero.jpg';

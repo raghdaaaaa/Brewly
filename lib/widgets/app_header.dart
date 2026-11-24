@@ -78,32 +78,24 @@ class AppHeaderTop extends StatelessWidget {
               children: [
                 Text(
                   'BREWLY\nROASTERS',
-                  style: TextStyle(
-                    fontFamily: AppTextStyles.fontFamily,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w800,
-                    height: 1.15,
-                    letterSpacing: 0.8,
-                    color: AppColors.primaryColor,
-                  ),
+                  style: AppTextStyles.wordmark,
                 ),
                 SizedBox(height: 2),
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      'Zamalek,',
-                      style: TextStyle(
-                        fontFamily: AppTextStyles.fontFamily,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.textColor,
+                    Flexible(
+                      child: Text(
+                        'Zamalek, Cairo',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.locationTitle,
                       ),
                     ),
                     SizedBox(width: 2),
                     Icon(
                       Icons.keyboard_arrow_down_rounded,
-                      size: 18,
+                      size: 20,
                       color: AppColors.mutedTextColor,
                     ),
                   ],
@@ -119,14 +111,14 @@ class AppHeaderTop extends StatelessWidget {
             },
             borderRadius: BorderRadius.circular(AppRadius.pill),
             child: Container(
-              width: 44,
-              height: 44,
+              width: AppSizes.headerAction,
+              height: AppSizes.headerAction,
               decoration: const BoxDecoration(
                 color: AppColors.softSurfaceColor,
                 shape: BoxShape.circle,
               ),
               child: const Icon(
-                Icons.notifications_outlined,
+                Icons.notifications_none_rounded,
                 size: 20,
                 color: AppColors.textColor,
               ),
@@ -134,19 +126,19 @@ class AppHeaderTop extends StatelessWidget {
           ),
           const SizedBox(width: AppSpacing.sm),
           Container(
-            width: 44,
-            height: 44,
+            width: AppSizes.headerAction,
+            height: AppSizes.headerAction,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
                 color: AppColors.cardColor,
                 width: 2,
               ),
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
-                  color: AppColors.textColor.withValues(alpha: 0.08),
+                  color: AppColors.shadowBlack10,
                   blurRadius: 4,
-                  offset: const Offset(0, 2),
+                  offset: Offset(0, 2),
                 ),
               ],
               image: const DecorationImage(

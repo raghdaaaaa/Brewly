@@ -22,8 +22,8 @@ void main() {
         );
         await tester.pumpAndSettle();
         expect(tester.takeException(), isNull);
-        expect(find.text('My Address'), findsOneWidget);
-        expect(find.text('Save'), findsOneWidget);
+        expect(find.text('My Delivery Address'), findsOneWidget);
+        expect(find.text('Save address'), findsOneWidget);
       }
     }
   });

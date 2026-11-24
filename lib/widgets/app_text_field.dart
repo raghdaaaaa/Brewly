@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_spacing.dart';
@@ -6,8 +7,16 @@ import '../core/theme/app_text_styles.dart';
 
 /// The single text-field style used by the whole app.
 ///
-/// The field grows with its validation error or helper text, so nothing is
-/// clipped when the keyboard is open or a message is shown.
+/// The label is drawn above the field and the field grows with its validation
+/// error or helper text, so messages never overlap the next field.
+enum AppTextFieldVariant {
+  /// Beige fill used by Register, Checkout and My Address.
+  filled,
+
+  /// White field with a soft shadow used by Login.
+  card,
+}
+
 class AppTextField extends StatelessWidget {
   const AppTextField({
     super.key,
@@ -24,6 +33,13 @@ class AppTextField extends StatelessWidget {
     this.textInputAction,
     this.textStyle = AppTextStyles.input,
     this.labelStyle = AppTextStyles.fieldLabel,
+    this.variant = AppTextFieldVariant.filled,
+    this.enabled = true,
+    this.onChanged,
+    this.onFieldSubmitted,
+    this.inputFormatters,
+    this.autofillHints,
+    this.textCapitalization = TextCapitalization.none,
   });
 
   final String? label;
@@ -39,6 +55,13 @@ class AppTextField extends StatelessWidget {
   final TextInputAction? textInputAction;
   final TextStyle textStyle;
   final TextStyle labelStyle;
+  final AppTextFieldVariant variant;
+  final bool enabled;
+  final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onFieldSubmitted;
+  final List<TextInputFormatter>? inputFormatters;
+  final Iterable<String>? autofillHints;
+  final TextCapitalization textCapitalization;
 
   OutlineInputBorder _border(Color color, double width) {
     return OutlineInputBorder(
@@ -53,7 +76,7 @@ class AppTextField extends StatelessWidget {
     }
     if (onSuffixTap == null) {
       return Padding(
-        padding: const EdgeInsets.only(right: 14),
+        padding: const EdgeInsets.only(left: 4, right: 14),
         child: suffixIcon,
       );
     }
@@ -70,6 +93,66 @@ class AppTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final field = TextFormField(
+      controller: controller,
+      validator: validator,
+      keyboardType: keyboardType,
+      obscureText: obscureText,
+      textInputAction: textInputAction,
+      style: textStyle,
+      enabled: enabled,
+      onChanged: onChanged,
+      onFieldSubmitted: onFieldSubmitted,
+      inputFormatters: inputFormatters,
+      autofillHints: autofillHints,
+      textCapitalization: textCapitalization,
+      cursorColor: AppColors.primaryColor,
+      textAlignVertical: TextAlignVertical.center,
+      onTapOutside: (_) => FocusScope.of(context).unfocus(),
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle: textStyle.copyWith(color: AppColors.mutedTextColor),
+        filled: true,
+        fillColor: variant == AppTextFieldVariant.card
+            ? AppColors.cardColor
+            : AppColors.softSurfaceColor,
+        isDense: true,
+        constraints: const BoxConstraints(minHeight: AppSizes.inputHeight),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.lg,
+          vertical: 16,
+        ),
+        prefixIcon: prefixIcon == null
+            ? null
+            : Padding(
+                padding: const EdgeInsets.only(left: 14, right: 10),
+                child: prefixIcon,
+              ),
+        prefixIconConstraints: const BoxConstraints(
+          minWidth: 0,
+          minHeight: 0,
+        ),
+        suffixIcon: _buildSuffix(),
+        suffixIconConstraints: const BoxConstraints(
+          minWidth: 0,
+          minHeight: 0,
+        ),
+        helperText: helperText,
+        helperStyle: AppTextStyles.caption,
+        helperMaxLines: 3,
+        errorStyle: AppTextStyles.caption.copyWith(
+          color: AppColors.errorColor,
+        ),
+        errorMaxLines: 3,
+        border: _border(Colors.transparent, 0),
+        enabledBorder: _border(Colors.transparent, 0),
+        focusedBorder: _border(AppColors.primaryColor, 1.5),
+        disabledBorder: _border(Colors.transparent, 0),
+        errorBorder: _border(AppColors.errorColor, 1),
+        focusedErrorBorder: _border(AppColors.errorColor, 1.5),
+      ),
+    );
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -77,54 +160,7 @@ class AppTextField extends StatelessWidget {
           Text(label!, style: labelStyle),
           const SizedBox(height: 6),
         ],
-        TextFormField(
-          controller: controller,
-          validator: validator,
-          keyboardType: keyboardType,
-          obscureText: obscureText,
-          textInputAction: textInputAction,
-          style: textStyle,
-          cursorColor: AppColors.primaryColor,
-          textAlignVertical: TextAlignVertical.center,
-          decoration: InputDecoration(
-            hintText: hint,
-            hintStyle: textStyle.copyWith(color: AppColors.mutedTextColor),
-            filled: true,
-            fillColor: AppColors.softSurfaceColor,
-            isDense: true,
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 17,
-            ),
-            prefixIcon: prefixIcon == null
-                ? null
-                : Padding(
-                    padding: const EdgeInsets.only(left: 14, right: 10),
-                    child: prefixIcon,
-                  ),
-            prefixIconConstraints: const BoxConstraints(
-              minWidth: 0,
-              minHeight: 0,
-            ),
-            suffixIcon: _buildSuffix(),
-            suffixIconConstraints: const BoxConstraints(
-              minWidth: 0,
-              minHeight: 0,
-            ),
-            helperText: helperText,
-            helperStyle: AppTextStyles.caption,
-            helperMaxLines: 2,
-            errorStyle: AppTextStyles.caption.copyWith(
-              color: AppColors.errorColor,
-            ),
-            errorMaxLines: 3,
-            border: _border(Colors.transparent, 0),
-            enabledBorder: _border(Colors.transparent, 0),
-            focusedBorder: _border(AppColors.primaryColor, 1.5),
-            errorBorder: _border(AppColors.errorColor, 1),
-            focusedErrorBorder: _border(AppColors.errorColor, 1.5),
-          ),
-        ),
+        field,
       ],
     );
   }

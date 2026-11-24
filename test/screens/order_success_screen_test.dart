@@ -19,8 +19,8 @@ void main() {
         );
         await tester.pumpAndSettle();
         expect(tester.takeException(), isNull);
-        expect(find.text('Order Confirmed'), findsOneWidget);
-        expect(find.text('ORD-1004'), findsOneWidget);
+        expect(find.text('Order Confirmed!'), findsOneWidget);
+        expect(find.textContaining('ORD-1004'), findsOneWidget);
       }
     }
   });

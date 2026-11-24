@@ -4,6 +4,7 @@ import '../core/routes/app_routes.dart';
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_spacing.dart';
 import '../core/theme/app_text_styles.dart';
+import '../services/auth_service.dart';
 import '../services/dummy/dummy_data.dart';
 import '../widgets/app_header.dart';
 import '../widgets/profile/profile_header_card.dart';
@@ -32,6 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             TextButton(
               onPressed: () {
+                AuthService.instance.logout();
                 Navigator.pop(dialogContext);
                 Navigator.pushReplacementNamed(
                   context,
@@ -48,6 +50,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = AuthService.instance.currentUser;
+    final displayName = (user != null && user.displayName.isNotEmpty)
+        ? user.displayName
+        : '${dummyAddress.firstName} ${dummyAddress.lastName}';
+    final email = (user != null && user.email.isNotEmpty)
+        ? user.email
+        : dummyUserEmail;
+
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       body: SafeArea(
@@ -62,8 +72,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const AppHeaderTop(),
             const SizedBox(height: AppSpacing.md),
             ProfileHeaderCard(
-              name: '${dummyAddress.firstName} ${dummyAddress.lastName}',
-              email: dummyUserEmail,
+              name: displayName,
+              email: email,
             ),
             const SizedBox(height: AppSpacing.lg),
             ProfileMenuCard(

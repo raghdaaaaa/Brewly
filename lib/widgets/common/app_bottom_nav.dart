@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
+import '../../core/theme/app_text_styles.dart';
 
 class AppBottomNav extends StatelessWidget {
   const AppBottomNav({
@@ -68,15 +69,15 @@ class AppBottomNav extends StatelessWidget {
         child: Center(
           child: active
               ? Container(
-                  width: 36,
-                  height: 36,
+                  width: AppSizes.navActiveCircle,
+                  height: AppSizes.navActiveCircle,
                   decoration: const BoxDecoration(
                     color: AppColors.primaryColor,
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(icon, size: 20, color: Colors.white),
+                  child: Icon(icon, size: 22, color: Colors.white),
                 )
-              : Icon(icon, size: 20, color: AppColors.mutedTextColor),
+              : Icon(icon, size: 22, color: AppColors.mutedTextColor),
         ),
       ),
     );
@@ -90,30 +91,30 @@ class AppBottomNav extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadius.pill),
         child: Center(
           child: SizedBox(
-            width: 36,
-            height: 36,
+            width: AppSizes.navActiveCircle,
+            height: AppSizes.navActiveCircle,
             child: Stack(
               clipBehavior: Clip.none,
               alignment: Alignment.center,
               children: [
                 if (active)
                   Container(
-                    width: 36,
-                    height: 36,
+                    width: AppSizes.navActiveCircle,
+                    height: AppSizes.navActiveCircle,
                     decoration: const BoxDecoration(
                       color: AppColors.primaryColor,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
                       Icons.shopping_cart_outlined,
-                      size: 20,
+                      size: 22,
                       color: Colors.white,
                     ),
                   )
                 else
                   const Icon(
                     Icons.shopping_cart_outlined,
-                    size: 20,
+                    size: 22,
                     color: AppColors.mutedTextColor,
                   ),
                 if (cartCount > 0)
@@ -121,20 +122,18 @@ class AppBottomNav extends StatelessWidget {
                     top: -2,
                     right: -2,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 5,
-                        vertical: 1,
-                      ),
-                      decoration: BoxDecoration(
-                        color: active ? AppColors.accentColor : AppColors.primaryColor,
+                      width: 18,
+                      height: 18,
+                      alignment: Alignment.center,
+                      decoration: const BoxDecoration(
+                        color: AppColors.accentColor,
                         shape: BoxShape.circle,
                       ),
                       child: Text(
-                        cartCount.toString(),
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w700,
-                          color: active ? AppColors.onAccentColor : Colors.white,
+                        cartCount > 9 ? '9+' : '$cartCount',
+                        style: AppTextStyles.statusPill.copyWith(
+                          color: AppColors.navBadgeTextColor,
+                          fontWeight: FontWeight.w800,
                         ),
                       ),
                     ),

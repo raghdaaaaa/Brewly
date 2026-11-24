@@ -2,8 +2,15 @@ import 'package:brewly/screens/products_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../fakes/fake_basket_service.dart';
+import '../fakes/fake_product_service.dart';
+import '../fakes/test_data.dart';
+
 void main() {
   testWidgets('products list screen renders without overflow', (tester) async {
+    final productService = FakeProductService(products: buildTestProducts());
+    final basketService = FakeBasketService();
+
     for (final size in [
       const Size(320, 640),
       const Size(360, 800),
@@ -14,10 +21,23 @@ void main() {
         tester.view.physicalSize = size;
         tester.view.devicePixelRatio = 1.0;
         tester.platformDispatcher.textScaleFactorTestValue = scale;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+
         await tester.pumpWidget(
-          const MaterialApp(home: ProductsListScreen()),
+          MaterialApp(
+            home: ProductsListScreen(
+              categoryName: longCategoryName,
+              productService: productService,
+              basketService: basketService,
+            ),
+          ),
         );
         await tester.pumpAndSettle();
+
+        expect(find.text('Product Detail'), findsOneWidget);
+        expect(find.text('12 items found'), findsOneWidget);
         expect(tester.takeException(), isNull);
       }
     }

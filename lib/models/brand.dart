@@ -1,5 +1,25 @@
-// This file will hold the Brand model.
-// Fields: id, name (the API has no brand image).
+import '../core/utils/json_parsers.dart';
+
 class Brand {
-  // TODO: add fields and fromJson() in step 2.
+  const Brand({
+    required this.id,
+    required this.name,
+  });
+
+  final int id;
+  final String name;
+
+  factory Brand.fromJson(Map<String, dynamic> json) {
+    return Brand(
+      id: Json.asInt(json['id']),
+      name: Json.asString(json['name']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+    };
+  }
 }

@@ -2,23 +2,14 @@ import 'package:flutter/foundation.dart' show ValueNotifier;
 
 import '../../models/address.dart';
 import '../../models/basket.dart';
-import '../../models/category.dart';
 import '../../models/delivery_method.dart';
 import '../../models/order.dart';
 import '../../models/product.dart';
 
 // ---------------------------------------------------------------
-// Hardcoded data. It is replaced by the real API in a later step.
+// Sample products for the Product Details widget test.
+// The Home, Explore and Products List screens now use the real API.
 // ---------------------------------------------------------------
-
-const List<Category> dummyCategories = [
-  Category(id: 0, name: 'All'),
-  Category(id: 1, name: 'Hot Coffee'),
-  Category(id: 2, name: 'Cold Brew'),
-  Category(id: 3, name: 'Bakery'),
-  Category(id: 4, name: 'Desserts'),
-  Category(id: 5, name: 'Bowls'),
-];
 
 const List<Product> dummyProducts = [
   Product(
@@ -29,7 +20,9 @@ const List<Product> dummyProducts = [
         'finished with a thin layer of sweet cream.',
     price: 95,
     pictureUrl: 'https://picsum.photos/seed/brewly-latte/400/400',
+    brandId: 1,
     brandName: 'Brewly Lab',
+    categoryId: 2,
     categoryName: 'Cold Brew',
   ),
   Product(
@@ -40,7 +33,9 @@ const List<Product> dummyProducts = [
         'and a pistachio cream.',
     price: 110,
     pictureUrl: 'https://picsum.photos/seed/brewly-pain/400/400',
+    brandId: 4,
     brandName: 'Brewly Roasters',
+    categoryId: 6,
     categoryName: 'Bakery',
   ),
   Product(
@@ -51,7 +46,9 @@ const List<Product> dummyProducts = [
         'and bergamot.',
     price: 85,
     pictureUrl: 'https://picsum.photos/seed/brewly-v60/400/400',
+    brandId: 2,
     brandName: 'Brewly Reserve',
+    categoryId: 1,
     categoryName: 'Hot Coffee',
   ),
   Product(
@@ -62,7 +59,9 @@ const List<Product> dummyProducts = [
         'soft layer of micro foam.',
     price: 75,
     pictureUrl: 'https://picsum.photos/seed/brewly-flatwhite/400/400',
+    brandId: 4,
     brandName: 'Brewly Roasters',
+    categoryId: 1,
     categoryName: 'Hot Coffee',
   ),
   Product(
@@ -73,7 +72,9 @@ const List<Product> dummyProducts = [
         'comforting.',
     price: 90,
     pictureUrl: 'https://picsum.photos/seed/brewly-cappuccino/400/400',
+    brandId: 1,
     brandName: 'Brewly Lab',
+    categoryId: 1,
     categoryName: 'Hot Coffee',
   ),
   Product(
@@ -84,7 +85,9 @@ const List<Product> dummyProducts = [
         'orange.',
     price: 105,
     pictureUrl: 'https://picsum.photos/seed/brewly-tonic/400/400',
+    brandId: 2,
     brandName: 'Brewly Reserve',
+    categoryId: 2,
     categoryName: 'Cold Brew',
   ),
   Product(
@@ -94,7 +97,9 @@ const List<Product> dummyProducts = [
         'Chewy cookie with medjool dates, tahini and a pinch of sea salt.',
     price: 60,
     pictureUrl: 'https://picsum.photos/seed/brewly-cookie/400/400',
+    brandId: 7,
     brandName: 'Seven Fortunes',
+    categoryId: 6,
     categoryName: 'Desserts',
   ),
   Product(
@@ -105,7 +110,9 @@ const List<Product> dummyProducts = [
         'of greens.',
     price: 190,
     pictureUrl: 'https://picsum.photos/seed/brewly-bowl/400/400',
+    brandId: 1,
     brandName: 'Brewly Kitchen',
+    categoryId: 8,
     categoryName: 'Bowls',
   ),
   Product(
@@ -116,7 +123,9 @@ const List<Product> dummyProducts = [
         'cream cheese glaze.',
     price: 70,
     pictureUrl: 'https://picsum.photos/seed/brewly-roll/400/400',
+    brandId: 4,
     brandName: 'Artisan Bakery',
+    categoryId: 6,
     categoryName: 'Bakery',
   ),
   Product(
@@ -126,10 +135,15 @@ const List<Product> dummyProducts = [
         'Two short shots of our darkest roast. Rich, syrupy and sweet.',
     price: 55,
     pictureUrl: 'https://picsum.photos/seed/brewly-espresso/400/400',
+    brandId: 2,
     brandName: 'Nile Roasters',
+    categoryId: 1,
     categoryName: 'Hot Coffee',
   ),
 ];
+
+/// Fixed ratings shown on the Home cards only (the API has no rating field).
+const List<double> homeRatings = [4.9, 4.8, 5.0, 4.7];
 
 // ---------------------------------------------------------------
 // Basket, address and delivery methods (still dummy).
@@ -175,6 +189,10 @@ const Address dummyAddress = Address(
   city: 'Cairo',
   country: 'Egypt',
 );
+
+/// Home header data that has no API endpoint yet.
+const String dummyDeliveryLabel = '14 Gezira St, Zamalek, Cairo';
+const int dummyLoyaltyPoints = 340;
 
 const List<DeliveryMethod> dummyDeliveryMethods = [
   DeliveryMethod(

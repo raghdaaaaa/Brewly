@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../services/dummy/dummy_data.dart';
+import '../services/basket_service.dart';
 import '../widgets/common/app_bottom_nav.dart';
 import 'cart_screen.dart';
 import 'explore_screen.dart';
@@ -20,6 +20,13 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   late int _currentIndex = widget.initialIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    // Load the real basket once so the cart badge shows the API count.
+    BasketService().getBasket().ignore();
+  }
 
   void _selectTab(int index) {
     setState(() {
@@ -41,7 +48,7 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
       bottomNavigationBar: ValueListenableBuilder<int>(
-        valueListenable: dummyCartItemCount,
+        valueListenable: BasketService.itemCount,
         builder: (context, cartCount, child) {
           return AppBottomNav(
             currentIndex: _currentIndex,

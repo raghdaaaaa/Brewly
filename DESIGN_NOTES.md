@@ -120,10 +120,10 @@ horizontal category rail (pill chips, selected = emerald filled), brand pills ro
 (white, radius 20, image on top, heart top-right, name 14/600, price 16/700).
 Bottom navigation: Home · Cart · Orders · Profile.
 
-**Product Details** – centered title "Product Detail" header, hero image card
-(radius 20, 269 high), title + price row, description 14/400, quantity stepper
-(radius 14, soft surface, − / 2 / +), sticky bottom bar with total + "Add to cart"
-pill button.
+**Product Details** – back circle + "Product Detail" 22/600 + share circle + avatar,
+hero image 370×276 radius 24 with a white 41 favorite circle, name 28/700 + price
+30/700 with a 14 EGP, description 16/24, fixed bottom bar with a 128×58 white quantity
+stepper and a 58 green "Add to cart · total EGP" pill.
 
 **Cart** – header "Your Cart", list of items (white card radius 16, 72 image,
 name 14/600, unit price 12/400, quantity stepper), order summary card
@@ -172,10 +172,61 @@ Approved deviations already applied:
    Register has "Already have an account? Login" under the button (opens Login).
 2. Login and Register are prefilled with `Cairo@12`, a password that satisfies the API
    rule. Register shows the helper text and the real RegExp validator. All forms use the
-   shared `AppTextField` (beige filled, no fixed height, so errors push the next field
-   down).
+   shared `AppTextField` (no fixed height, so errors push the next field down).
 3. The Welcome "Get Started" button is unchanged.
+4. The country flag in the phone field is replaced by the text "+20" (the design has no
+   flag asset and the API only needs the dialling code).
+5. The shared `AppTextField` has two surfaces from the two frames: `card` (white with a
+   soft shadow, Login) and `filled` (beige, Register and the other forms). Labels,
+   radius, error/helper layout, touch targets and focus state are identical.
+6. `MaterialApp.builder` clamps the system text scale to 1.0 so the phone font setting
+   cannot enlarge the design.
 
-Implementation fix (not a design change): the Register brand mark is now a pill sized by
-its content. It used to be a 40×40 circle that overflowed by up to 87 px at text scale
-1.3. It keeps the white surface, soft shadow, emerald mark and "BREWLY" label.
+## 8. Batch 1 – Welcome / Login / Register
+
+Values come from `DESIGN_SPEC/welcome.md`, `login.md` and `register.md` (the
+`figma_screens/` PNGs are not in the repository, so the pixel diff against them is still
+pending).
+
+- Type scale: screen title 30/38 bold, body 14, field label 12/16, button 14. Nothing
+  is above the requested caps (32 title, 14 body, 16 button).
+- Screen padding 16. Auth input 52 high, radius 12 (the Login/Register frames), 6 gap
+  label→field, 16 between fields. Cards are white, radius 16 (form) / 24 (Welcome hero),
+  padding 16.
+- Welcome: 56 brand circle with steam + butter dots, 24 wordmark, white hero card radius
+  24 with a 256-high illustration, centered 24/30 title in ink and emerald, 24 gap, then
+  the 56-high pill CTA.
+- Login: 44 back button, 64 emblem, 30 title, white 52 fields with soft shadow, green
+  check when the email is valid, eye toggle, 56 CTA, Register switch link.
+- Register: 44 back button + BREWLY chip, 30 title, white form card radius 16 p16, four
+  fields, 100×52 country pill with 🇪🇬 + "+20", helper text under the password, 56 CTA.
+- `PrimaryButton` is the single CTA everywhere in this batch: 56 high, pill, emerald,
+  white 14 label + arrow, and a spinner inside the same pill while a request runs.
+
+## 9. Batch 3a – Product Details (from `Product Details.png`)
+
+The PNG is 1752 px wide for a **402 dp** frame (scale 4.36); side padding is 16. The
+screen keeps the fixed top bar and purchase bar while only the middle scrolls.
+
+| Element | Value |
+|---|---|
+| Top bar | back circle 46, title 22/28 w600, share circle 45, avatar 34, gaps 16/8 |
+| Hero | width 370 (16 side padding), height 276, radius 24, `BoxFit.cover` |
+| Favorite | white circle 41, 12 from the top-right of the image, heart 21 |
+| Summary gap | 19 between image and name row; 20 between name row and description |
+| Name | 28/33 w700, max 2 lines, ellipsis |
+| Price | 30/36 w700 emerald number + 14/18 w500 muted "EGP", baseline aligned |
+| Description | 16/24 w400 muted, scrolls with the page |
+| Bottom bar | 16 side padding, 12 gap, two 58-high pills, bottom `SafeArea` |
+| Stepper | white 128×58 pill, 44-wide minus/number/plus, 22/28 w700 number, min 1 / max 99 |
+| CTA | emerald pill fills the rest, bag icon 20 + 17/22 w600 white label, spinner while posting |
+
+The PNG has no brand chip, category pill or "About this item" heading, so the rebuilt
+screen does not add them. Tokens: `detailsTopBarTitle`, `detailsProductName`,
+`detailsPrice`, `detailsPriceCurrency`, `detailsDescription`, `detailsQuantity`,
+`detailsAddToCart`; `AppSizes.details*` and `AppSizes.purchaseBarHeight`.
+
+Behavior: the heart is local-only with an `AnimatedSwitcher` scale, the quantity number
+uses a fade switcher and the total updates live, share shows a SnackBar, and Add to cart
+asks the user to log in when there is no session. `POST /api/Basket` was verified live:
+it **replaces** the quantity of an existing line (`qty 1 → 2 → 1` came back as 1, 2, 1).

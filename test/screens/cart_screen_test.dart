@@ -1,6 +1,9 @@
 import 'package:brewly/screens/cart_screen.dart';
+import 'package:brewly/services/dummy/dummy_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import '../fakes/fake_basket_service.dart';
 
 void main() {
   testWidgets('cart screen renders without overflow', (tester) async {
@@ -14,13 +17,26 @@ void main() {
         tester.view.physicalSize = size;
         tester.view.devicePixelRatio = 1.0;
         tester.platformDispatcher.textScaleFactorTestValue = scale;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+
+        final basketService = FakeBasketService(items: dummyBasketItems);
         await tester.pumpWidget(
-          MaterialApp(home: CartScreen(onBrowseMenu: () {})),
+          MaterialApp(
+            home: CartScreen(
+              onBrowseMenu: () {},
+              basketService: basketService,
+            ),
+          ),
         );
-        await tester.pumpAndSettle(const Duration(seconds: 2));
+        await tester.pumpAndSettle();
         expect(tester.takeException(), isNull);
-        expect(find.text('Your Cart'), findsOneWidget);
-        expect(find.text('Checkout'), findsOneWidget);
+        expect(find.text('Your Basket'), findsOneWidget);
+        expect(
+          find.text('Proceed to checkout', skipOffstage: false),
+          findsOneWidget,
+        );
       }
     }
   });

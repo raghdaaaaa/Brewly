@@ -16,6 +16,12 @@ must fix.
   with the name/price overlay at the bottom of the image.
 - AppBottomNav 5-tab pill bar: the cart tab is a plain `InkWell` inside an
   `Expanded` (the badge `Stack` around it rejects an `Expanded` child).
+- Batch 1: `figma_screens/` is missing from the repository (only `DESIGN_SPEC/*.md`
+  exists), so Welcome/Login/Register were built from the spec sheets and checked with
+  rendered previews. A pixel diff against the PNGs is still pending.
+- Batch 3a: the Product Details PNG (`C:\Users\ra9hdaa\Downloads\Product Details.png`)
+  was used as the design source. The screen is built and tested; the golden preview
+  cannot show the real coffee photo because it is a network URL and tests block HTTP.
 
 ## Global (phase 2 screen rebuild)
 
@@ -25,26 +31,33 @@ must fix.
       `AppSpacing`, `AppRadius`, `AppSizes`.
 - [ ] Replace `Widget _buildSomething()` helpers with `StatelessWidget` classes in their
       own files (one public widget per file).
-- [ ] Add `SafeArea` to Login, Register and Welcome; keep forms usable with the keyboard
-      open.
-- [ ] Move feature widgets to `widgets/<feature>/` and shared ones to `widgets/common/`.
-- [ ] Add the per-screen `test/screens/<screen>_test.dart` at 320×640, 360×800, 390×844,
-      430×932 with text scale 1.0 and 1.3.
+- [x] Add `SafeArea` to Login, Register and Welcome; forms scroll with the keyboard open.
+- [ ] Move the remaining feature widgets to `widgets/<feature>/`.
+- [x] Add the per-screen tests for Welcome, Login and Register at 320×640, 360×800,
+      390×844, 430×932 with text scale 1.0 and 1.3 (the other screens already have them).
+- [ ] Migrate the remaining local CTA buttons (Cart, Checkout, Address, Order Success)
+      to the shared `PrimaryButton` in their own batch. Product Details keeps its own
+      pill because the label includes the live total and the bag icon.
 
 ## Screens
 
-- [x] **Home** (Group 2, first pass from DESIGN_NOTES; no promo card / brand pills yet,
-      first `mainAxisExtent` product grid; product cards are the overlay design).
-- [x] **Explore** (Group 2; first pass).
-- [x] **Products List** (Group 2; first pass).
+- [x] **Home** (Batch 2: header, greeting + points, delivery card, promo, category rail,
+      brand pills, popular product cards; live API + FutureBuilder).
+- [x] **Explore** (Batch 2: 2-column category image grid from the API).
+- [x] **Products List** (Batch 2: filters, search, sort, pagination, current-order bar;
+      live API).
 - [x] **Splash** – explicit `AnimationController` fade + scale, disposed correctly, then navigates to Welcome with a named route (logo is still the Material coffee icon; no logo asset exists yet).
-- [ ] **Welcome** – replace `FractionallySizedBox(1.3123)` and the absolute offsets with
-      `ClipRRect` + `AspectRatio`; verify hero and CTA against the frame.
-- [ ] **Login / Register** – first-pass layout, not the Figma frames. Both now use the
-      shared `AppTextField` (beige filled, natural height for validation errors).
-      Register has the password helper text and the real API RegExp; the phone field
-      shows "+20" instead of the flag.
-- [x] **Product Details** (Group 3; structurally complete, overflow-proofed).
+- [x] **Welcome** – rebuilt from `DESIGN_SPEC/welcome.md` with `AspectRatio` hero,
+      centered promise, 24 gap and the shared `PrimaryButton`; opens Login by named route.
+- [x] **Login** – rebuilt from `DESIGN_SPEC/login.md`: white 52 fields, green email
+      check, password eye, loading CTA, API error SnackBar, API success → Home.
+- [x] **Register** – rebuilt from `DESIGN_SPEC/register.md`: white form card, four
+      fields, flag + "+20", password helper + RegExp, email availability check, loading
+      CTA, API success → Home.
+- [x] **Product Details** (Batch 3a: rebuilt from the PNG; fixed header and purchase
+      bar, 276 hero, favorite animation, live total, auth guard, API add-to-cart).
+      Remaining: compare the real photo frame after running the app; the golden preview
+      uses the network placeholder.
 - [x] **Cart** (Group 3; overflow-proofed).
 - [x] **Checkout** (Group 3; delivery cards replaced with overflow-proof rows,
       `_placeOrder` navigates to Order Success).
@@ -53,14 +66,17 @@ must fix.
 - [x] **Order Details** (Group 4; new screen, items + address + summary).
 - [x] **Profile** (Group 4; "My Address" row navigates to the new Address screen).
 - [x] **My Address** (Group 4; new screen with a validated address form).
-- [ ] **Images** – dummy products still use picsum URLs. Export real product images to
-      `assets/images` and reference them through `AppAssets`.
+- [x] **Images** – Home, Explore and Products List use the `pictureUrl` from the API;
+      a broken/relative URL falls back to the local cafe placeholder.
+- [ ] **Product Details photo** – the hero uses the API `pictureUrl`; verify the crop of
+      the real photo on a device (the widget tests show the placeholder).
 
 ## Approved deviations still to apply
 
 - [x] Register password helper text (12, muted) + RegExp validator (deviation 2).
-- [x] Phone field: "+20" instead of the flag (deviation 5).
-- [ ] "Coming soon" SnackBar for visual-only buttons (deviation 8).
+- [x] Phone field: 🇪🇬 flag emoji + "+20" (Batch 1 instruction, supersedes deviation 5).
+- [x] Shared `AppTextField` used by Login, Register, Checkout and My Address.
+- [ ] "Coming soon" SnackBar for the remaining visual-only buttons (deviation 8).
 
 ## Done
 

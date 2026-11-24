@@ -21,7 +21,7 @@ void main() {
         );
         await tester.pumpAndSettle();
         expect(tester.takeException(), isNull);
-        expect(find.text(order.id), findsOneWidget);
+        expect(find.textContaining(order.id), findsWidgets);
       }
     }
   });

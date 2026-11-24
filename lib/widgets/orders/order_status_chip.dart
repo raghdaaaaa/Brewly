@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 
+/// Status pill matching Figma design Frame 3 (In Preparation, Delivered, Canceled).
 class OrderStatusChip extends StatelessWidget {
   const OrderStatusChip({super.key, required this.status});
 
@@ -11,32 +11,54 @@ class OrderStatusChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isPreparation = status == 'In preparation';
-    final isCancelled = status == 'Cancelled';
+    final normalized = status.toLowerCase();
+    final isPreparation = normalized.contains('preparation') || normalized.contains('pending');
+    final isCancelled = normalized.contains('cancel');
+
+    final Color bgColor;
+    final Color textColor;
+    final IconData icon;
+
+    if (isCancelled) {
+      bgColor = const Color(0xFFFEE2E2);
+      textColor = const Color(0xFF991B1B);
+      icon = Icons.close_rounded;
+    } else if (isPreparation) {
+      bgColor = const Color(0xFFFEF3C7);
+      textColor = const Color(0xFF92400E);
+      icon = Icons.access_time_rounded;
+    } else {
+      bgColor = const Color(0xFFD1FAE5);
+      textColor = const Color(0xFF065F46);
+      icon = Icons.check_rounded;
+    }
+
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 10,
-        vertical: AppSpacing.xs,
+        vertical: 4,
       ),
       decoration: BoxDecoration(
-        color: isCancelled
-            ? AppColors.errorColor
-            : isPreparation
-                ? AppColors.emeraldTintColor
-                : AppColors.borderColor,
+        color: bgColor,
         borderRadius: const BorderRadius.all(
           Radius.circular(AppRadius.pill),
         ),
       ),
-      child: Text(
-        status,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: AppTextStyles.statusPill.copyWith(
-          color: isCancelled || isPreparation
-              ? AppColors.onAccentColor
-              : AppColors.mutedTextColor,
-        ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 12, color: textColor),
+          const SizedBox(width: 4),
+          Text(
+            status,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyles.statusPill.copyWith(
+              color: textColor,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
       ),
     );
   }

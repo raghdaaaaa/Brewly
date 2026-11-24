@@ -1,310 +1,166 @@
 import 'package:flutter/material.dart';
 
-import '../core/theme/app_colors.dart';
-import '../core/theme/app_spacing.dart';
-import '../core/theme/app_text_styles.dart';
+import '../core/errors/app_exception.dart';
+import '../core/routes/app_routes.dart';
 import '../models/product.dart';
+import '../services/auth_service.dart';
+import '../services/basket_service.dart';
+import '../services/product_service.dart';
+import '../widgets/products/product_details_view.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   const ProductDetailsScreen({
     super.key,
     this.product,
+    this.productId,
     this.heroPrefix = 'home',
+    this.productService,
+    this.basketService,
   });
 
+  /// The product passed by Home / Products List through the named route.
   final Product? product;
+
+  /// Used when only the id is available; the screen then loads the product.
+  final int? productId;
 
   /// Keeps the Hero tag unique to the screen the product was opened from.
   final String heroPrefix;
+
+  final ProductService? productService;
+  final BasketService? basketService;
 
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
-  // How many items the user wants to add.
-  int _quantity = 1;
+  late final ProductService _productService =
+      widget.productService ?? ProductService();
+  late final BasketService _basketService =
+      widget.basketService ?? BasketService();
 
-  void _addToCart(Product product) {
-    // Dummy add for now. The basket service call comes later.
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('$_quantity × ${product.name} added to cart'),
-      ),
-    );
-  }
+  Product? _product;
+  Future<Product>? _productFuture;
+  int _quantity = 1;
+  bool _isFavorite = false;
+  bool _isAdding = false;
 
   @override
-  Widget build(BuildContext context) {
-    Product? product = widget.product;
-    String heroPrefix = widget.heroPrefix;
-    if (product == null) {
-      final arguments = ModalRoute.of(context)?.settings.arguments;
-      if (arguments is Map) {
-        product = arguments['product'] as Product?;
-        heroPrefix = arguments['heroPrefix'] as String? ?? 'home';
-      }
+  void initState() {
+    super.initState();
+    _product = widget.product;
+    if (_product == null && widget.productId != null) {
+      _productFuture = _fetchProduct();
     }
+  }
 
-    if (product == null) {
-      return Scaffold(
-        appBar: AppBar(title: const Text('Product Detail')),
-        body: const Center(
-          child: Text(
-            'Product not found',
-            style: AppTextStyles.bodyLargeMuted,
+  Future<Product> _fetchProduct() async {
+    final product = await _productService.getProduct(widget.productId!);
+    if (mounted) {
+      setState(() => _product = product);
+    }
+    return product;
+  }
+
+  void _retryLoad() {
+    if (widget.productId == null) {
+      return;
+    }
+    setState(() {
+      _product = null;
+      _productFuture = _fetchProduct();
+    });
+  }
+
+  void _toggleFavorite() => setState(() => _isFavorite = !_isFavorite);
+
+  void _decreaseQuantity() {
+    if (_quantity <= 1) return;
+    setState(() => _quantity--);
+  }
+
+  void _increaseQuantity() {
+    if (_quantity >= 99) return;
+    setState(() => _quantity++);
+  }
+
+  void _share() => _showMessage('Share is not available yet');
+
+  Future<void> _addToCart() async {
+    final product = _product;
+    if (product == null || _isAdding) {
+      return;
+    }
+    if (!AuthService.instance.isLoggedIn) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Please log in to add items to your cart.'),
+          action: SnackBarAction(
+            label: 'Log in',
+            onPressed: () {
+              if (!mounted) {
+                return;
+              }
+              Navigator.of(context).pushNamed(AppRoutes.loginRoute);
+            },
           ),
         ),
       );
+      return;
     }
 
-    final Product details = product;
+    setState(() => _isAdding = true);
+    try {
+      await _basketService.addItem(
+        productId: product.id,
+        quantity: _quantity,
+      );
+      if (!mounted) {
+        return;
+      }
+      _showMessage('Added to cart');
+    } on AppException catch (error) {
+      if (!mounted) {
+        return;
+      }
+      _showMessage(error.message);
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+      _showMessage('Could not add this item. Please try again.');
+    } finally {
+      if (mounted) {
+        setState(() => _isAdding = false);
+      }
+    }
+  }
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Product Detail')),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(
-          AppSpacing.lg,
-          AppSpacing.sm,
-          AppSpacing.lg,
-          AppSpacing.xl,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Hero image (same tag as the product card).
-            ClipRRect(
-              borderRadius: BorderRadius.circular(AppRadius.lg),
-              child: AspectRatio(
-                aspectRatio: 358 / 269,
-                child: Hero(
-                  tag: '${heroPrefix}_product_${details.id}',
-                  child: Image.network(
-                    product.pictureUrl,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        color: AppColors.softSurfaceColor,
-                        child: const Icon(
-                          Icons.local_cafe,
-                          size: 48,
-                          color: AppColors.mutedTextColor,
-                        ),
-                      );
-                    },
-                    loadingBuilder: (context, child, progress) {
-                      if (progress == null) {
-                        return child;
-                      }
-                      return Container(color: AppColors.softSurfaceColor);
-                    },
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
 
-            // Brand.
-            Text(
-              product.brandName.toUpperCase(),
-              style: AppTextStyles.brandCaps,
-            ),
-            const SizedBox(height: AppSpacing.sm),
+  void _close() => Navigator.of(context).maybePop();
 
-            // Name + price.
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Text(
-                    product.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.pageTitle,
-                  ),
-                ),
-                const SizedBox(width: AppSpacing.md),
-                Text(
-                  '${product.price.toStringAsFixed(0)} EGP',
-                  style: AppTextStyles.priceLarge,
-                ),
-              ],
-            ),
-            const SizedBox(height: AppSpacing.md),
-
-            // Category pill.
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 14,
-                vertical: 7,
-              ),
-              decoration: const BoxDecoration(
-                color: AppColors.softSurfaceColor,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(AppRadius.pill),
-                ),
-              ),
-              child: Text(
-                product.categoryName,
-                style: AppTextStyles.tag,
-              ),
-            ),
-            const SizedBox(height: AppSpacing.xl),
-
-            // Description.
-            const Text(
-              'About this item',
-              style: AppTextStyles.subtitle,
-            ),
-            const SizedBox(height: AppSpacing.sm),
-            Text(
-              product.description,
-              style: AppTextStyles.description,
-            ),
-            const SizedBox(height: AppSpacing.xl),
-
-            // Quantity counter.
-            Row(
-              children: [
-                const Text(
-                  'Quantity',
-                  style: AppTextStyles.subtitle,
-                ),
-                const Spacer(),
-                Container(
-                  decoration: const BoxDecoration(
-                    color: AppColors.softSurfaceDeepColor,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(14),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      InkWell(
-                        onTap: _quantity > 1
-                            ? () {
-                                setState(() {
-                                  _quantity--;
-                                });
-                              }
-                            : null,
-                        borderRadius: BorderRadius.circular(AppRadius.pill),
-                        child: const SizedBox(
-                          width: 24,
-                          child: Icon(
-                            Icons.remove,
-                            size: 14,
-                            color: AppColors.textColor,
-                          ),
-                        ),
-                      ),
-                      // Animated number.
-                      SizedBox(
-                        width: 22,
-                        child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 200),
-                          transitionBuilder: (child, animation) {
-                            return FadeTransition(
-                              opacity: animation,
-                              child: child,
-                            );
-                          },
-                          child: Text(
-                            '$_quantity',
-                            key: ValueKey(_quantity),
-                            textAlign: TextAlign.center,
-                            style: AppTextStyles.title,
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: _quantity < 10
-                            ? () {
-                                setState(() {
-                                  _quantity++;
-                                });
-                              }
-                            : null,
-                        borderRadius: BorderRadius.circular(AppRadius.pill),
-                        child: const SizedBox(
-                          width: 24,
-                          child: Icon(
-                            Icons.add,
-                            size: 14,
-                            color: AppColors.textColor,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-
-      // Sticky bottom bar with the total and the main button.
-      bottomNavigationBar: SafeArea(
-        top: false,
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(
-            AppSpacing.lg,
-            AppSpacing.md,
-            AppSpacing.lg,
-            AppSpacing.md,
-          ),
-          decoration: BoxDecoration(
-            color: AppColors.backgroundColor,
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.textColor.withValues(alpha: 0.06),
-                blurRadius: 20,
-                offset: const Offset(0, -4),
-              ),
-            ],
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text('Total', style: AppTextStyles.caption),
-                    const SizedBox(height: 2),
-                    Text(
-                      '${(details.price * _quantity).toStringAsFixed(0)} EGP',
-                      style: AppTextStyles.priceTotal,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: AppSpacing.lg),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () => _addToCart(details),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.shopping_bag_outlined, size: 18),
-                      SizedBox(width: AppSpacing.sm),
-                      Flexible(
-                        child: Text(
-                          'Add to cart',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+  @override
+  Widget build(BuildContext context) {
+    return ProductDetailsView(
+      product: _product,
+      productFuture: _productFuture,
+      heroPrefix: widget.heroPrefix,
+      quantity: _quantity,
+      isFavorite: _isFavorite,
+      isAdding: _isAdding,
+      onShare: _share,
+      onRetry: _retryLoad,
+      onClose: _close,
+      onFavoriteTap: _toggleFavorite,
+      onDecrease: _decreaseQuantity,
+      onIncrease: _increaseQuantity,
+      onAdd: _addToCart,
     );
   }
 }

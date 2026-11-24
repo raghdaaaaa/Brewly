@@ -1,4 +1,4 @@
-// One product line inside an order (OrderItemDto).
+import '../core/utils/json_parsers.dart';
 class OrderItem {
   const OrderItem({
     required this.name,
@@ -12,11 +12,18 @@ class OrderItem {
   final double price;
   final int quantity;
 
-  // price x quantity
   double get lineTotal => price * quantity;
+
+  factory OrderItem.fromJson(Map<String, dynamic> json) {
+    return OrderItem(
+      name: Json.asString(json['productName'] ?? json['name']),
+      pictureUrl: Json.asString(json['pictureUrl']),
+      price: Json.asDouble(json['price']),
+      quantity: Json.asInt(json['quantity'], fallback: 1),
+    );
+  }
 }
 
-// One order of the user (OrderToReturnDto).
 class Order {
   const Order({
     required this.id,
@@ -24,6 +31,9 @@ class Order {
     required this.status,
     required this.total,
     required this.items,
+    this.deliveryMethod = 'Zamalek Express Dispatch',
+    this.deliveryCost = 35.0,
+    this.subTotal = 0.0,
   });
 
   final String id;
@@ -31,13 +41,36 @@ class Order {
   final String status;
   final double total;
   final List<OrderItem> items;
+  final String deliveryMethod;
+  final double deliveryCost;
+  final double subTotal;
 
-  // Sum of the item line totals (the price before delivery).
   double get subtotal {
+    if (subTotal > 0) return subTotal;
     double sum = 0;
     for (final item in items) {
       sum += item.lineTotal;
     }
     return sum;
   }
+
+  factory Order.fromJson(Map<String, dynamic> json) {
+    final rawItems = json['items'];
+    return Order(
+      id: Json.asString(json['id']),
+      orderDate: Json.asString(json['orderDate']),
+      status: Json.asString(json['status']),
+      total: Json.asDouble(json['total']),
+      deliveryMethod: Json.asString(json['deliveryMethod']),
+      deliveryCost: Json.asDouble(json['deliveryCost']),
+      subTotal: Json.asDouble(json['subTotal']),
+      items: rawItems is List
+          ? rawItems
+              .whereType<Map>()
+              .map((item) => OrderItem.fromJson(Map<String, dynamic>.from(item)))
+              .toList()
+          : const [],
+    );
+  }
 }
+

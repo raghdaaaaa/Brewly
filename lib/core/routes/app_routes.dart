@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../models/address.dart';
 import '../../models/order.dart';
+import '../../models/product.dart';
 import '../../screens/address_screen.dart';
 import '../../screens/checkout_screen.dart';
 import '../../screens/explore_screen.dart';
@@ -43,8 +44,36 @@ class AppRoutes {
       return MainScreen(initialIndex: initialIndex);
     },
     exploreRoute: (context) => const ExploreScreen(),
-    productsListRoute: (context) => const ProductsListScreen(),
-    detailsRoute: (context) => const ProductDetailsScreen(),
+    productsListRoute: (context) {
+      final arguments = ModalRoute.of(context)?.settings.arguments;
+      if (arguments is Map) {
+        return ProductsListScreen(
+          initialSearch: arguments['search'] as String? ?? '',
+          categoryId: arguments['categoryId'] as int?,
+          categoryName: arguments['categoryName'] as String?,
+          brandId: arguments['brandId'] as int?,
+          brandName: arguments['brandName'] as String?,
+        );
+      }
+      return const ProductsListScreen();
+    },
+    detailsRoute: (context) {
+      final arguments = ModalRoute.of(context)?.settings.arguments;
+      if (arguments is Product) {
+        return ProductDetailsScreen(product: arguments);
+      }
+      if (arguments is int) {
+        return ProductDetailsScreen(productId: arguments);
+      }
+      if (arguments is Map) {
+        return ProductDetailsScreen(
+          product: arguments['product'] as Product?,
+          productId: arguments['productId'] as int?,
+          heroPrefix: arguments['heroPrefix'] as String? ?? 'home',
+        );
+      }
+      return const ProductDetailsScreen();
+    },
     checkoutRoute: (context) => const CheckoutScreen(),
     orderDetailsRoute: (context) {
       final arguments = ModalRoute.of(context)?.settings.arguments;
@@ -52,7 +81,16 @@ class AppRoutes {
     },
     orderSuccessRoute: (context) {
       final arguments = ModalRoute.of(context)?.settings.arguments;
-      return OrderSuccessScreen(orderId: arguments as String?);
+      if (arguments is String) {
+        return OrderSuccessScreen(orderId: arguments);
+      }
+      if (arguments is Map) {
+        return OrderSuccessScreen(
+          orderId: arguments['orderId'] as String?,
+          total: (arguments['total'] as num?)?.toDouble(),
+        );
+      }
+      return const OrderSuccessScreen();
     },
     addressRoute: (context) {
       final arguments = ModalRoute.of(context)?.settings.arguments;

@@ -3,130 +3,235 @@ import 'package:flutter/material.dart';
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_spacing.dart';
 import '../core/theme/app_text_styles.dart';
+import '../core/utils/formatters.dart';
 import '../models/product.dart';
+import 'product_thumbnail.dart';
 
-/// One product inside the Home grid.
-/// The heart is local only: Home keeps the list of favorite ids.
+/// One product row, shared by Home and Products List.
 ///
-/// [heroPrefix] disambiguates Hero tags when two grids (e.g. Home and Explore)
-/// are alive in the same [IndexedStack] at the same time.
+/// The card grows with the text scale instead of using a fixed height, so a
+/// long name or description can never overflow. Home passes [rating] (a fixed
+/// local value); Products List leaves it null and uses the uppercase brand.
 class ProductCard extends StatelessWidget {
   const ProductCard({
     super.key,
     required this.product,
-    required this.isFavorite,
-    required this.onFavoriteTap,
     required this.onTap,
+    required this.onAddTap,
     this.heroPrefix = 'home',
+    this.rating,
+    this.tagTone = ProductTagTone.dark,
+    this.brandUppercase = false,
+    this.isAdding = false,
   });
 
   final Product product;
-  final bool isFavorite;
-  final VoidCallback onFavoriteTap;
   final VoidCallback onTap;
-  /// Prefix that makes the Hero tag unique across tabs.
+  final VoidCallback onAddTap;
   final String heroPrefix;
+  final double? rating;
+  final ProductTagTone tagTone;
+  final bool brandUppercase;
+  final bool isAdding;
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      color: AppColors.cardColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppRadius.lg),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        boxShadow: const [
+          BoxShadow(
+            color: AppColors.cardShadow,
+            blurRadius: 16,
+            offset: Offset(0, 6),
+          ),
+        ],
       ),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      child: Material(
+        color: AppColors.cardColor,
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          child: Container(
+            constraints: const BoxConstraints(
+              minHeight: AppSizes.productCardMinHeight,
+            ),
+            padding: const EdgeInsets.all(AppSpacing.md),
+            child: Row(
+              children: [
+                ProductThumbnail(
+                  product: product,
+                  tone: tagTone,
+                  heroPrefix: heroPrefix,
+                ),
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: _CardDetails(
+                    product: product,
+                    rating: rating,
+                    brandUppercase: brandUppercase,
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                _AddButton(isLoading: isAdding, onTap: onAddTap),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CardDetails extends StatelessWidget {
+  const _CardDetails({
+    required this.product,
+    required this.rating,
+    required this.brandUppercase,
+  });
+
+  final Product product;
+  final double? rating;
+  final bool brandUppercase;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
           children: [
-            // Image + favorite heart.
-            Expanded(
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Hero(
-                    tag: '${heroPrefix}_product_${product.id}',
-                    child: Image.network(
-                      product.pictureUrl,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          color: AppColors.softSurfaceColor,
-                          child: const Icon(
-                            Icons.local_cafe,
-                            size: 32,
-                            color: AppColors.mutedTextColor,
-                          ),
-                        );
-                      },
-                      loadingBuilder: (context, child, progress) {
-                        if (progress == null) {
-                          return child;
-                        }
-                        return Container(color: AppColors.softSurfaceColor);
-                      },
-                    ),
+            Flexible(
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 7,
+                  vertical: 3,
+                ),
+                decoration: const BoxDecoration(
+                  color: AppColors.brandChipColor,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(AppRadius.pill),
                   ),
-                  Positioned(
-                    top: AppSpacing.sm,
-                    right: AppSpacing.sm,
-                    child: GestureDetector(
-                      onTap: onFavoriteTap,
-                      child: Container(
-                        width: AppSpacing.xxl,
-                        height: AppSpacing.xxl,
-                        decoration: const BoxDecoration(
-                          color: AppColors.cardColor,
-                          shape: BoxShape.circle,
-                        ),
-                        child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 250),
-                          transitionBuilder: (child, animation) {
-                            return ScaleTransition(
-                              scale: animation,
-                              child: child,
-                            );
-                          },
-                          child: Icon(
-                            isFavorite
-                                ? Icons.favorite
-                                : Icons.favorite_border,
-                            key: ValueKey(isFavorite),
-                            size: 18,
-                            color: isFavorite
-                                ? AppColors.errorColor
-                                : AppColors.mutedTextColor,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
+                child: Text(
+                  brandUppercase
+                      ? product.brandName.toUpperCase()
+                      : product.brandName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: brandUppercase
+                      ? AppTextStyles.brandChipCaps
+                      : AppTextStyles.brandChip,
+                ),
               ),
             ),
-            // Name and price below image.
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    product.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.cardTitle,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '${product.price.toStringAsFixed(0)} EGP',
-                    style: AppTextStyles.priceMedium,
-                  ),
-                ],
+            if (rating != null) ...[
+              const SizedBox(width: 6),
+              const Icon(
+                Icons.star_rounded,
+                size: 14,
+                color: AppColors.starColor,
               ),
-            ),
+              const SizedBox(width: 2),
+              Text(
+                rating!.toStringAsFixed(1),
+                style: AppTextStyles.rating,
+              ),
+            ],
           ],
+        ),
+        const SizedBox(height: 6),
+        Text(
+          product.name,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: AppTextStyles.productName,
+        ),
+        if (product.description.isNotEmpty) ...[
+          const SizedBox(height: 2),
+          Text(
+            product.description,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyles.productDescription,
+          ),
+        ],
+        const SizedBox(height: 6),
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerLeft,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                Formatters.amount(product.price),
+                style: AppTextStyles.priceCard,
+              ),
+              const SizedBox(width: 3),
+              const Padding(
+                padding: EdgeInsets.only(bottom: 2),
+                child: Text(
+                  'EGP',
+                  style: AppTextStyles.priceCurrency,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _AddButton extends StatelessWidget {
+  const _AddButton({required this.isLoading, required this.onTap});
+
+  final bool isLoading;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: AppSizes.headerAction,
+      height: AppSizes.headerAction,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: isLoading ? null : onTap,
+          customBorder: const CircleBorder(),
+          child: Center(
+            child: Container(
+              width: AppSizes.addButton,
+              height: AppSizes.addButton,
+              decoration: const BoxDecoration(
+                color: AppColors.primaryColor,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.primaryShadow25,
+                    blurRadius: 10,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: isLoading
+                  ? const Padding(
+                      padding: EdgeInsets.all(12),
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
+                    )
+                  : const Icon(
+                      Icons.add_rounded,
+                      size: 22,
+                      color: Colors.white,
+                    ),
+            ),
+          ),
         ),
       ),
     );

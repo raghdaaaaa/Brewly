@@ -1,41 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
+import '../core/errors/app_exception.dart';
 import '../core/routes/app_routes.dart';
-import '../core/theme/app_colors.dart';
 import '../core/theme/app_spacing.dart';
-import '../core/theme/app_text_styles.dart';
+import '../models/brand.dart';
+import '../models/category.dart';
 import '../models/product.dart';
+import '../models/product_page.dart';
+import '../services/auth_service.dart';
+import '../services/basket_service.dart';
 import '../services/dummy/dummy_data.dart';
+import '../services/product_service.dart';
 import '../widgets/app_header.dart';
-import '../widgets/common/product_grid.dart';
-import '../widgets/category_chip.dart';
-import '../widgets/error_retry.dart';
-import '../widgets/loading_indicator.dart';
+import '../widgets/common/app_search_field.dart';
+import '../widgets/home/delivery_card.dart';
+import '../widgets/home/home_brands_section.dart';
+import '../widgets/home/home_categories_section.dart';
+import '../widgets/home/home_greeting.dart';
+import '../widgets/home/home_popular_section.dart';
+import '../widgets/home/promo_card.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({
+    super.key,
+    this.productService,
+    this.basketService,
+  });
+
+  final ProductService? productService;
+  final BasketService? basketService;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final _searchFormKey = GlobalKey<FormState>();
+  late final ProductService _productService =
+      widget.productService ?? ProductService();
+  late final BasketService _basketService =
+      widget.basketService ?? BasketService();
+
   final _searchController = TextEditingController();
+  final Set<int> _addingIds = {};
 
-  String _selectedCategory = 'All';
-  String _searchText = '';
-
-  // Favorite products (local only, not saved on the server).
-  final Set<int> _favoriteIds = {};
-
-  // The future used by the FutureBuilder.
-  late Future<List<Product>> _productsFuture;
+  late Future<List<Category>> _categoriesFuture;
+  late Future<List<Brand>> _brandsFuture;
+  late Future<ProductPage> _productsFuture;
 
   @override
   void initState() {
     super.initState();
-    _productsFuture = _loadProducts();
+    _loadCategories();
+    _loadBrands();
+    _loadProducts();
   }
 
   @override
@@ -44,224 +62,157 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  // Fake "network" call, so the loading spinner is visible.
-  // It will be replaced by the product service later.
-  Future<List<Product>> _loadProducts() async {
-    await Future.delayed(const Duration(milliseconds: 700));
-    return dummyProducts;
+  void _loadCategories() {
+    _categoriesFuture = _productService.getCategories();
   }
 
-  void _retry() {
-    setState(() {
-      _productsFuture = _loadProducts();
+  void _loadBrands() {
+    _brandsFuture = _productService.getBrands();
+  }
+
+  void _loadProducts() {
+    _productsFuture = _productService.getProducts(pageSize: 4);
+  }
+
+  String get _firstName {
+    final displayName =
+        AuthService.instance.currentUser?.displayName.trim() ?? '';
+    if (displayName.isEmpty) {
+      return 'Omar';
+    }
+    return displayName.split(' ').first;
+  }
+
+  void _openProducts([Map<String, Object?>? arguments]) {
+    Navigator.pushNamed(
+      context,
+      AppRoutes.productsListRoute,
+      arguments: arguments,
+    );
+  }
+
+  void _search(String value) {
+    final query = value.trim();
+    if (query.isEmpty) {
+      return;
+    }
+    _openProducts({'search': query});
+    _searchController.clear();
+  }
+
+  void _openCategory(Category category) {
+    _openProducts({
+      'categoryId': category.id,
+      'categoryName': category.name,
     });
   }
 
-  // Category + search filter, done locally on the dummy list.
-  List<Product> _filterProducts(List<Product> products) {
-    return products.where((product) {
-      final matchesCategory = _selectedCategory == 'All' ||
-          product.categoryName == _selectedCategory;
-      final matchesSearch = _searchText.isEmpty ||
-          product.name.toLowerCase().contains(_searchText.toLowerCase());
-      return matchesCategory && matchesSearch;
-    }).toList();
+  void _openBrand(Brand brand) {
+    _openProducts({
+      'brandId': brand.id,
+      'brandName': brand.name,
+    });
   }
 
-  void _search() {
-    if (_searchFormKey.currentState!.validate()) {
-      setState(() {
-        _searchText = _searchController.text.trim();
-      });
-      FocusScope.of(context).unfocus();
+  void _openProduct(Product product) {
+    Navigator.pushNamed(
+      context,
+      AppRoutes.detailsRoute,
+      arguments: {'product': product, 'heroPrefix': 'home'},
+    );
+  }
+
+  Future<void> _addToBasket(Product product) async {
+    setState(() => _addingIds.add(product.id));
+    try {
+      await _basketService.addItem(productId: product.id);
+      if (!mounted) {
+        return;
+      }
+      _showMessage('${product.name} added to your order');
+    } on AppException catch (error) {
+      if (!mounted) {
+        return;
+      }
+      _showMessage(error.message);
+    } finally {
+      if (mounted) {
+        setState(() => _addingIds.remove(product.id));
+      }
     }
   }
 
-  void _toggleFavorite(int productId) {
-    setState(() {
-      if (_favoriteIds.contains(productId)) {
-        _favoriteIds.remove(productId);
-      } else {
-        _favoriteIds.add(productId);
-      }
-    });
+  Future<void> _claimPromo() async {
+    await Clipboard.setData(const ClipboardData(text: 'BREW20'));
+    if (!mounted) {
+      return;
+    }
+    _showMessage('Promo code BREW20 copied');
+  }
+
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: ListView(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(
             AppSpacing.lg,
-            AppSpacing.lg,
+            AppSpacing.sm,
             AppSpacing.lg,
             AppSpacing.xl,
           ),
-          children: [
-            const AppHeaderTop(),
-            const SizedBox(height: AppSpacing.md),
-            _buildGreeting(),
-            const SizedBox(height: AppSpacing.xl),
-            _buildSearchField(),
-            const SizedBox(height: AppSpacing.xl),
-            _buildCategories(),
-            const SizedBox(height: AppSpacing.xl),
-            const Text(
-              'Popular Right Now',
-              style: AppTextStyles.heading,
-            ),
-            const SizedBox(height: AppSpacing.md),
-            _buildProductGrid(),
-            const SizedBox(height: AppSpacing.lg),
-            Align(
-              child: TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.productsListRoute);
-                },
-                child: const Text('See all products', style: AppTextStyles.link),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Greeting + avatar.
-  Widget _buildGreeting() {
-    return Row(
-      children: [
-        Expanded(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text(
-                'Good evening, Omar 👋',
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: AppTextStyles.pageTitle,
+              const AppHeaderTop(),
+              const SizedBox(height: AppSpacing.lg),
+              HomeGreeting(name: _firstName, points: dummyLoyaltyPoints),
+              const SizedBox(height: AppSpacing.lg),
+              DeliveryCard(
+                address: dummyDeliveryLabel,
+                onTap: () => _showMessage('Address editing is coming soon'),
               ),
-              const SizedBox(height: AppSpacing.xs),
-              Text(
-                'What would you like today?',
-                style: AppTextStyles.bodySubtle,
+              const SizedBox(height: AppSpacing.lg),
+              AppSearchField(
+                controller: _searchController,
+                hint: 'Search specialty beans, croissants, coffee...',
+                onSubmitted: _search,
+                onFilterTap: () => _showMessage('Coming soon'),
+              ),
+              const SizedBox(height: 20),
+              PromoCard(onClaim: _claimPromo),
+              const SizedBox(height: 20),
+              HomeCategoriesSection(
+                future: _categoriesFuture,
+                onRetry: () => setState(_loadCategories),
+                onSeeAll: () => _openProducts(),
+                onCategoryTap: _openCategory,
+              ),
+              const SizedBox(height: 20),
+              HomeBrandsSection(
+                future: _brandsFuture,
+                onRetry: () => setState(_loadBrands),
+                onBrandTap: _openBrand,
+              ),
+              const SizedBox(height: 20),
+              HomePopularSection(
+                future: _productsFuture,
+                onRetry: () => setState(_loadProducts),
+                onViewMenu: () => _openProducts(),
+                onProductTap: _openProduct,
+                onAddTap: _addToBasket,
+                addingIds: _addingIds,
               ),
             ],
           ),
         ),
-        const SizedBox(width: AppSpacing.md),
-        Container(
-          width: 44,
-          height: 44,
-          decoration: const BoxDecoration(
-            color: AppColors.primaryColor,
-            shape: BoxShape.circle,
-          ),
-          child: const Center(
-            child: Text('OE', style: AppTextStyles.avatarInitials),
-          ),
-        ),
-      ],
-    );
-  }
-
-  // Search form (validation: not empty).
-  Widget _buildSearchField() {
-    return Form(
-      key: _searchFormKey,
-      child: TextFormField(
-        controller: _searchController,
-        textInputAction: TextInputAction.search,
-        onFieldSubmitted: (_) => _search(),
-        style: AppTextStyles.input,
-        decoration: InputDecoration(
-          hintText: 'Search coffee, pastry...',
-          prefixIcon: const Icon(
-            Icons.search,
-            size: 20,
-            color: AppColors.mutedTextColor,
-          ),
-          suffixIcon: IconButton(
-            icon: const Icon(
-              Icons.arrow_forward,
-              size: 18,
-              color: AppColors.primaryColor,
-            ),
-            onPressed: _search,
-          ),
-        ),
-        validator: (value) {
-          if (value == null || value.trim().isEmpty) {
-            return 'Type something to search';
-          }
-          return null;
-        },
       ),
-    );
-  }
-
-  // Horizontal category chips.
-  Widget _buildCategories() {
-    return SizedBox(
-      height: 44,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: dummyCategories.length,
-        separatorBuilder: (context, index) =>
-            const SizedBox(width: AppSpacing.sm),
-        itemBuilder: (context, index) {
-          final category = dummyCategories[index];
-          return CategoryChip(
-            label: category.name,
-            isSelected: _selectedCategory == category.name,
-            onTap: () {
-              setState(() {
-                _selectedCategory = category.name;
-              });
-            },
-          );
-        },
-      ),
-    );
-  }
-
-  // The product grid, with loading and error states.
-  Widget _buildProductGrid() {
-    return FutureBuilder<List<Product>>(
-      future: _productsFuture,
-      builder: (context, snapshot) {
-        // 1. Loading.
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const SizedBox(height: 200, child: LoadingIndicator());
-        }
-
-        // 2. Error.
-        if (snapshot.hasError) {
-          return SizedBox(
-            height: 220,
-            child: ErrorRetry(
-              message: 'Could not load the menu. Check your connection.',
-              onRetry: _retry,
-            ),
-          );
-        }
-
-        // 3. Data.
-        final visibleProducts = _filterProducts(snapshot.data ?? []);
-        return ProductGrid(
-          products: visibleProducts,
-          favorites: _favoriteIds,
-          onFavoriteTap: _toggleFavorite,
-          onTap: (product) {
-            Navigator.pushNamed(
-              context,
-              AppRoutes.detailsRoute,
-              arguments: {'product': product, 'heroPrefix': 'home'},
-            );
-          },
-        );
-      },
     );
   }
 }

@@ -1,5 +1,27 @@
-// This file will hold the User model (UserDto).
-// Fields: displayName, email, token.
 class User {
-  // TODO: add fields and fromJson() in step 2.
+  const User({
+    required this.displayName,
+    required this.email,
+    required this.token,
+  });
+
+  final String displayName;
+  final String email;
+  final String token;
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      displayName: json['displayName'] as String? ?? '',
+      email: json['email'] as String? ?? '',
+      token: json['token'] as String? ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'displayName': displayName,
+      'email': email,
+      'token': token,
+    };
+  }
 }

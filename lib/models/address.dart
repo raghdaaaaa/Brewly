@@ -1,4 +1,4 @@
-// The delivery address of the user (GET/PUT /api/Account/Address).
+import '../core/utils/json_parsers.dart';
 class Address {
   const Address({
     required this.firstName,
@@ -13,4 +13,25 @@ class Address {
   final String street;
   final String city;
   final String country;
+
+  factory Address.fromJson(Map<String, dynamic> json) {
+    return Address(
+      firstName: Json.asString(json['firstName']),
+      lastName: Json.asString(json['lastName']),
+      street: Json.asString(json['street']),
+      city: Json.asString(json['city']),
+      country: Json.asString(json['country']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'firstName': firstName,
+      'lastName': lastName,
+      'street': street,
+      'city': city,
+      'country': country,
+    };
+  }
 }
+
