@@ -83,17 +83,22 @@ class _AddressScreenState extends State<AddressScreen> {
 
     try {
       await AuthService.instance.updateAddress(address);
-    } catch (_) {
-      // Offline fallback: save locally for session.
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Address saved')),
+      );
+      Navigator.of(context).maybePop(address);
+    } catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not save address. Please try again.')),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _saving = false);
+      }
     }
-
-    if (!mounted) return;
-    setState(() => _saving = false);
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Address saved')),
-    );
-    Navigator.of(context).maybePop(address);
   }
 
   String? Function(String?) _required(String fieldName) {
