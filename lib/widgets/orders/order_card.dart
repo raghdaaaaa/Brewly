@@ -88,44 +88,59 @@ class OrderCard extends StatelessWidget {
                   : MainAxisAlignment.end,
               children: [
                 if (isInPreparation) ...[
-                  Text(
-                    '${order.total.toStringAsFixed(0)} EGP',
-                    style: AppTextStyles.priceTotal,
+                  Expanded(
+                    child: Text(
+                      '${order.total.toStringAsFixed(0)} EGP',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.priceTotal,
+                    ),
                   ),
-                  SizedBox(
-                    height: 38,
-                    child: FilledButton(
-                      onPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          AppRoutes.orderDetailsRoute,
-                          arguments: order,
-                        );
-                      },
-                      style: FilledButton.styleFrom(
-                        backgroundColor: AppColors.primaryColor,
-                        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(AppRadius.pill)),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Track Order',
-                            style: AppTextStyles.buttonLabel.copyWith(
-                              fontSize: 12,
-                              color: AppColors.onAccentColor,
+                  const SizedBox(width: AppSpacing.sm),
+                  Flexible(
+                    child: SizedBox(
+                      height: 38,
+                      child: FilledButton(
+                        onPressed: () {
+                          Navigator.pushNamed(
+                            context,
+                            AppRoutes.orderDetailsRoute,
+                            arguments: order,
+                          );
+                        },
+                        style: FilledButton.styleFrom(
+                          backgroundColor: AppColors.primaryColor,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppSpacing.md,
+                          ),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(AppRadius.pill),
                             ),
                           ),
-                          const SizedBox(width: 4),
-                          const Icon(
-                            Icons.arrow_forward_rounded,
-                            size: 14,
-                            color: AppColors.onAccentColor,
-                          ),
-                        ],
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Flexible(
+                              child: Text(
+                                'Track Order',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTextStyles.buttonLabel.copyWith(
+                                  fontSize: 12,
+                                  color: AppColors.onAccentColor,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            const Icon(
+                              Icons.arrow_forward_rounded,
+                              size: 14,
+                              color: AppColors.onAccentColor,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

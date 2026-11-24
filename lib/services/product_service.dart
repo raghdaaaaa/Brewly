@@ -39,6 +39,30 @@ class ProductService {
       if (categoryId != null) 'categoryId': '$categoryId',
     };
     final json = await _client.get(_productsPath, query: query);
+    if (json is List) {
+      if (json.isEmpty) {
+        return ProductPage(
+          pageIndex: pageIndex,
+          pageSize: pageSize,
+          count: 0,
+          products: const [],
+        );
+      }
+      final firstPage = ProductPage.fromJson(_asObject(json.first));
+      if (json.length == 1) {
+        return firstPage;
+      }
+      final products = <Product>[];
+      for (final item in json) {
+        products.addAll(ProductPage.fromJson(_asObject(item)).products);
+      }
+      return ProductPage(
+        pageIndex: firstPage.pageIndex,
+        pageSize: firstPage.pageSize,
+        count: firstPage.count,
+        products: products,
+      );
+    }
     return ProductPage.fromJson(_asObject(json));
   }
 

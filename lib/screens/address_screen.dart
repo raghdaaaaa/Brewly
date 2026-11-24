@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/errors/app_exception.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
@@ -37,7 +38,7 @@ class _AddressScreenState extends State<AddressScreen> {
     _cityController = TextEditingController(text: address?.city ?? 'Cairo');
     _countryController = TextEditingController(text: address?.country ?? 'Egypt');
 
-    if (address == null) {
+    if (address == null && AuthService.instance.isLoggedIn) {
       _loadSavedAddress();
     }
   }
@@ -47,16 +48,24 @@ class _AddressScreenState extends State<AddressScreen> {
       final saved = await AuthService.instance.getAddress();
       if (saved != null && mounted) {
         setState(() {
-          if (_firstNameController.text.isEmpty) _firstNameController.text = saved.firstName;
-          if (_lastNameController.text.isEmpty) _lastNameController.text = saved.lastName;
-          if (_streetController.text.isEmpty) _streetController.text = saved.street;
-          if (_cityController.text.isEmpty) _cityController.text = saved.city;
-          if (_countryController.text.isEmpty) _countryController.text = saved.country;
+          if (_firstNameController.text.isEmpty) {
+            _firstNameController.text = saved.firstName;
+          }
+          if (_lastNameController.text.isEmpty) {
+            _lastNameController.text = saved.lastName;
+          }
+          if (_streetController.text.isEmpty) {
+            _streetController.text = saved.street;
+          }
+          if (saved.city.isNotEmpty) {
+            _cityController.text = saved.city;
+          }
+          if (saved.country.isNotEmpty) {
+            _countryController.text = saved.country;
+          }
         });
       }
-    } catch (_) {
-      // Unauthenticated or network error; keep existing fields.
-    }
+    } catch (_) {}
   }
 
   @override
@@ -82,18 +91,28 @@ class _AddressScreenState extends State<AddressScreen> {
     );
 
     try {
-      await AuthService.instance.updateAddress(address);
+      final saved = await AuthService.instance.updateAddress(address);
+      if (!mounted) return;
+      setState(() => _saving = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Address saved')),
+      );
+      Navigator.of(context).maybePop(saved);
+    } on AppException catch (error) {
+      if (!mounted) return;
+      setState(() => _saving = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(error.message)),
+      );
     } catch (_) {
-      // Offline fallback: save locally for session.
+      if (!mounted) return;
+      setState(() => _saving = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Could not save address. Please try again.'),
+        ),
+      );
     }
-
-    if (!mounted) return;
-    setState(() => _saving = false);
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Address saved')),
-    );
-    Navigator.of(context).maybePop(address);
   }
 
   String? Function(String?) _required(String fieldName) {

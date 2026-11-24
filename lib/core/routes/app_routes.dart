@@ -77,7 +77,23 @@ class AppRoutes {
     checkoutRoute: (context) => const CheckoutScreen(),
     orderDetailsRoute: (context) {
       final arguments = ModalRoute.of(context)?.settings.arguments;
-      return OrderDetailsScreen(order: arguments as Order?);
+      if (arguments is Order) {
+        return OrderDetailsScreen(order: arguments);
+      }
+      if (arguments is int) {
+        return OrderDetailsScreen(orderId: arguments);
+      }
+      if (arguments is String) {
+        return OrderDetailsScreen(orderId: int.tryParse(arguments));
+      }
+      if (arguments is Map) {
+        final rawId = arguments['orderId'];
+        return OrderDetailsScreen(
+          order: arguments['order'] as Order?,
+          orderId: rawId is int ? rawId : int.tryParse('$rawId'),
+        );
+      }
+      return const OrderDetailsScreen();
     },
     orderSuccessRoute: (context) {
       final arguments = ModalRoute.of(context)?.settings.arguments;

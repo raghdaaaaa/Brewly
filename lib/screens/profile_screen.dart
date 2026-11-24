@@ -81,11 +81,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Navigator.pushNamed(context, AppRoutes.homeRoute, arguments: 3);
               },
               onAddressTap: () {
-                Navigator.pushNamed(
-                  context,
-                  AppRoutes.addressRoute,
-                  arguments: dummyAddress,
-                );
+                Navigator.pushNamed(context, AppRoutes.addressRoute);
               },
               onSettingsTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(

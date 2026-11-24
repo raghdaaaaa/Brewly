@@ -1,8 +1,12 @@
 import 'dart:convert';
 
 import 'package:brewly/core/errors/app_exception.dart';
+import 'package:brewly/models/address.dart';
 import 'package:brewly/services/api_client.dart';
 import 'package:brewly/services/api_service.dart';
+import 'package:brewly/services/basket_service.dart';
+import 'package:brewly/services/order_service.dart';
+import 'package:brewly/services/product_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -169,6 +173,135 @@ void main() {
           ),
         ),
       );
+    });
+
+    test('ProductService parses Swagger array pagination response', () async {
+      final mock = MockClient((request) async {
+        expect(request.url.path, '/api/Products');
+        return http.Response(
+          jsonEncode([
+            {
+              'page_Index': 1,
+              'page_Size': 10,
+              'count': 1,
+              'data': [
+                {
+                  'id': 7,
+                  'name': 'Spanish Iced Latte',
+                  'description': 'Cold espresso',
+                  'pictureUrl': 'https://example.test/latte.png',
+                  'price': 95,
+                  'brandId': 1,
+                  'brand': 'Brewly',
+                  'categoryId': 2,
+                  'category': 'Cold Brew',
+                },
+              ],
+            },
+          ]),
+          200,
+          headers: {'content-type': 'application/json'},
+        );
+      });
+
+      final service = ProductService(
+        client: ApiClient(
+          httpClient: mock,
+          baseUrl: 'https://example.test',
+        ),
+      );
+
+      final page = await service.getProducts();
+      expect(page.pageIndex, 1);
+      expect(page.pageSize, 10);
+      expect(page.count, 1);
+      expect(page.products.length, 1);
+      expect(page.products.first.id, 7);
+      expect(page.products.first.name, 'Spanish Iced Latte');
+    });
+
+    test('BasketService sends productId and quantity to POST /api/Basket', () async {
+      final mock = MockClient((request) async {
+        expect(request.method, 'POST');
+        expect(request.url.path, '/api/Basket');
+        final body = jsonDecode(request.body) as Map<String, dynamic>;
+        expect(body['productId'], 7);
+        expect(body['quantity'], 3);
+
+        return http.Response(
+          jsonEncode({
+            'id': 'basket-1',
+            'items': [
+              {
+                'id': 7,
+                'productName': 'Spanish Iced Latte',
+                'price': 95,
+                'pictureUrl': 'https://example.test/latte.png',
+                'quantity': 3,
+              },
+            ],
+          }),
+          200,
+          headers: {'content-type': 'application/json'},
+        );
+      });
+
+      final service = BasketService(
+        client: ApiClient(
+          httpClient: mock,
+          baseUrl: 'https://example.test',
+        ),
+      );
+
+      final basket = await service.addItem(productId: 7, quantity: 3);
+      expect(basket.items.single.id, 7);
+      expect(basket.items.single.productId, 7);
+      expect(basket.items.single.quantity, 3);
+    });
+
+    test('OrderService sends deliverMethodID and shippingAddress', () async {
+      final mock = MockClient((request) async {
+        expect(request.method, 'POST');
+        expect(request.url.path, '/api/Orders');
+        final body = jsonDecode(request.body) as Map<String, dynamic>;
+        expect(body['deliverMethodID'], 2);
+        expect(body['shippingAddress']['city'], 'Cairo');
+
+        return http.Response(
+          jsonEncode({
+            'id': 42,
+            'orderDate': '2026-11-24T12:00:00Z',
+            'status': 'Pending',
+            'deliveryMethod': 'Express',
+            'deliveryCost': 60,
+            'subTotal': 190,
+            'total': 250,
+            'items': [],
+          }),
+          200,
+          headers: {'content-type': 'application/json'},
+        );
+      });
+
+      final service = OrderService(
+        client: ApiClient(
+          httpClient: mock,
+          baseUrl: 'https://example.test',
+        ),
+      );
+
+      final order = await service.createOrder(
+        deliveryMethodId: 2,
+        shippingAddress: const Address(
+          firstName: 'Omar',
+          lastName: 'El-Sayed',
+          street: '14 Gezira St',
+          city: 'Cairo',
+          country: 'Egypt',
+        ),
+      );
+      expect(order.id, '42');
+      expect(order.total, 250);
     });
   });
 }

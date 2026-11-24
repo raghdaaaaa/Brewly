@@ -1,14 +1,17 @@
 import '../core/utils/json_parsers.dart';
+
 class BasketItem {
   BasketItem({
     required this.id,
+    int? productId,
     required this.productName,
     required this.pictureUrl,
     required this.price,
     this.quantity = 1,
-  });
+  }) : productId = productId ?? id;
 
   final int id;
+  final int productId;
   final String productName;
   final String pictureUrl;
   final double price;
@@ -18,8 +21,10 @@ class BasketItem {
   double get lineTotal => price * quantity;
 
   factory BasketItem.fromJson(Map<String, dynamic> json) {
+    final id = Json.asInt(json['id']);
     return BasketItem(
-      id: Json.asInt(json['id']),
+      id: id,
+      productId: Json.asInt(json['productId'], fallback: id),
       productName: Json.asString(json['productName']),
       pictureUrl: Json.asString(json['pictureUrl']),
       price: Json.asDouble(json['price']),

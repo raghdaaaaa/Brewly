@@ -146,9 +146,16 @@ class _OrderItemRow extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Qty: ${item.quantity}', style: AppTextStyles.caption),
+                  Expanded(
+                    child: Text(
+                      'Qty: ${item.quantity}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.caption,
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
                   Text(
                     '${item.lineTotal.toStringAsFixed(0)} EGP',
                     style: AppTextStyles.priceSmall.copyWith(

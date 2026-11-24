@@ -1,23 +1,28 @@
 import 'package:flutter/material.dart';
 
+import '../core/errors/app_exception.dart';
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_spacing.dart';
 import '../core/theme/app_text_styles.dart';
 import '../models/order.dart';
-import '../services/dummy/dummy_data.dart';
 import '../services/order_service.dart';
 import '../widgets/app_header.dart';
+import '../widgets/error_retry.dart';
+import '../widgets/loading_indicator.dart';
 import '../widgets/orders/order_card.dart';
 import '../widgets/orders/orders_empty_state.dart';
 
 class OrdersScreen extends StatefulWidget {
-  const OrdersScreen({super.key});
+  const OrdersScreen({super.key, this.orderService});
+
+  final OrderService? orderService;
 
   @override
   State<OrdersScreen> createState() => _OrdersScreenState();
 }
 
 class _OrdersScreenState extends State<OrdersScreen> {
+  late final OrderService _orderService = widget.orderService ?? OrderService();
   late Future<List<Order>> _ordersFuture;
 
   @override
@@ -26,14 +31,14 @@ class _OrdersScreenState extends State<OrdersScreen> {
     _ordersFuture = _fetchOrders();
   }
 
-  Future<List<Order>> _fetchOrders() async {
-    try {
-      final orders = await OrderService().getOrders();
-      if (orders.isNotEmpty) return orders;
-    } catch (_) {
-      // Unauthenticated or network error; fall back to dummy orders.
-    }
-    return dummyOrders;
+  Future<List<Order>> _fetchOrders() {
+    return _orderService.getOrders();
+  }
+
+  void _reload() {
+    setState(() {
+      _ordersFuture = _fetchOrders();
+    });
   }
 
   @override
@@ -43,10 +48,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () async {
-            setState(() {
-              _ordersFuture = _fetchOrders();
-            });
-            await _ordersFuture;
+            _reload();
+            await _ordersFuture.catchError((_) => <Order>[]);
           },
           child: ListView(
             padding: const EdgeInsets.fromLTRB(0, AppSpacing.sm, 0, 100),
@@ -65,15 +68,20 @@ class _OrdersScreenState extends State<OrdersScreen> {
                 future: _ordersFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Padding(
-                      padding: EdgeInsets.only(top: AppSpacing.xxl),
-                      child: Center(
-                        child: CircularProgressIndicator(color: AppColors.primaryColor),
-                      ),
+                    return const LoadingIndicator();
+                  }
+
+                  if (snapshot.hasError) {
+                    final error = snapshot.error;
+                    return ErrorRetry(
+                      message: error is AppException
+                          ? error.message
+                          : 'Could not load your orders. Please try again.',
+                      onRetry: _reload,
                     );
                   }
 
-                  final orders = snapshot.data ?? dummyOrders;
+                  final orders = snapshot.data ?? const [];
                   if (orders.isEmpty) {
                     return const OrdersEmptyState();
                   }

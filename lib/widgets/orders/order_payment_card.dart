@@ -35,9 +35,16 @@ class OrderPaymentCard extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.md),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Subtotal', style: AppTextStyles.bodyMuted),
+              const Expanded(
+                child: Text(
+                  'Subtotal',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTextStyles.bodyMuted,
+                ),
+              ),
+              const SizedBox(width: AppSpacing.sm),
               Text(
                 '${order.subtotal.toStringAsFixed(0)} EGP',
                 style: AppTextStyles.summaryValue,
@@ -46,9 +53,16 @@ class OrderPaymentCard extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.sm),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Delivery Fee', style: AppTextStyles.bodyMuted),
+              const Expanded(
+                child: Text(
+                  'Delivery Fee',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTextStyles.bodyMuted,
+                ),
+              ),
+              const SizedBox(width: AppSpacing.sm),
               Text(
                 '${order.deliveryCost.toStringAsFixed(0)} EGP',
                 style: AppTextStyles.summaryValue,

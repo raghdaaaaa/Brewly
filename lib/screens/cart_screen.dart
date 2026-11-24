@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 
+import '../core/errors/app_exception.dart';
 import '../core/routes/app_routes.dart';
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_spacing.dart';
 import '../core/theme/app_text_styles.dart';
 import '../models/basket.dart';
 import '../services/basket_service.dart';
-import '../services/dummy/dummy_data.dart';
 import '../widgets/app_header.dart';
 import '../widgets/cart/cart_checkout_button.dart';
 import '../widgets/cart/cart_item_card.dart';
 import '../widgets/cart/cart_summary_card.dart';
 import '../widgets/common/empty_view.dart';
+import '../widgets/error_retry.dart';
 import '../widgets/loading_indicator.dart';
 
 class CartScreen extends StatefulWidget {
@@ -21,7 +22,6 @@ class CartScreen extends StatefulWidget {
     this.basketService,
   });
 
-  /// Called by the empty state button to switch to the Home tab.
   final VoidCallback onBrowseMenu;
   final BasketService? basketService;
 
@@ -34,30 +34,58 @@ class _CartScreenState extends State<CartScreen> {
       widget.basketService ?? BasketService();
 
   bool _isLoading = true;
+  bool _isInternalUpdate = false;
+  String? _errorMessage;
   List<BasketItem> _items = [];
 
   @override
   void initState() {
     super.initState();
+    BasketService.itemCount.addListener(_onExternalBasketChanged);
     _loadBasket();
   }
 
-  Future<void> _loadBasket() async {
+  @override
+  void dispose() {
+    BasketService.itemCount.removeListener(_onExternalBasketChanged);
+    super.dispose();
+  }
+
+  void _onExternalBasketChanged() {
+    if (!mounted || _isInternalUpdate) return;
+    _loadBasket(showSpinner: false);
+  }
+
+  Future<void> _loadBasket({bool showSpinner = true}) async {
+    if (showSpinner && mounted) {
+      setState(() {
+        _isLoading = true;
+        _errorMessage = null;
+      });
+    }
+    _isInternalUpdate = true;
     try {
       final basket = await _basketService.getBasket();
       if (!mounted) return;
       setState(() {
-        _items = basket.items.isNotEmpty
-            ? basket.items
-            : List.of(dummyBasketItems);
+        _items = List.of(basket.items);
+        _errorMessage = null;
+        _isLoading = false;
+      });
+    } on AppException catch (error) {
+      if (!mounted) return;
+      setState(() {
+        _errorMessage = error.message;
         _isLoading = false;
       });
     } catch (_) {
       if (!mounted) return;
       setState(() {
-        _items = List.of(dummyBasketItems);
+        _errorMessage = 'Could not load your basket. Please try again.';
         _isLoading = false;
       });
+    } finally {
+      _isInternalUpdate = false;
     }
   }
 
@@ -69,20 +97,43 @@ class _CartScreenState extends State<CartScreen> {
     return sum;
   }
 
-  void _increaseQuantity(BasketItem item) {
-    if (item.quantity >= 99) return;
+  Future<void> _updateQuantity(BasketItem item, int nextQuantity) async {
+    if (nextQuantity < 1 || nextQuantity > 99) return;
+    final previousQuantity = item.quantity;
     setState(() {
-      item.quantity++;
+      item.quantity = nextQuantity;
     });
-    _basketService.addItem(productId: item.id, quantity: item.quantity).ignore();
+    _isInternalUpdate = true;
+    try {
+      final basket = await _basketService.updateItemQuantity(
+        productId: item.productId,
+        quantity: nextQuantity,
+      );
+      if (!mounted) return;
+      setState(() {
+        _items = List.of(basket.items);
+      });
+    } on AppException catch (error) {
+      if (!mounted) return;
+      setState(() {
+        item.quantity = previousQuantity;
+      });
+      _showMessage(error.message);
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        item.quantity = previousQuantity;
+      });
+      _showMessage('Could not update item quantity. Please try again.');
+    } finally {
+      _isInternalUpdate = false;
+    }
   }
 
-  void _decreaseQuantity(BasketItem item) {
-    if (item.quantity <= 1) return;
-    setState(() {
-      item.quantity--;
-    });
-    _basketService.addItem(productId: item.id, quantity: item.quantity).ignore();
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
   }
 
   void _confirmClearCart() {
@@ -98,13 +149,24 @@ class _CartScreenState extends State<CartScreen> {
               child: const Text('Cancel'),
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 Navigator.pop(dialogContext);
-                setState(() {
-                  _items.clear();
-                  clearDummyBasket();
-                });
-                _basketService.clearBasket().ignore();
+                _isInternalUpdate = true;
+                try {
+                  await _basketService.clearBasket();
+                  if (!mounted) return;
+                  setState(() {
+                    _items.clear();
+                  });
+                } on AppException catch (error) {
+                  if (!mounted) return;
+                  _showMessage(error.message);
+                } catch (_) {
+                  if (!mounted) return;
+                  _showMessage('Could not clear cart. Please try again.');
+                } finally {
+                  _isInternalUpdate = false;
+                }
               },
               child: const Text('Clear', style: AppTextStyles.dangerAction),
             ),
@@ -128,64 +190,75 @@ class _CartScreenState extends State<CartScreen> {
             Expanded(
               child: _isLoading
                   ? const LoadingIndicator()
-                  : _items.isEmpty
-                      ? EmptyView(
-                          icon: Icons.shopping_bag_outlined,
-                          title: 'Your cart is empty',
-                          message: 'Add a coffee or a pastry from the menu.',
-                          actionLabel: 'Browse menu',
-                          onAction: widget.onBrowseMenu,
+                  : _errorMessage != null
+                      ? ErrorRetry(
+                          message: _errorMessage!,
+                          onRetry: _loadBasket,
                         )
-                      : ListView(
-                          padding: const EdgeInsets.fromLTRB(
-                            AppSpacing.lg,
-                            AppSpacing.sm,
-                            AppSpacing.lg,
-                            100,
-                          ),
-                          children: [
-                            Row(
+                      : _items.isEmpty
+                          ? EmptyView(
+                              icon: Icons.shopping_bag_outlined,
+                              title: 'Your cart is empty',
+                              message: 'Add a coffee or a pastry from the menu.',
+                              actionLabel: 'Browse menu',
+                              onAction: widget.onBrowseMenu,
+                            )
+                          : ListView(
+                              padding: const EdgeInsets.fromLTRB(
+                                AppSpacing.lg,
+                                AppSpacing.sm,
+                                AppSpacing.lg,
+                                100,
+                              ),
                               children: [
-                                const Expanded(
-                                  child: Text(
-                                    'Your Basket',
-                                    style: AppTextStyles.displayTitle,
-                                  ),
+                                Row(
+                                  children: [
+                                    const Expanded(
+                                      child: Text(
+                                        'Your Basket',
+                                        style: AppTextStyles.displayTitle,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      tooltip: 'Clear cart',
+                                      icon: const Icon(
+                                        Icons.delete_outline_rounded,
+                                        color: AppColors.errorColor,
+                                        size: 20,
+                                      ),
+                                      onPressed: _confirmClearCart,
+                                    ),
+                                  ],
                                 ),
-                                IconButton(
-                                  tooltip: 'Clear cart',
-                                  icon: const Icon(
-                                    Icons.delete_outline_rounded,
-                                    color: AppColors.errorColor,
-                                    size: 20,
+                                const SizedBox(height: AppSpacing.md),
+                                for (final item in _items) ...[
+                                  CartItemCard(
+                                    item: item,
+                                    onIncrease: () => _updateQuantity(
+                                      item,
+                                      item.quantity + 1,
+                                    ),
+                                    onDecrease: () => _updateQuantity(
+                                      item,
+                                      item.quantity - 1,
+                                    ),
                                   ),
-                                  onPressed: _confirmClearCart,
+                                  const SizedBox(height: AppSpacing.md),
+                                ],
+                                const SizedBox(height: AppSpacing.sm),
+                                CartSummaryCard(subtotal: _subtotal),
+                                const SizedBox(height: AppSpacing.lg),
+                                CartCheckoutButton(
+                                  total: _subtotal,
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      AppRoutes.checkoutRoute,
+                                    );
+                                  },
                                 ),
                               ],
                             ),
-                            const SizedBox(height: AppSpacing.md),
-                            for (final item in _items) ...[
-                              CartItemCard(
-                                item: item,
-                                onIncrease: () => _increaseQuantity(item),
-                                onDecrease: () => _decreaseQuantity(item),
-                              ),
-                              const SizedBox(height: AppSpacing.md),
-                            ],
-                            const SizedBox(height: AppSpacing.sm),
-                            CartSummaryCard(subtotal: _subtotal),
-                            const SizedBox(height: AppSpacing.lg),
-                            CartCheckoutButton(
-                              total: _subtotal,
-                              onTap: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  AppRoutes.checkoutRoute,
-                                );
-                              },
-                            ),
-                          ],
-                        ),
             ),
           ],
         ),
