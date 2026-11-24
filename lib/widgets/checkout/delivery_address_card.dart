@@ -66,6 +66,7 @@ class DeliveryAddressCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.cardColor,
             borderRadius: BorderRadius.circular(AppRadius.lg),
+            border: Border.all(color: AppColors.borderColor),
             boxShadow: [
               BoxShadow(
                 color: AppColors.textColor.withValues(alpha: 0.04),
@@ -134,32 +135,35 @@ class DeliveryAddressCard extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: AppSpacing.md),
+              const SizedBox(height: AppSpacing.sm),
               InkWell(
                 onTap: () => onSaveDefaultChanged(!saveAsDefault),
                 borderRadius: BorderRadius.circular(6),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 22,
-                      height: 22,
-                      child: Checkbox(
-                        value: saveAsDefault,
-                        onChanged: onSaveDefaultChanged,
-                        activeColor: AppColors.primaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 22,
+                        height: 22,
+                        child: Checkbox(
+                          value: saveAsDefault,
+                          onChanged: onSaveDefaultChanged,
+                          activeColor: AppColors.primaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: AppSpacing.sm),
-                    const Expanded(
-                      child: Text(
-                        'Save as default Cairo delivery address',
-                        style: AppTextStyles.caption,
+                      const SizedBox(width: AppSpacing.sm),
+                      const Expanded(
+                        child: Text(
+                          'Save as default Cairo delivery address',
+                          style: AppTextStyles.bodyMuted,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],

@@ -32,7 +32,7 @@ class HomeCategoriesSection extends StatelessWidget {
           actionLabel: 'See all',
           onActionTap: onSeeAll,
         ),
-        const SizedBox(height: AppSpacing.sm),
+        const SizedBox(height: AppSpacing.xs),
         FutureBuilder<List<Category>>(
           future: future,
           builder: (context, snapshot) {

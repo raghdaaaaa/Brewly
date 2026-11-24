@@ -39,6 +39,7 @@ class ProductCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(AppRadius.md),
+        border: Border.all(color: AppColors.borderColor),
         boxShadow: const [
           BoxShadow(
             color: AppColors.cardShadow,
@@ -145,7 +146,7 @@ class _CardDetails extends StatelessWidget {
         const SizedBox(height: 6),
         Text(
           product.name,
-          maxLines: 1,
+          maxLines: 2,
           overflow: TextOverflow.ellipsis,
           style: AppTextStyles.productName,
         ),

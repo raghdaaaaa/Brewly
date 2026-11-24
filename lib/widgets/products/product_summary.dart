@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/utils/formatters.dart';
@@ -55,7 +56,10 @@ class ProductSummary extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: AppSizes.detailsNameDescriptionGap),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: AppSizes.detailsNameDescriptionGap),
+          child: Divider(height: 1, color: AppColors.borderColor),
+        ),
         Text(
           product.description,
           style: AppTextStyles.detailsDescription,

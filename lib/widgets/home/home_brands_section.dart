@@ -37,7 +37,7 @@ class HomeBrandsSection extends StatelessWidget {
                   ? '${brands.length} Roasters'
                   : null,
             ),
-            const SizedBox(height: AppSpacing.sm),
+            const SizedBox(height: AppSpacing.xs),
             if (snapshot.connectionState == ConnectionState.waiting)
               const LoadingIndicator()
             else if (snapshot.hasError)

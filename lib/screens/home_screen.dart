@@ -191,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const AppHeaderTop(),
-              const SizedBox(height: AppSpacing.lg),
+              const SizedBox(height: AppSpacing.sm),
               ValueListenableBuilder<User?>(
                 valueListenable: AuthService.currentUserNotifier,
                 builder: (context, user, child) {
@@ -201,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 },
               ),
-              const SizedBox(height: AppSpacing.lg),
+              const SizedBox(height: AppSpacing.md),
               ValueListenableBuilder<Address?>(
                 valueListenable: AuthService.savedAddress,
                 builder: (context, address, child) {
@@ -211,7 +211,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 },
               ),
-              const SizedBox(height: AppSpacing.lg),
+              const SizedBox(height: AppSpacing.md),
               AppSearchField(
                 controller: _searchController,
                 hint: 'Search specialty beans, croissants, coffee...',

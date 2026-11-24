@@ -695,9 +695,9 @@ class AppTextStyles {
 
   static const TextStyle detailsPrice = TextStyle(
     fontFamily: fontFamily,
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: FontWeight.w700,
-    height: 36 / 28,
+    height: 32 / 26,
     letterSpacing: -0.5,
     color: AppColors.primaryColor,
   );

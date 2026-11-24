@@ -88,16 +88,16 @@ class _ExploreScreenState extends State<ExploreScreen> {
           ),
           children: [
             const AppHeaderTop(),
-            const SizedBox(height: AppSpacing.lg),
+            const SizedBox(height: AppSpacing.md),
             const Text('Explore Brewly', style: AppTextStyles.screenTitle),
-            const SizedBox(height: AppSpacing.lg),
+            const SizedBox(height: AppSpacing.md),
             AppSearchField(
               controller: _searchController,
               hint: 'Search categories, roast styles, roasters..',
               onSubmitted: _search,
               onFilterTap: () => _showMessage('Coming soon'),
             ),
-            const SizedBox(height: AppSpacing.xl),
+            const SizedBox(height: AppSpacing.lg),
             const Text('Categories', style: AppTextStyles.sectionHeading),
             const SizedBox(height: AppSpacing.md),
             FutureBuilder<List<Category>>(

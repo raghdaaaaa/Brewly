@@ -53,7 +53,7 @@ class ProductsListControls extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.fromLTRB(
             AppSpacing.lg,
-            AppSpacing.lg,
+            AppSpacing.md,
             AppSpacing.lg,
             0,
           ),
@@ -65,7 +65,7 @@ class ProductsListControls extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: AppSpacing.md),
+          padding: const EdgeInsets.only(top: AppSpacing.sm),
           child: FilterChipBar(
             categoryName: categoryName,
             brandName: brandName,
@@ -78,9 +78,9 @@ class ProductsListControls extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.fromLTRB(
             AppSpacing.lg,
-            AppSpacing.md,
+            AppSpacing.xs,
             AppSpacing.lg,
-            0,
+            AppSpacing.xs,
           ),
           child: SortRow(
             sortLabel: sortLabel,

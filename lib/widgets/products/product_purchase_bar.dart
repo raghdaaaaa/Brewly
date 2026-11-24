@@ -38,10 +38,11 @@ class ProductPurchaseBar extends StatelessWidget {
         ),
         decoration: const BoxDecoration(
           color: AppColors.backgroundColor,
+          border: Border(top: BorderSide(color: AppColors.borderColor)),
           boxShadow: [
             BoxShadow(
               color: AppColors.shadowBlack05,
-              blurRadius: 20,
+              blurRadius: 16,
               offset: Offset(0, -4),
             ),
           ],

@@ -42,13 +42,13 @@ class DeliveryMethodCard extends StatelessWidget {
           ],
         ),
         const SizedBox(height: AppSpacing.sm),
-        for (final method in methods) ...[
+        for (var i = 0; i < methods.length; i++) ...[
+          if (i > 0) const SizedBox(height: AppSpacing.sm),
           _MethodTile(
-            method: method,
-            isSelected: method.id == selectedMethodId,
-            onTap: () => onSelect(method.id),
+            method: methods[i],
+            isSelected: methods[i].id == selectedMethodId,
+            onTap: () => onSelect(methods[i].id),
           ),
-          const SizedBox(height: AppSpacing.sm),
         ],
       ],
     );
@@ -72,14 +72,17 @@ class _MethodTile extends StatelessWidget {
     final isSelfPick = method.shortName.toLowerCase().contains('pick') ||
         method.description.toLowerCase().contains('pick') ||
         isFree;
+    final deliveryTime = method.deliveryTime.trim();
 
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.cardColor,
+        color: isSelected
+            ? AppColors.profileGradientEnd
+            : AppColors.cardColor,
         borderRadius: BorderRadius.circular(AppRadius.md),
         border: Border.all(
-          color: isSelected ? AppColors.primaryColor : Colors.transparent,
-          width: 1.5,
+          color: isSelected ? AppColors.primaryColor : AppColors.borderColor,
+          width: isSelected ? 1.5 : 1,
         ),
         boxShadow: [
           BoxShadow(
@@ -128,36 +131,51 @@ class _MethodTile extends StatelessWidget {
                 ),
                 const SizedBox(width: AppSpacing.md),
                 Expanded(
-                  child: Row(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Flexible(
-                        child: Text(
-                          method.shortName,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppTextStyles.subtitle,
-                        ),
-                      ),
-                      if (isSelfPick) ...[
-                        const SizedBox(width: AppSpacing.xs),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 6,
-                            vertical: 2,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.softSurfaceColor,
-                            borderRadius: BorderRadius.circular(AppRadius.sm),
-                          ),
-                          child: const Text(
-                            'Self Pick',
-                            style: TextStyle(
-                              fontFamily: AppTextStyles.fontFamily,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.mutedTextColor,
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              method.shortName,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTextStyles.subtitle,
                             ),
                           ),
+                          if (isSelfPick) ...[
+                            const SizedBox(width: AppSpacing.xs),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.softSurfaceColor,
+                                borderRadius: BorderRadius.circular(AppRadius.sm),
+                              ),
+                              child: const Text(
+                                'Self Pick',
+                                style: TextStyle(
+                                  fontFamily: AppTextStyles.fontFamily,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.mutedTextColor,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                      if (deliveryTime.isNotEmpty) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          deliveryTime,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyles.caption,
                         ),
                       ],
                     ],

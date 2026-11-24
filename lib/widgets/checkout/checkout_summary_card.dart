@@ -27,6 +27,7 @@ class CheckoutSummaryCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.cardColor,
         borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: AppColors.borderColor),
         boxShadow: [
           BoxShadow(
             color: AppColors.textColor.withValues(alpha: 0.04),
@@ -78,33 +79,37 @@ class CheckoutSummaryCard extends StatelessWidget {
               ),
             ],
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: AppSpacing.md),
-            child: Divider(height: 1, color: AppColors.borderColor),
-          ),
-          Row(
-            children: [
-              const Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Total Payable', style: AppTextStyles.subtitle),
-                    SizedBox(height: 2),
-                    Text(
-                      'Includes Egyptian VAT',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTextStyles.caption,
-                    ),
-                  ],
+          const SizedBox(height: AppSpacing.md),
+          Container(
+            padding: const EdgeInsets.all(AppSpacing.md),
+            decoration: BoxDecoration(
+              color: AppColors.softSurfaceColor,
+              borderRadius: BorderRadius.circular(AppRadius.sm),
+            ),
+            child: Row(
+              children: [
+                const Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Total Payable', style: AppTextStyles.subtitle),
+                      SizedBox(height: 2),
+                      Text(
+                        'Includes Egyptian VAT',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.caption,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(width: AppSpacing.sm),
-              Text(
-                Formatters.price(total),
-                style: AppTextStyles.priceLarge.copyWith(fontSize: 22),
-              ),
-            ],
+                const SizedBox(width: AppSpacing.sm),
+                Text(
+                  Formatters.price(total),
+                  style: AppTextStyles.priceLarge.copyWith(fontSize: 22),
+                ),
+              ],
+            ),
           ),
         ],
       ),

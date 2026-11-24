@@ -16,7 +16,7 @@ class PromoCard extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(AppRadius.lg),
       child: ConstrainedBox(
-        constraints: const BoxConstraints(minHeight: 190),
+        constraints: const BoxConstraints(minHeight: 156),
         child: Stack(
           fit: StackFit.passthrough,
           children: [
@@ -43,7 +43,10 @@ class PromoCard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(AppSpacing.lg),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.lg,
+                vertical: 14,
+              ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,14 +75,14 @@ class PromoCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: AppSpacing.sm),
                   const Text(
                     'Artisan Morning Roast &\nSourdough Croissant',
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                     style: AppTextStyles.promoTitle,
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: AppSpacing.xs),
                   const Text(
                     'Freshly baked in Zamalek • Ethiopian beans',
                     maxLines: 2,
@@ -87,8 +90,8 @@ class PromoCard extends StatelessWidget {
                     style: AppTextStyles.promoSubtitle,
                   ),
                   const SizedBox(height: AppSpacing.md),
-                  SizedBox(
-                    height: AppSizes.headerAction,
+                  Align(
+                    alignment: Alignment.centerLeft,
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
@@ -96,37 +99,36 @@ class PromoCard extends StatelessWidget {
                         borderRadius: const BorderRadius.all(
                           Radius.circular(AppRadius.pill),
                         ),
-                        child: Center(
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 14,
-                              vertical: 9,
+                        child: Container(
+                          constraints: const BoxConstraints(minHeight: 40),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 9,
+                          ),
+                          decoration: const BoxDecoration(
+                            color: AppColors.primaryColor,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(AppRadius.pill),
                             ),
-                            decoration: const BoxDecoration(
-                              color: AppColors.primaryColor,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(AppRadius.pill),
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  'Claim Code BREW20',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: AppTextStyles.promoButton,
+                                ),
                               ),
-                            ),
-                            child: const Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Flexible(
-                                  child: Text(
-                                    'Claim Code BREW20',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: AppTextStyles.promoButton,
-                                  ),
-                                ),
-                                SizedBox(width: AppSpacing.xs),
-                                Icon(
-                                  Icons.arrow_forward_rounded,
-                                  size: 14,
-                                  color: Colors.white,
-                                ),
-                              ],
-                            ),
+                              SizedBox(width: AppSpacing.xs),
+                              Icon(
+                                Icons.arrow_forward_rounded,
+                                size: 14,
+                                color: Colors.white,
+                              ),
+                            ],
                           ),
                         ),
                       ),

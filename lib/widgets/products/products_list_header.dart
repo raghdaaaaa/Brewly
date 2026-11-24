@@ -41,7 +41,7 @@ class ProductsListHeader extends StatelessWidget {
             'Product Detail',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: AppTextStyles.screenTitle,
+            style: AppTextStyles.detailsTopBarTitle,
           ),
         ),
         const SizedBox(width: AppSpacing.sm),
@@ -49,7 +49,7 @@ class ProductsListHeader extends StatelessWidget {
           width: AppSizes.headerAction,
           height: AppSizes.headerAction,
           child: Material(
-            color: AppColors.cardColor,
+            color: AppColors.softSurfaceColor,
             shape: const CircleBorder(),
             child: InkWell(
               onTap: onShare,
@@ -64,8 +64,8 @@ class ProductsListHeader extends StatelessWidget {
         ),
         const SizedBox(width: AppSpacing.sm),
         Container(
-          width: AppSizes.headerAction,
-          height: AppSizes.headerAction,
+          width: AppSizes.detailsAvatar,
+          height: AppSizes.detailsAvatar,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(color: AppColors.cardColor, width: 2),

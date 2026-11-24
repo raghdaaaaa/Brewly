@@ -144,8 +144,18 @@ class AppTextField extends StatelessWidget {
           color: AppColors.errorColor,
         ),
         errorMaxLines: 3,
-        border: _border(Colors.transparent, 0),
-        enabledBorder: _border(Colors.transparent, 0),
+        border: _border(
+          variant == AppTextFieldVariant.card
+              ? AppColors.borderColor
+              : Colors.transparent,
+          variant == AppTextFieldVariant.card ? 1 : 0,
+        ),
+        enabledBorder: _border(
+          variant == AppTextFieldVariant.card
+              ? AppColors.borderColor
+              : Colors.transparent,
+          variant == AppTextFieldVariant.card ? 1 : 0,
+        ),
         focusedBorder: _border(AppColors.primaryColor, 1.5),
         disabledBorder: _border(Colors.transparent, 0),
         errorBorder: _border(AppColors.errorColor, 1),

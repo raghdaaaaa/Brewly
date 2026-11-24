@@ -301,7 +301,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         }
                                       },
                                     ),
-                                    const SizedBox(height: AppSpacing.xl),
+                                    const SizedBox(height: AppSpacing.lg),
                                     if (selectedMethod != null) ...[
                                       DeliveryMethodCard(
                                         methods: _methods,
@@ -310,7 +310,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                           () => _selectedMethodId = id,
                                         ),
                                       ),
-                                      const SizedBox(height: AppSpacing.xl),
+                                      const SizedBox(height: AppSpacing.lg),
                                       CheckoutSummaryCard(
                                         subtotal: _subtotal,
                                         deliveryMethodName:
@@ -318,7 +318,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         deliveryCost: selectedMethod.cost,
                                         total: _total,
                                       ),
-                                      const SizedBox(height: AppSpacing.xl),
+                                      const SizedBox(height: AppSpacing.lg),
                                     ],
                                     PlaceOrderButton(
                                       total: _total,

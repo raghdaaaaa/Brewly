@@ -34,21 +34,21 @@ class AppSizes {
   static const double headerAction = 44;
   static const double backButton = 46;
   static const double categoryCircle = 66;
-  static const double categoryTileHeight = 165;
+  static const double categoryTileHeight = 144;
   static const double productCardMinHeight = 118;
   static const double productCardImage = 90;
   static const double addButton = 40;
   static const double orderBarHeight = 57;
 
   // Product Details
-  static const double detailsHeroHeight = 276;
+  static const double detailsHeroHeight = 256;
   static const double detailsFavoriteButton = 41;
   static const double detailsFavoriteInset = 12;
   static const double detailsFavoriteIcon = 21;
   static const double detailsShareButton = 45;
   static const double detailsAvatar = 34;
-  static const double detailsHeroContentGap = 19;
-  static const double detailsNameDescriptionGap = 20;
+  static const double detailsHeroContentGap = 16;
+  static const double detailsNameDescriptionGap = 14;
   static const double detailsPriceMaxWidth = 150;
   static const double purchaseBarHeight = 58;
   static const double quantityStepperWidth = 128;
