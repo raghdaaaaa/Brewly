@@ -21,7 +21,7 @@ class BasketService {
       _publish(basket);
       return basket;
     } on AppException catch (error) {
-      if (error.statusCode == 500) {
+      if (error.statusCode == 500 && error.message == 'Internal Server Error') {
         final empty = CustomerBasket.empty();
         _publish(empty);
         return empty;
@@ -54,9 +54,7 @@ class BasketService {
   }
 
   Future<void> clearBasket() async {
-    try {
-      await _client.delete(_basketPath);
-    } catch (_) {}
+    await _client.delete(_basketPath);
     final empty = CustomerBasket.empty();
     _publish(empty);
   }

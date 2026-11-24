@@ -1,9 +1,19 @@
+import 'package:brewly/core/errors/app_exception.dart';
 import 'package:brewly/screens/cart_screen.dart';
 import 'package:brewly/services/dummy/dummy_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../fakes/fake_basket_service.dart';
+
+class _FailingClearBasketService extends FakeBasketService {
+  _FailingClearBasketService({super.items});
+
+  @override
+  Future<void> clearBasket() async {
+    throw const AppException('Failed to clear cart');
+  }
+}
 
 void main() {
   testWidgets('cart screen renders without overflow', (tester) async {
@@ -39,5 +49,28 @@ void main() {
         );
       }
     }
+  });
+
+  testWidgets('cart screen shows error and keeps items if clearBasket fails', (
+    tester,
+  ) async {
+    final basketService = _FailingClearBasketService(items: dummyBasketItems);
+    await tester.pumpWidget(
+      MaterialApp(
+        home: CartScreen(
+          onBrowseMenu: () {},
+          basketService: basketService,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byTooltip('Clear cart'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Clear'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Failed to clear cart'), findsOneWidget);
+    expect(find.text(dummyBasketItems.first.productName), findsOneWidget);
   });
 }

@@ -259,6 +259,107 @@ void main() {
       expect(basket.items.single.quantity, 3);
     });
 
+    test('BasketService.clearBasket rethrows DELETE error without publishing empty', () async {
+      BasketService.itemCount.value = 2;
+      BasketService.total.value = 190;
+
+      final mock = MockClient((request) async {
+        expect(request.method, 'DELETE');
+        expect(request.url.path, '/api/Basket');
+        return http.Response(
+          jsonEncode({'statusCode': 500, 'message': 'Could not delete basket'}),
+          500,
+          headers: {'content-type': 'application/json'},
+        );
+      });
+
+      final service = BasketService(
+        client: ApiClient(
+          httpClient: mock,
+          baseUrl: 'https://example.test',
+        ),
+      );
+
+      await expectLater(
+        service.clearBasket(),
+        throwsA(
+          isA<AppException>().having(
+            (e) => e.message,
+            'message',
+            'Could not delete basket',
+          ),
+        ),
+      );
+      expect(BasketService.itemCount.value, 2);
+      expect(BasketService.total.value, 190);
+    });
+
+    test('BasketService.clearBasket publishes empty only after 200 DELETE', () async {
+      BasketService.itemCount.value = 2;
+      BasketService.total.value = 190;
+
+      final mock = MockClient((request) async {
+        expect(request.method, 'DELETE');
+        expect(request.url.path, '/api/Basket');
+        return http.Response('', 200);
+      });
+
+      final service = BasketService(
+        client: ApiClient(
+          httpClient: mock,
+          baseUrl: 'https://example.test',
+        ),
+      );
+
+      await service.clearBasket();
+      expect(BasketService.itemCount.value, 0);
+      expect(BasketService.total.value, 0);
+    });
+
+    test('BasketService.getBasket only treats API empty-basket 500 as empty', () async {
+      final empty500Mock = MockClient((request) async {
+        return http.Response(
+          jsonEncode({'details': null, 'statusCode': 500, 'message': 'Internal Server Error'}),
+          500,
+          headers: {'content-type': 'application/json'},
+        );
+      });
+
+      final emptyService = BasketService(
+        client: ApiClient(
+          httpClient: empty500Mock,
+          baseUrl: 'https://example.test',
+        ),
+      );
+      final emptyBasket = await emptyService.getBasket();
+      expect(emptyBasket.items, isEmpty);
+
+      final realErrorMock = MockClient((request) async {
+        return http.Response(
+          jsonEncode({'statusCode': 500, 'message': 'Database connection failed'}),
+          500,
+          headers: {'content-type': 'application/json'},
+        );
+      });
+
+      final failingService = BasketService(
+        client: ApiClient(
+          httpClient: realErrorMock,
+          baseUrl: 'https://example.test',
+        ),
+      );
+      await expectLater(
+        failingService.getBasket(),
+        throwsA(
+          isA<AppException>().having(
+            (e) => e.message,
+            'message',
+            'Database connection failed',
+          ),
+        ),
+      );
+    });
+
     test('OrderService sends deliverMethodID and shippingAddress', () async {
       final mock = MockClient((request) async {
         expect(request.method, 'POST');

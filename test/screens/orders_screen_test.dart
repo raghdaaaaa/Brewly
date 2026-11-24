@@ -44,14 +44,22 @@ void main() {
   ) async {
     await tester.pumpWidget(
       MaterialApp(
-        home: OrdersScreen(orderService: FakeOrderService(orders: const [])),
+        home: OrdersScreen(
+          key: const ValueKey('empty'),
+          orderService: FakeOrderService(orders: const []),
+        ),
       ),
     );
     await tester.pumpAndSettle();
     expect(find.text('No orders yet'), findsOneWidget);
 
     await tester.pumpWidget(
-      MaterialApp(home: OrdersScreen(orderService: _FailingOrderService())),
+      MaterialApp(
+        home: OrdersScreen(
+          key: const ValueKey('error'),
+          orderService: _FailingOrderService(),
+        ),
+      ),
     );
     await tester.pumpAndSettle();
     expect(find.text('Failed to fetch orders'), findsOneWidget);
