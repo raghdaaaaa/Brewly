@@ -115,17 +115,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
 
     try {
-      String orderId;
-      try {
-        final order = await _orderService.createOrder(
-          deliveryMethodId: _selectedMethodId,
-          shippingAddress: address,
-        );
-        orderId = order.id;
-      } catch (_) {
-        // Fallback local order id if offline or unauthenticated.
-        orderId = 'ORD-${1000 + dummyOrders.length + 1}';
-      }
+      final order = await _orderService.createOrder(
+        deliveryMethodId: _selectedMethodId,
+        shippingAddress: address,
+      );
+      final orderId = order.id
 
       await _basketService.clearBasket();
       clearDummyBasket();
