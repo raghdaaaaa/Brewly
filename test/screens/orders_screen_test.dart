@@ -1,4 +1,5 @@
 import 'package:brewly/core/errors/app_exception.dart';
+import 'package:brewly/core/utils/formatters.dart';
 import 'package:brewly/models/order.dart';
 import 'package:brewly/screens/orders_screen.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,20 @@ class _FailingOrderService extends FakeOrderService {
 }
 
 void main() {
+  test('order dates use the compact format shown in the order list', () {
+    final now = DateTime(2024, 10, 12, 10);
+
+    expect(
+      Formatters.orderDate('2024-10-12T09:50:00', now: now),
+      'Today, 9:50 AM',
+    );
+    expect(
+      Formatters.orderDate('2024-10-11T16:15:00', now: now),
+      'Yesterday, 4:15 PM',
+    );
+    expect(Formatters.orderDate('2024-10-12'), '12 Oct 2024');
+  });
+
   testWidgets('orders screen renders without overflow', (tester) async {
     for (final size in [
       const Size(320, 640),

@@ -7,9 +7,9 @@ import '../../core/theme/app_text_styles.dart';
 
 /// The local promo card on Home. Its height grows with the text scale.
 class PromoCard extends StatelessWidget {
-  const PromoCard({super.key, required this.onClaim});
+  const PromoCard({super.key, required this.onExplore});
 
-  final VoidCallback onClaim;
+  final VoidCallback onExplore;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +71,7 @@ class PromoCard extends StatelessWidget {
                           color: AppColors.onAccentColor,
                         ),
                         SizedBox(width: AppSpacing.xs),
-                        Text('PROMO • 20% OFF', style: AppTextStyles.promoTag),
+                        Text('BREWLY PICK', style: AppTextStyles.promoTag),
                       ],
                     ),
                   ),
@@ -95,7 +95,7 @@ class PromoCard extends StatelessWidget {
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
-                        onTap: onClaim,
+                        onTap: onExplore,
                         borderRadius: const BorderRadius.all(
                           Radius.circular(AppRadius.pill),
                         ),
@@ -116,7 +116,7 @@ class PromoCard extends StatelessWidget {
                             children: [
                               Flexible(
                                 child: Text(
-                                  'Claim Code BREW20',
+                                  'Explore menu',
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: AppTextStyles.promoButton,

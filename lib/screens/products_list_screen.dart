@@ -206,7 +206,7 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
   Future<void> _addToBasket(Product product) async {
     setState(() => _addingIds.add(product.id));
     try {
-      await _basketService.addItem(productId: product.id);
+      await _basketService.addQuantity(productId: product.id, quantity: 1);
       if (!mounted) {
         return;
       }

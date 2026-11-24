@@ -7,6 +7,7 @@ import '../core/theme/app_spacing.dart';
 import '../models/address.dart';
 import '../models/basket.dart';
 import '../models/delivery_method.dart';
+import '../models/order.dart';
 import '../services/auth_service.dart';
 import '../services/basket_service.dart';
 import '../services/order_service.dart';
@@ -54,6 +55,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   bool _isPlacing = false;
   String? _errorMessage;
 
+  Order? _createdOrder;
   CustomerBasket _basket = CustomerBasket.empty();
   List<DeliveryMethod> _methods = [];
   int? _selectedMethodId;
@@ -179,18 +181,47 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
 
     try {
-      final order = await _orderService.createOrder(
-        deliveryMethodId: methodId,
-        shippingAddress: address,
-      );
+      var order = _createdOrder;
+      if (order == null) {
+        order = await _orderService.createOrder(
+          deliveryMethodId: methodId,
+          shippingAddress: address,
+        );
+        if (!mounted) return;
+        setState(() => _createdOrder = order);
 
-      if (_saveAsDefault && AuthService.instance.isLoggedIn) {
-        try {
-          await AuthService.instance.updateAddress(address);
-        } catch (_) {}
+        if (_saveAsDefault && AuthService.instance.isLoggedIn) {
+          try {
+            await AuthService.instance.updateAddress(address);
+          } catch (_) {}
+        }
       }
 
-      await _basketService.clearBasket();
+      try {
+        await _basketService.clearBasket();
+      } on AppException catch (error) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Order created, but the basket could not be cleared: '
+              '${error.message}',
+            ),
+          ),
+        );
+        return;
+      } catch (_) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Order created, but the basket could not be cleared. '
+              'Please retry.',
+            ),
+          ),
+        );
+        return;
+      }
 
       if (!mounted) return;
       Navigator.pushNamedAndRemoveUntil(

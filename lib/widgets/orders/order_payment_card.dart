@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/utils/formatters.dart';
 import '../../models/order.dart';
 
 /// Card showing payment summary with subtotal, delivery fee, and total paid.
@@ -29,10 +30,7 @@ class OrderPaymentCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Payment Summary',
-            style: AppTextStyles.sectionTitle,
-          ),
+          const Text('Payment Summary', style: AppTextStyles.sectionTitle),
           const SizedBox(height: AppSpacing.md),
           Row(
             children: [
@@ -46,7 +44,7 @@ class OrderPaymentCard extends StatelessWidget {
               ),
               const SizedBox(width: AppSpacing.sm),
               Text(
-                '${order.subtotal.toStringAsFixed(0)} EGP',
+                Formatters.price(order.subtotal),
                 style: AppTextStyles.summaryValue,
               ),
             ],
@@ -64,7 +62,7 @@ class OrderPaymentCard extends StatelessWidget {
               ),
               const SizedBox(width: AppSpacing.sm),
               Text(
-                '${order.deliveryCost.toStringAsFixed(0)} EGP',
+                Formatters.price(order.deliveryCost),
                 style: AppTextStyles.summaryValue,
               ),
             ],
@@ -77,23 +75,11 @@ class OrderPaymentCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Total Paid', style: AppTextStyles.cardTitle),
-                    SizedBox(height: 2),
-                    Text(
-                      'Paid via Apple Pay (Mastercard •• 4092)',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTextStyles.caption,
-                    ),
-                  ],
-                ),
+                child: Text('Total Paid', style: AppTextStyles.cardTitle),
               ),
               const SizedBox(width: AppSpacing.md),
               Text(
-                '${order.total.toStringAsFixed(0)} EGP',
+                Formatters.price(order.total),
                 style: AppTextStyles.priceTotal.copyWith(
                   color: AppColors.primaryColor,
                   fontSize: 22,

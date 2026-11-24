@@ -39,7 +39,6 @@ class OrderSuccessScreen extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: AppSpacing.xl),
-              // Top illustration banner with checkmark badge
               Container(
                 width: double.infinity,
                 height: 180,
@@ -86,7 +85,6 @@ class OrderSuccessScreen extends StatelessWidget {
                 style: AppTextStyles.displayBig,
               ),
               const SizedBox(height: AppSpacing.xl),
-              // Order summary card
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(AppSpacing.xl),
@@ -148,7 +146,6 @@ class OrderSuccessScreen extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              // Track order button
               Container(
                 width: double.infinity,
                 height: 56,

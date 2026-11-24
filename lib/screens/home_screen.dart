@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../core/errors/app_exception.dart';
 import '../core/routes/app_routes.dart';
@@ -145,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _addToBasket(Product product) async {
     setState(() => _addingIds.add(product.id));
     try {
-      await _basketService.addItem(productId: product.id);
+      await _basketService.addQuantity(productId: product.id, quantity: 1);
       if (!mounted) {
         return;
       }
@@ -160,14 +159,6 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() => _addingIds.remove(product.id));
       }
     }
-  }
-
-  Future<void> _claimPromo() async {
-    await Clipboard.setData(const ClipboardData(text: 'BREW20'));
-    if (!mounted) {
-      return;
-    }
-    _showMessage('Promo code BREW20 copied');
   }
 
   void _showMessage(String message) {
@@ -219,7 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 onFilterTap: () => _showMessage('Coming soon'),
               ),
               const SizedBox(height: AppSpacing.lg),
-              PromoCard(onClaim: _claimPromo),
+              PromoCard(onExplore: () => _openProducts()),
               const SizedBox(height: AppSpacing.lg),
               HomeCategoriesSection(
                 future: _categoriesFuture,

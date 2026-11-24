@@ -39,6 +39,31 @@ class FakeBasketService extends BasketService {
   }
 
   @override
+  Future<CustomerBasket> addQuantity({
+    required int productId,
+    int quantity = 1,
+  }) async {
+    final existingIndex = _items.indexWhere(
+      (item) => item.productId == productId,
+    );
+    if (existingIndex >= 0) {
+      _items[existingIndex].quantity += quantity;
+    } else {
+      _items.add(
+        BasketItem(
+          id: productId,
+          productId: productId,
+          productName: 'Product $productId',
+          pictureUrl: '',
+          price: 95,
+          quantity: quantity,
+        ),
+      );
+    }
+    return CustomerBasket(id: 'fake-basket', items: List.of(_items));
+  }
+
+  @override
   Future<void> clearBasket() async {
     _items.clear();
   }

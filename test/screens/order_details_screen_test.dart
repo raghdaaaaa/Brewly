@@ -31,6 +31,10 @@ void main() {
         expect(find.textContaining(order.id), findsWidgets);
       }
     }
+    expect(find.text('Qty: 2'), findsOneWidget);
+    expect(find.text('150 EGP'), findsOneWidget);
+    expect(find.text('BREWLY RESERVE'), findsNothing);
+    expect(find.text('Paid via Apple Pay (Mastercard •• 4092)'), findsNothing);
   });
 
   testWidgets('order details screen loads order by orderId from service', (

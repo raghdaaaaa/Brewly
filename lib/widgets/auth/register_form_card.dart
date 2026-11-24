@@ -91,7 +91,7 @@ class RegisterFormCard extends StatelessWidget {
                         )
                       : null,
                 ),
-                const SizedBox(height: AppSpacing.lg),
+                const SizedBox(height: AppSpacing.xl),
                 AppTextField(
                   label: 'Email Address',
                   hint: 'omar.sayed@cairobrew.com',
@@ -110,9 +110,9 @@ class RegisterFormCard extends StatelessWidget {
                         )
                       : null,
                 ),
-                const SizedBox(height: AppSpacing.lg),
+                const SizedBox(height: AppSpacing.xl),
                 PhoneNumberField(controller: phoneController),
-                const SizedBox(height: AppSpacing.lg),
+                const SizedBox(height: AppSpacing.xl),
                 AppTextField(
                   label: 'Password',
                   hint: 'Password',

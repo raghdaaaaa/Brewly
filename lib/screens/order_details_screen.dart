@@ -81,15 +81,22 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
     return Column(
       children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.lg,
+            AppSpacing.sm,
+            AppSpacing.lg,
+            AppSpacing.md,
+          ),
+          child: OrderDetailsTopBar(orderId: order.id),
+        ),
         Expanded(
           child: ListView(
             padding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.lg,
-              vertical: AppSpacing.md,
+              vertical: AppSpacing.sm,
             ),
             children: [
-              OrderDetailsTopBar(orderId: order.id),
-              const SizedBox(height: AppSpacing.lg),
               OrderItemsCard(order: order),
               const SizedBox(height: AppSpacing.lg),
               OrderPaymentCard(order: order),

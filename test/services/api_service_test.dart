@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:brewly/core/errors/app_exception.dart';
@@ -259,6 +260,202 @@ void main() {
       expect(basket.items.single.id, 7);
       expect(basket.items.single.productId, 7);
       expect(basket.items.single.quantity, 3);
+    });
+
+    test('BasketService.addQuantity increments the existing product quantity', () async {
+      var postQuantity = 0;
+      final mock = MockClient((request) async {
+        if (request.method == 'GET') {
+          return http.Response(
+            jsonEncode({
+              'id': 'basket-1',
+              'items': [
+                {'id': 7, 'productId': 7, 'quantity': 2},
+              ],
+            }),
+            200,
+            headers: {'content-type': 'application/json'},
+          );
+        }
+
+        expect(request.method, 'POST');
+        final body = jsonDecode(request.body) as Map<String, dynamic>;
+        expect(body['productId'], 7);
+        postQuantity = body['quantity'] as int;
+        return http.Response(
+          jsonEncode({
+            'id': 'basket-1',
+            'items': [
+              {'id': 7, 'productId': 7, 'quantity': postQuantity},
+            ],
+          }),
+          200,
+          headers: {'content-type': 'application/json'},
+        );
+      });
+
+      final service = BasketService(
+        client: ApiClient(
+          httpClient: mock,
+          baseUrl: 'https://example.test',
+        ),
+      );
+
+      final basket = await service.addQuantity(productId: 7);
+      expect(postQuantity, 3);
+      expect(basket.items.single.quantity, 3);
+    });
+
+    test('BasketService.addQuantity uses requested quantity for a new product', () async {
+      var postQuantity = 0;
+      final mock = MockClient((request) async {
+        if (request.method == 'GET') {
+          return http.Response(
+            jsonEncode({'id': 'basket-1', 'items': []}),
+            200,
+            headers: {'content-type': 'application/json'},
+          );
+        }
+
+        final body = jsonDecode(request.body) as Map<String, dynamic>;
+        postQuantity = body['quantity'] as int;
+        return http.Response(
+          jsonEncode({
+            'id': 'basket-1',
+            'items': [
+              {'id': 7, 'productId': 7, 'quantity': postQuantity},
+            ],
+          }),
+          200,
+          headers: {'content-type': 'application/json'},
+        );
+      });
+      final service = BasketService(
+        client: ApiClient(
+          httpClient: mock,
+          baseUrl: 'https://example.test',
+        ),
+      );
+
+      final basket = await service.addQuantity(productId: 7, quantity: 3);
+      expect(postQuantity, 3);
+      expect(basket.items.single.quantity, 3);
+    });
+
+    test('BasketService.addQuantity propagates ambiguous empty-basket 500', () async {
+      var postCalled = false;
+      final mock = MockClient((request) async {
+        if (request.method == 'GET') {
+          return http.Response(
+            jsonEncode({
+              'details': null,
+              'statusCode': 500,
+              'message': 'Internal Server Error',
+            }),
+            500,
+            headers: {'content-type': 'application/json'},
+          );
+        }
+        postCalled = true;
+        return http.Response('', 200);
+      });
+      final service = BasketService(
+        client: ApiClient(
+          httpClient: mock,
+          baseUrl: 'https://example.test',
+        ),
+      );
+
+      await expectLater(
+        service.addQuantity(productId: 7),
+        throwsA(
+          isA<AppException>()
+              .having((error) => error.statusCode, 'statusCode', 500)
+              .having(
+                (error) => error.message,
+                'message',
+                'Internal Server Error',
+              ),
+        ),
+      );
+      expect(postCalled, isFalse);
+    });
+
+    test('BasketService serializes add, absolute update, and clear mutations', () async {
+      final requests = <String>[];
+      final postStarted = Completer<void>();
+      final releaseFirstPost = Completer<void>();
+      var postCount = 0;
+      var quantity = 2;
+      final mock = MockClient((request) async {
+        if (request.method == 'GET') {
+          requests.add('GET');
+          return http.Response(
+            jsonEncode({
+              'id': 'basket-1',
+              'items': [
+                {'id': 7, 'productId': 7, 'quantity': quantity},
+              ],
+            }),
+            200,
+            headers: {'content-type': 'application/json'},
+          );
+        }
+        if (request.method == 'POST') {
+          final body = jsonDecode(request.body) as Map<String, dynamic>;
+          quantity = body['quantity'] as int;
+          requests.add('POST:$quantity');
+          postCount++;
+          if (postCount == 1) {
+            postStarted.complete();
+            await releaseFirstPost.future;
+          }
+          return http.Response(
+            jsonEncode({
+              'id': 'basket-1',
+              'items': [
+                {'id': 7, 'productId': 7, 'quantity': quantity},
+              ],
+            }),
+            200,
+            headers: {'content-type': 'application/json'},
+          );
+        }
+        requests.add('DELETE');
+        quantity = 0;
+        return http.Response('', 200);
+      });
+      final service = BasketService(
+        client: ApiClient(
+          httpClient: mock,
+          baseUrl: 'https://example.test',
+        ),
+      );
+      final secondService = BasketService(
+        client: ApiClient(
+          httpClient: mock,
+          baseUrl: 'https://example.test',
+        ),
+      );
+
+      final addFuture = service.addQuantity(productId: 7);
+      await postStarted.future;
+      final repeatedAddFuture = secondService.addQuantity(productId: 7);
+      final updateFuture =
+          secondService.updateItemQuantity(productId: 7, quantity: 8);
+      final clearFuture = secondService.clearBasket();
+      releaseFirstPost.complete();
+
+      await addFuture;
+      await repeatedAddFuture;
+      await updateFuture;
+      await clearFuture;
+
+      expect(
+        requests,
+        ['GET', 'POST:3', 'GET', 'POST:4', 'POST:8', 'DELETE'],
+      );
+      expect(BasketService.itemCount.value, 0);
     });
 
     test('BasketService.clearBasket rethrows DELETE error without publishing empty', () async {

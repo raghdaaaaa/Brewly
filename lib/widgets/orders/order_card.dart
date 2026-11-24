@@ -4,6 +4,7 @@ import '../../core/routes/app_routes.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/utils/formatters.dart';
 import '../../models/order.dart';
 import 'order_status_chip.dart';
 
@@ -16,7 +17,8 @@ class OrderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final normalized = order.status.toLowerCase();
-    final isInPreparation = normalized.contains('preparation') || normalized.contains('pending');
+    final isInPreparation =
+        normalized.contains('preparation') || normalized.contains('pending');
     final isCancelled = normalized.contains('cancel');
 
     final IconData statusIcon;
@@ -30,7 +32,7 @@ class OrderCard extends StatelessWidget {
       statusIconColor = AppColors.primaryColor;
     } else {
       statusIcon = Icons.check_circle_outline_rounded;
-      statusIconColor = AppColors.primaryColor;
+      statusIconColor = AppColors.textColor;
     }
 
     return InkWell(
@@ -65,16 +67,25 @@ class OrderCard extends StatelessWidget {
             Row(
               children: [
                 Icon(statusIcon, size: 16, color: statusIconColor),
-                const SizedBox(width: 6),
+                const SizedBox(width: AppSpacing.sm),
                 Expanded(
-                  child: Text(
-                    '#${order.id} • ${order.orderDate}',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.bodyMuted.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.textColor,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '#${order.id}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.title,
+                      ),
+                      const SizedBox(height: AppSpacing.xs),
+                      Text(
+                        Formatters.orderDate(order.orderDate),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.caption,
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(width: AppSpacing.xs),
@@ -90,7 +101,7 @@ class OrderCard extends StatelessWidget {
                 if (isInPreparation) ...[
                   Expanded(
                     child: Text(
-                      '${order.total.toStringAsFixed(0)} EGP',
+                      Formatters.price(order.total),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: AppTextStyles.priceTotal,
@@ -99,7 +110,7 @@ class OrderCard extends StatelessWidget {
                   const SizedBox(width: AppSpacing.sm),
                   Flexible(
                     child: SizedBox(
-                      height: 38,
+                      height: 44,
                       child: FilledButton(
                         onPressed: () {
                           Navigator.pushNamed(
@@ -133,7 +144,7 @@ class OrderCard extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 4),
+                            const SizedBox(width: AppSpacing.xs),
                             const Icon(
                               Icons.arrow_forward_rounded,
                               size: 14,
@@ -146,7 +157,7 @@ class OrderCard extends StatelessWidget {
                   ),
                 ] else ...[
                   Text(
-                    '${order.total.toStringAsFixed(0)} EGP',
+                    Formatters.price(order.total),
                     style: AppTextStyles.priceTotal,
                   ),
                 ],

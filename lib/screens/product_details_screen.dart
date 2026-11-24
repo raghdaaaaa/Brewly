@@ -112,7 +112,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
     setState(() => _isAdding = true);
     try {
-      await _basketService.addItem(
+      await _basketService.addQuantity(
         productId: product.id,
         quantity: _quantity,
       );

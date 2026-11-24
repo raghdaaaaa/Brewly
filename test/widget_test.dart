@@ -17,14 +17,11 @@ void main() {
     SharedPreferences.setMockInitialValues({});
     await tester.pumpWidget(const BrewlyApp());
 
-    // The splash screen is shown first.
     expect(find.text('Brewly'), findsOneWidget);
 
-    // Wait for the 2 second splash timer.
     await tester.pump(const Duration(seconds: 2));
     await tester.pumpAndSettle();
 
-    // After the splash we are on the Welcome screen.
     expect(find.text('Artisanal Coffee & Pastries,'), findsOneWidget);
   });
 
@@ -92,7 +89,6 @@ void main() {
     expect(find.text('Product Detail'), findsOneWidget);
     expect(find.text('Add to cart · 95 EGP'), findsOneWidget);
 
-    // The total should follow the quantity.
     await tester.tap(find.byIcon(Icons.add_rounded));
     await tester.pumpAndSettle();
     expect(find.text('Add to cart · 190 EGP'), findsOneWidget);
