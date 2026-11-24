@@ -117,9 +117,9 @@ class _MenuItemRow extends StatelessWidget {
             Container(
               width: 44,
               height: 44,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: AppColors.softSurfaceColor,
-                borderRadius: BorderRadius.circular(AppRadius.sm),
+                shape: BoxShape.circle,
               ),
               child: Center(
                 child: Icon(

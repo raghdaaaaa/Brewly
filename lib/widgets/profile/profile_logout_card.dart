@@ -39,9 +39,9 @@ class ProfileLogoutCard extends StatelessWidget {
             Container(
               width: 44,
               height: 44,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: AppColors.logoutIconBackground,
-                borderRadius: BorderRadius.circular(AppRadius.sm),
+                shape: BoxShape.circle,
               ),
               child: const Center(
                 child: Icon(
