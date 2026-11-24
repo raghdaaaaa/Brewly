@@ -38,7 +38,23 @@ class ProductService {
       if (brandId != null) 'brandId': '$brandId',
       if (categoryId != null) 'categoryId': '$categoryId',
     };
+
     final json = await _client.get(_productsPath, query: query);
+
+    // Swagger describes the response as a list containing pagination data.
+    // Some API responses may return the pagination object directly.
+    if (json is List) {
+      if (json.isEmpty) {
+        return ProductPage(
+          pageIndex: pageIndex,
+          pageSize: pageSize,
+          count: 0,
+          products: const [],
+        );
+      }
+      return ProductPage.fromJson(_asObject(json.first));
+    }
+
     return ProductPage.fromJson(_asObject(json));
   }
 
