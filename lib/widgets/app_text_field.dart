@@ -5,13 +5,8 @@ import '../core/theme/app_colors.dart';
 import '../core/theme/app_spacing.dart';
 import '../core/theme/app_text_styles.dart';
 
-/// The label is drawn above the field and the field grows with its validation
-/// error or helper text, so messages never overlap the next field.
 enum AppTextFieldVariant {
-  /// Beige fill used by Register, Checkout and My Address.
   filled,
-
-  /// White field with a soft shadow used by Login.
   card,
 }
 

@@ -7,9 +7,6 @@ import '../core/utils/formatters.dart';
 import '../models/product.dart';
 import 'product_thumbnail.dart';
 
-/// The card grows with the text scale instead of using a fixed height, so a
-/// long name or description can never overflow. Home passes [rating] (a fixed
-/// local value); Products List leaves it null and uses the uppercase brand.
 class ProductCard extends StatelessWidget {
   const ProductCard({
     super.key,

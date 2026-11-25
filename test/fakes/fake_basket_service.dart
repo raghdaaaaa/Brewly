@@ -2,7 +2,6 @@ import 'package:brewly/models/basket.dart';
 import 'package:brewly/models/product.dart';
 import 'package:brewly/services/basket_service.dart';
 
-/// Keeps basket changes in memory so widget tests never touch the network.
 class FakeBasketService extends BasketService {
   FakeBasketService({List<BasketItem>? items}) {
     if (items != null) {
