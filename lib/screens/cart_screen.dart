@@ -7,7 +7,6 @@ import '../core/theme/app_spacing.dart';
 import '../core/theme/app_text_styles.dart';
 import '../models/basket.dart';
 import '../services/basket_service.dart';
-import '../widgets/app_header.dart';
 import '../widgets/cart/cart_checkout_button.dart';
 import '../widgets/cart/cart_item_card.dart';
 import '../widgets/cart/cart_summary_card.dart';
@@ -16,11 +15,7 @@ import '../widgets/error_retry.dart';
 import '../widgets/loading_indicator.dart';
 
 class CartScreen extends StatefulWidget {
-  const CartScreen({
-    super.key,
-    required this.onBrowseMenu,
-    this.basketService,
-  });
+  const CartScreen({super.key, required this.onBrowseMenu, this.basketService});
 
   final VoidCallback onBrowseMenu;
   final BasketService? basketService;
@@ -131,9 +126,8 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   void _showMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   void _confirmClearCart() {
@@ -183,82 +177,79 @@ class _CartScreenState extends State<CartScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-              child: AppHeaderTop(),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.lg,
+                AppSpacing.md,
+                AppSpacing.lg,
+                AppSpacing.xs,
+              ),
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: Text(
+                      'Your Basket',
+                      style: AppTextStyles.displayTitle,
+                    ),
+                  ),
+                  if (!_isLoading && _errorMessage == null && _items.isNotEmpty)
+                    IconButton(
+                      tooltip: 'Clear cart',
+                      icon: const Icon(
+                        Icons.delete_outline_rounded,
+                        color: AppColors.errorColor,
+                        size: 20,
+                      ),
+                      onPressed: _confirmClearCart,
+                    ),
+                ],
+              ),
             ),
             Expanded(
               child: _isLoading
                   ? const LoadingIndicator()
                   : _errorMessage != null
-                      ? ErrorRetry(
-                          message: _errorMessage!,
-                          onRetry: _loadBasket,
-                        )
-                      : _items.isEmpty
-                          ? EmptyView(
-                              icon: Icons.shopping_bag_outlined,
-                              title: 'Your cart is empty',
-                              message: 'Add a coffee or a pastry from the menu.',
-                              actionLabel: 'Browse menu',
-                              onAction: widget.onBrowseMenu,
-                            )
-                          : ListView(
-                              padding: const EdgeInsets.fromLTRB(
-                                AppSpacing.lg,
-                                AppSpacing.sm,
-                                AppSpacing.lg,
-                                AppSpacing.xxl,
-                              ),
-                              children: [
-                                Row(
-                                  children: [
-                                    const Expanded(
-                                      child: Text(
-                                        'Your Basket',
-                                        style: AppTextStyles.displayTitle,
-                                      ),
-                                    ),
-                                    IconButton(
-                                      tooltip: 'Clear cart',
-                                      icon: const Icon(
-                                        Icons.delete_outline_rounded,
-                                        color: AppColors.errorColor,
-                                        size: 20,
-                                      ),
-                                      onPressed: _confirmClearCart,
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: AppSpacing.md),
-                                for (final item in _items) ...[
-                                  CartItemCard(
-                                    item: item,
-                                    onIncrease: () => _updateQuantity(
-                                      item,
-                                      item.quantity + 1,
-                                    ),
-                                    onDecrease: () => _updateQuantity(
-                                      item,
-                                      item.quantity - 1,
-                                    ),
-                                  ),
-                                  const SizedBox(height: AppSpacing.md),
-                                ],
-                                const SizedBox(height: AppSpacing.sm),
-                                CartSummaryCard(subtotal: _subtotal),
-                                const SizedBox(height: AppSpacing.lg),
-                                CartCheckoutButton(
-                                  total: _subtotal,
-                                  onTap: () {
-                                    Navigator.pushNamed(
-                                      context,
-                                      AppRoutes.checkoutRoute,
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
+                  ? ErrorRetry(message: _errorMessage!, onRetry: _loadBasket)
+                  : _items.isEmpty
+                  ? EmptyView(
+                      icon: Icons.shopping_bag_outlined,
+                      title: 'Your cart is empty',
+                      message: 'Add a coffee or a pastry from the menu.',
+                      actionLabel: 'Browse menu',
+                      onAction: widget.onBrowseMenu,
+                    )
+                  : ListView(
+                      padding: const EdgeInsets.fromLTRB(
+                        AppSpacing.lg,
+                        AppSpacing.sm,
+                        AppSpacing.lg,
+                        AppSpacing.xxl,
+                      ),
+                      children: [
+                        for (final item in _items) ...[
+                          CartItemCard(
+                            item: item,
+                            onIncrease: () =>
+                                _updateQuantity(item, item.quantity + 1),
+                            onDecrease: () =>
+                                _updateQuantity(item, item.quantity - 1),
+                          ),
+                          const SizedBox(height: AppSpacing.md),
+                        ],
+                        const SizedBox(height: AppSpacing.sm),
+                        CartSummaryCard(subtotal: _subtotal),
+                        const SizedBox(height: AppSpacing.lg),
+                        CartCheckoutButton(
+                          total: _subtotal,
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              AppRoutes.checkoutRoute,
+                            );
+                          },
+                        ),
+                      ],
+                    ),
             ),
           ],
         ),

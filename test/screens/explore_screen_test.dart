@@ -28,7 +28,7 @@ void main() {
         );
         await tester.pumpAndSettle();
 
-        expect(find.text('Explore Brewly'), findsOneWidget);
+        expect(find.text('Explore'), findsOneWidget);
         expect(find.text('Categories'), findsOneWidget);
         expect(tester.takeException(), isNull);
       }

@@ -1,31 +1,54 @@
 import 'package:flutter/material.dart';
 
+import '../core/errors/app_exception.dart';
 import '../core/routes/app_routes.dart';
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_spacing.dart';
 import '../core/theme/app_text_styles.dart';
 import '../models/user.dart';
 import '../services/auth_service.dart';
-import '../widgets/app_header.dart';
+import '../services/profile_image_service.dart';
 import '../widgets/profile/profile_header_card.dart';
 import '../widgets/profile/profile_logout_card.dart';
 import '../widgets/profile/profile_menu_card.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key, this.onOrdersTap});
+  const ProfileScreen({super.key, this.onOrdersTap, this.profileImageService});
 
   final VoidCallback? onOrdersTap;
+  final ProfileImageService? profileImageService;
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  late final ProfileImageService _profileImageService =
+      widget.profileImageService ?? ProfileImageService.instance;
+  bool _isPickingImage = false;
+
   @override
   void initState() {
     super.initState();
+    _profileImageService.initialize().ignore();
     if (AuthService.instance.isLoggedIn) {
       AuthService.instance.fetchCurrentUser().ignore();
+    }
+  }
+
+  Future<void> _changeProfileImage() async {
+    if (_isPickingImage) return;
+    setState(() => _isPickingImage = true);
+    try {
+      await _profileImageService.pickFromGallery();
+    } on AppException catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(error.message)));
+    } finally {
+      if (mounted) {
+        setState(() => _isPickingImage = false);
+      }
     }
   }
 
@@ -69,7 +92,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           valueListenable: AuthService.currentUserNotifier,
           builder: (context, user, child) {
             final current = user ?? AuthService.instance.currentUser;
-            final displayName = (current != null && current.displayName.isNotEmpty)
+            final displayName =
+                (current != null && current.displayName.isNotEmpty)
                 ? current.displayName
                 : 'Guest';
             final email = (current != null && current.email.isNotEmpty)
@@ -79,20 +103,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
             return ListView(
               padding: const EdgeInsets.fromLTRB(
                 AppSpacing.lg,
-                AppSpacing.sm,
+                AppSpacing.lg,
                 AppSpacing.lg,
                 AppSpacing.xxl,
               ),
               children: [
-                const AppHeaderTop(),
-                const SizedBox(height: AppSpacing.md),
                 ProfileHeaderCard(
                   name: displayName,
                   email: email,
+                  onAvatarTap: _changeProfileImage,
+                  isPickingImage: _isPickingImage,
                 ),
                 const SizedBox(height: AppSpacing.lg),
                 ProfileMenuCard(
-                  onOrdersTap: widget.onOrdersTap ??
+                  onOrdersTap:
+                      widget.onOrdersTap ??
                       () {
                         Navigator.pushNamed(
                           context,

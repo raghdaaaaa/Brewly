@@ -28,19 +28,19 @@ class AppTextStyles {
 
   static const TextStyle heroLine = TextStyle(
     fontFamily: fontFamily,
-    fontSize: 24,
-    fontWeight: FontWeight.w700,
-    height: 30 / 24,
-    letterSpacing: -0.6,
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+    height: 28 / 20,
+    letterSpacing: -0.3,
     color: AppColors.textColor,
   );
 
   static const TextStyle heroLineAccent = TextStyle(
     fontFamily: fontFamily,
-    fontSize: 24,
-    fontWeight: FontWeight.w700,
-    height: 32 / 24,
-    letterSpacing: -0.48,
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+    height: 28 / 20,
+    letterSpacing: -0.3,
     color: AppColors.primaryColor,
   );
 

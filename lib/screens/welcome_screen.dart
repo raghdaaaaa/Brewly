@@ -16,24 +16,32 @@ class WelcomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const WelcomeBrandHeader(),
-              const WelcomeHeroCard(),
-              const SizedBox(height: AppSpacing.xl),
-              PrimaryButton(
-                label: 'Get Started',
-                iconAsset: AppAssets.welcomeCtaArrow,
-                onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.loginRoute);
-                },
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const WelcomeBrandHeader(),
+                    const WelcomeHeroCard(),
+                    const SizedBox(height: AppSpacing.xl),
+                    PrimaryButton(
+                      label: 'Get Started',
+                      iconAsset: AppAssets.welcomeCtaArrow,
+                      onPressed: () {
+                        Navigator.pushNamed(context, AppRoutes.loginRoute);
+                      },
+                    ),
+                    const SizedBox(height: AppSpacing.xl),
+                  ],
+                ),
               ),
-              const SizedBox(height: AppSpacing.xxl),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

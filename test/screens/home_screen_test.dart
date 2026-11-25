@@ -42,9 +42,9 @@ void main() {
         );
         await tester.pumpAndSettle();
 
-        expect(find.text('BREWLY\nROASTERS'), findsOneWidget);
+        expect(find.text('Brewly'), findsOneWidget);
         expect(find.text('Cairo • Zamalek Roastery'), findsNothing);
-        expect(find.text('DELIVERY NOW (~25 MIN)'), findsOneWidget);
+        expect(find.text('DELIVERY NOW'), findsOneWidget);
         expect(find.textContaining('Good evening,'), findsOneWidget);
         expect(find.byIcon(Icons.notifications_none_rounded), findsOneWidget);
 

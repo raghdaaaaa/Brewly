@@ -23,11 +23,7 @@ import '../widgets/home/home_popular_section.dart';
 import '../widgets/home/promo_card.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({
-    super.key,
-    this.productService,
-    this.basketService,
-  });
+  const HomeScreen({super.key, this.productService, this.basketService});
 
   final ProductService? productService;
   final BasketService? basketService;
@@ -120,17 +116,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _openCategory(Category category) {
-    _openProducts({
-      'categoryId': category.id,
-      'categoryName': category.name,
-    });
+    _openProducts({'categoryId': category.id, 'categoryName': category.name});
   }
 
   void _openBrand(Brand brand) {
-    _openProducts({
-      'brandId': brand.id,
-      'brandName': brand.name,
-    });
+    _openProducts({'brandId': brand.id, 'brandName': brand.name});
   }
 
   void _openProduct(Product product) {
@@ -162,9 +152,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _showMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
@@ -181,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const AppHeaderTop(showLocation: false),
+              const AppHeaderTop(),
               const SizedBox(height: AppSpacing.sm),
               ValueListenableBuilder<User?>(
                 valueListenable: AuthService.currentUserNotifier,
@@ -192,39 +181,40 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 },
               ),
-              const SizedBox(height: AppSpacing.md),
+              const SizedBox(height: AppSpacing.lg),
               ValueListenableBuilder<Address?>(
                 valueListenable: AuthService.savedAddress,
                 builder: (context, address, child) {
                   return DeliveryCard(
                     address: _formatAddress(address),
-                    onTap: () => Navigator.pushNamed(context, AppRoutes.addressRoute),
+                    onTap: () =>
+                        Navigator.pushNamed(context, AppRoutes.addressRoute),
                   );
                 },
               ),
-              const SizedBox(height: AppSpacing.md),
+              const SizedBox(height: AppSpacing.lg),
               AppSearchField(
                 controller: _searchController,
                 hint: 'Search specialty beans, croissants, coffee...',
                 onSubmitted: _search,
                 onFilterTap: () => _showMessage('Coming soon'),
               ),
-              const SizedBox(height: AppSpacing.lg),
+              const SizedBox(height: AppSpacing.xl),
               PromoCard(onExplore: () => _openProducts()),
-              const SizedBox(height: AppSpacing.lg),
+              const SizedBox(height: AppSpacing.xl),
               HomeCategoriesSection(
                 future: _categoriesFuture,
                 onRetry: () => setState(_loadCategories),
                 onSeeAll: () => _openProducts(),
                 onCategoryTap: _openCategory,
               ),
-              const SizedBox(height: AppSpacing.lg),
+              const SizedBox(height: AppSpacing.xl),
               HomeBrandsSection(
                 future: _brandsFuture,
                 onRetry: () => setState(_loadBrands),
                 onBrandTap: _openBrand,
               ),
-              const SizedBox(height: AppSpacing.lg),
+              const SizedBox(height: AppSpacing.xl),
               HomePopularSection(
                 future: _productsFuture,
                 onRetry: () => setState(_loadProducts),

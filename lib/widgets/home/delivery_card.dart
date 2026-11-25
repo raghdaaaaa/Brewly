@@ -6,11 +6,7 @@ import '../../core/theme/app_text_styles.dart';
 
 /// The beige delivery address card at the top of Home.
 class DeliveryCard extends StatelessWidget {
-  const DeliveryCard({
-    super.key,
-    required this.address,
-    required this.onTap,
-  });
+  const DeliveryCard({super.key, required this.address, required this.onTap});
 
   final String address;
   final VoidCallback onTap;
@@ -50,7 +46,7 @@ class DeliveryCard extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const Text(
-                      'DELIVERY NOW (~25 MIN)',
+                      'DELIVERY NOW',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: AppTextStyles.deliveryEyebrow,

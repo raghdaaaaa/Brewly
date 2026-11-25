@@ -125,10 +125,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       if (!mounted) {
         return;
       }
-      navigator.pushNamedAndRemoveUntil(
-        AppRoutes.homeRoute,
-        (route) => false,
-      );
+      navigator.pushNamedAndRemoveUntil(AppRoutes.homeRoute, (route) => false);
     } on AppException catch (error) {
       if (!mounted) {
         return;
@@ -166,7 +163,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               AuthTopBar(onBack: _goToLogin, showBrandChip: true),
-              const SizedBox(height: AppSpacing.lg),
+              const SizedBox(height: AppSpacing.xl),
               const Text('Create Account', style: AppTextStyles.displayBig),
               const SizedBox(height: AppSpacing.lg),
               RegisterFormCard(

@@ -8,7 +8,7 @@ import '../loading_indicator.dart';
 import '../common/section_header.dart';
 import 'brand_pill.dart';
 
-/// "FEATURED ROASTERS & BAKERIES" and the brand pills from the API.
+/// Store brands from the API.
 class HomeBrandsSection extends StatelessWidget {
   const HomeBrandsSection({
     super.key,
@@ -31,10 +31,10 @@ class HomeBrandsSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SectionHeader(
-              title: 'FEATURED ROASTERS & BAKERIES',
+              title: 'Explore Stores',
               titleStyle: AppTextStyles.eyebrowCaps,
               trailingLabel: snapshot.hasData
-                  ? '${brands.length} Roasters'
+                  ? '${brands.length} Stores'
                   : null,
             ),
             const SizedBox(height: AppSpacing.xs),

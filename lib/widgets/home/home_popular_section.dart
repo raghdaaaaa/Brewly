@@ -36,7 +36,6 @@ class HomePopularSection extends StatelessWidget {
       children: [
         SectionHeader(
           title: 'Popular Right Now',
-          subtitle: 'Top crafted sips and warm bakes in Zamalek',
           actionLabel: 'View Menu',
           onActionTap: onViewMenu,
         ),
@@ -72,9 +71,7 @@ class HomePopularSection extends StatelessWidget {
                 for (var index = 0; index < products.length; index++)
                   Padding(
                     padding: EdgeInsets.only(
-                      bottom: index == products.length - 1
-                          ? 0
-                          : AppSpacing.md,
+                      bottom: index == products.length - 1 ? 0 : AppSpacing.md,
                     ),
                     child: ProductCard(
                       product: products[index],

@@ -19,10 +19,12 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.text('Create Account'), findsOneWidget);
-        expect(find.text('BREWLY'), findsOneWidget);
+        expect(find.text('Brewly'), findsOneWidget);
         expect(find.text('Egyptian Phone Number'), findsOneWidget);
         expect(find.text('+20'), findsOneWidget);
-        final fields = tester.widgetList<TextFormField>(find.byType(TextFormField));
+        final fields = tester.widgetList<TextFormField>(
+          find.byType(TextFormField),
+        );
         for (final field in fields) {
           expect(field.controller?.text, isEmpty);
         }

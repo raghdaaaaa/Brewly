@@ -6,7 +6,6 @@ import '../core/theme/app_spacing.dart';
 import '../core/theme/app_text_styles.dart';
 import '../models/order.dart';
 import '../services/order_service.dart';
-import '../widgets/app_header.dart';
 import '../widgets/error_retry.dart';
 import '../widgets/loading_indicator.dart';
 import '../widgets/orders/order_card.dart';
@@ -52,13 +51,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
             await _ordersFuture.catchError((_) => <Order>[]);
           },
           child: ListView(
-            padding: const EdgeInsets.fromLTRB(0, AppSpacing.sm, 0, 100),
+            padding: const EdgeInsets.fromLTRB(0, AppSpacing.lg, 0, 100),
             children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-                child: AppHeaderTop(),
-              ),
-              const SizedBox(height: AppSpacing.lg),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
                 child: Text('My Orders', style: AppTextStyles.pageTitle),
@@ -90,9 +84,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: orders.length,
-                    itemBuilder: (context, index) => OrderCard(
-                      order: orders[index],
-                    ),
+                    itemBuilder: (context, index) =>
+                        OrderCard(order: orders[index]),
                   );
                 },
               ),

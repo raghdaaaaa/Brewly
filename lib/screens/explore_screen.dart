@@ -5,7 +5,6 @@ import '../core/theme/app_spacing.dart';
 import '../core/theme/app_text_styles.dart';
 import '../models/category.dart';
 import '../services/product_service.dart';
-import '../widgets/app_header.dart';
 import '../widgets/common/app_search_field.dart';
 import '../widgets/common/empty_view.dart';
 import '../widgets/error_retry.dart';
@@ -62,17 +61,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
     Navigator.pushNamed(
       context,
       AppRoutes.productsListRoute,
-      arguments: {
-        'categoryId': category.id,
-        'categoryName': category.name,
-      },
+      arguments: {'categoryId': category.id, 'categoryName': category.name},
     );
   }
 
   void _showMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
@@ -82,14 +77,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(
             AppSpacing.lg,
-            AppSpacing.sm,
+            AppSpacing.lg,
             AppSpacing.lg,
             AppSpacing.xl,
           ),
           children: [
-            const AppHeaderTop(),
-            const SizedBox(height: AppSpacing.md),
-            const Text('Explore Brewly', style: AppTextStyles.screenTitle),
+            const Text('Explore', style: AppTextStyles.screenTitle),
             const SizedBox(height: AppSpacing.md),
             AppSearchField(
               controller: _searchController,

@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../../core/constants/app_assets.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../services/profile_image_service.dart';
 
 /// Top card in Profile screen displaying the user's avatar, badge, name, and email.
 class ProfileHeaderCard extends StatelessWidget {
@@ -11,10 +14,14 @@ class ProfileHeaderCard extends StatelessWidget {
     super.key,
     required this.name,
     required this.email,
+    required this.onAvatarTap,
+    required this.isPickingImage,
   });
 
   final String name;
   final String email;
+  final VoidCallback onAvatarTap;
+  final bool isPickingImage;
 
   @override
   Widget build(BuildContext context) {
@@ -50,25 +57,48 @@ class ProfileHeaderCard extends StatelessWidget {
           Stack(
             clipBehavior: Clip.none,
             children: [
-              Container(
-                width: 96,
-                height: 96,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: AppColors.cardColor,
-                    width: 4,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.textColor.withValues(alpha: 0.08),
-                      blurRadius: 8,
-                      offset: const Offset(0, 3),
+              Tooltip(
+                message: 'Change profile photo',
+                child: InkWell(
+                  onTap: isPickingImage ? null : onAvatarTap,
+                  customBorder: const CircleBorder(),
+                  child: Container(
+                    width: 96,
+                    height: 96,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: AppColors.cardColor, width: 4),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.textColor.withValues(alpha: 0.08),
+                          blurRadius: 8,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
                     ),
-                  ],
-                  image: const DecorationImage(
-                    image: AssetImage(AppAssets.userAvatar),
-                    fit: BoxFit.cover,
+                    child: ClipOval(
+                      child: ValueListenableBuilder<String?>(
+                        valueListenable: ProfileImageService.selectedImagePath,
+                        builder: (context, imagePath, child) {
+                          if (imagePath == null) {
+                            return Image.asset(
+                              AppAssets.userAvatar,
+                              fit: BoxFit.cover,
+                            );
+                          }
+                          return Image.file(
+                            File(imagePath),
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Image.asset(
+                                AppAssets.userAvatar,
+                                fit: BoxFit.cover,
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -76,19 +106,16 @@ class ProfileHeaderCard extends StatelessWidget {
                 bottom: 0,
                 right: 0,
                 child: Container(
-                  width: 28,
-                  height: 28,
+                  width: 32,
+                  height: 32,
                   decoration: BoxDecoration(
                     color: AppColors.primaryColor,
                     shape: BoxShape.circle,
-                    border: Border.all(
-                      color: AppColors.cardColor,
-                      width: 2,
-                    ),
+                    border: Border.all(color: AppColors.cardColor, width: 2),
                   ),
                   child: const Icon(
-                    Icons.local_cafe_rounded,
-                    size: 14,
+                    Icons.camera_alt_rounded,
+                    size: 16,
                     color: AppColors.cardColor,
                   ),
                 ),
@@ -96,15 +123,9 @@ class ProfileHeaderCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: AppSpacing.lg),
-          Text(
-            name,
-            style: AppTextStyles.profileName,
-          ),
+          Text(name, style: AppTextStyles.profileName),
           const SizedBox(height: AppSpacing.xs),
-          Text(
-            email,
-            style: AppTextStyles.bodyMuted,
-          ),
+          Text(email, style: AppTextStyles.bodyMuted),
         ],
       ),
     );

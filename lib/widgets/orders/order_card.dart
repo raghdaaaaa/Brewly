@@ -110,7 +110,7 @@ class OrderCard extends StatelessWidget {
                   const SizedBox(width: AppSpacing.sm),
                   Flexible(
                     child: SizedBox(
-                      height: 44,
+                      height: 40,
                       child: FilledButton(
                         onPressed: () {
                           Navigator.pushNamed(
@@ -140,7 +140,7 @@ class OrderCard extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                                 style: AppTextStyles.buttonLabel.copyWith(
                                   fontSize: 12,
-                                  color: AppColors.onAccentColor,
+                                  color: AppColors.cardColor,
                                 ),
                               ),
                             ),
@@ -148,7 +148,7 @@ class OrderCard extends StatelessWidget {
                             const Icon(
                               Icons.arrow_forward_rounded,
                               size: 14,
-                              color: AppColors.onAccentColor,
+                              color: AppColors.cardColor,
                             ),
                           ],
                         ),
