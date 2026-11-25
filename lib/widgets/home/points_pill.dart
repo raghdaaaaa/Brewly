@@ -14,8 +14,8 @@ class PointsPill extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.sm,
-        vertical: 6,
+        horizontal: AppSpacing.xs,
+        vertical: AppSpacing.xs,
       ),
       decoration: const BoxDecoration(
         color: AppColors.accentColor,
@@ -26,7 +26,7 @@ class PointsPill extends StatelessWidget {
         children: [
           const Icon(
             Icons.workspace_premium_rounded,
-            size: 14,
+            size: 12,
             color: AppColors.onAccentColor,
           ),
           const SizedBox(width: AppSpacing.xs),

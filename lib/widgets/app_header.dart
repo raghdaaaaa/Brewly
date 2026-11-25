@@ -75,8 +75,11 @@ class AppHeaderTop extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(const SnackBar(content: Text('Coming soon')));
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Your coffee order is getting ready!'),
+                ),
+              );
             },
             borderRadius: const BorderRadius.all(
               Radius.circular(AppRadius.pill),

@@ -4,6 +4,7 @@ import '../core/errors/app_exception.dart';
 import '../core/routes/app_routes.dart';
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_spacing.dart';
+import '../core/theme/app_text_styles.dart';
 import '../core/utils/validators.dart';
 import '../services/auth_service.dart';
 import '../widgets/auth/login_form.dart';
@@ -95,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(
             AppSpacing.lg,
-            AppSpacing.lg,
+            AppSpacing.xl,
             AppSpacing.lg,
             AppSpacing.xl,
           ),
@@ -121,6 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
               AuthSwitchLink(
                 prompt: "Don't have an account?",
                 actionLabel: 'Create account',
+                actionStyle: AppTextStyles.authSwitchAction,
                 onTap: () {
                   Navigator.pushNamed(context, AppRoutes.registerRoute);
                 },

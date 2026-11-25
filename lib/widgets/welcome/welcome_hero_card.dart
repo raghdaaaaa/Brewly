@@ -51,12 +51,7 @@ class WelcomeHeroCard extends StatelessWidget {
             ),
           ),
           const Padding(
-            padding: EdgeInsets.fromLTRB(
-              AppSpacing.lg,
-              0,
-              AppSpacing.lg,
-              20,
-            ),
+            padding: EdgeInsets.fromLTRB(AppSpacing.lg, 0, AppSpacing.lg, 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,

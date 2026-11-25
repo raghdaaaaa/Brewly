@@ -1,4 +1,5 @@
 import 'package:brewly/screens/product_details_screen.dart';
+import 'package:brewly/widgets/common/profile_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -40,6 +41,26 @@ void main() {
         expect(tester.takeException(), isNull);
       }
     }
+  });
+
+  testWidgets('product details header has no profile avatar', (tester) async {
+    final product = buildTestProducts(count: 1).first;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ProductDetailsScreen(
+          product: product,
+          productService: FakeProductService(products: [product]),
+          basketService: FakeBasketService(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.byType(ProfileAvatar), findsNothing);
+    expect(find.byIcon(Icons.share_outlined), findsOneWidget);
+    expect(find.byIcon(Icons.share_rounded), findsNothing);
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('loads a product by id when only the id is passed', (

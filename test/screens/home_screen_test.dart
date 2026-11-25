@@ -1,6 +1,8 @@
 import 'package:brewly/models/address.dart';
 import 'package:brewly/screens/home_screen.dart';
 import 'package:brewly/services/auth_service.dart';
+import 'package:brewly/widgets/app_header.dart';
+import 'package:brewly/widgets/home/home_greeting.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -98,5 +100,43 @@ void main() {
 
     expect(find.text('99 Corniche, Alexandria, Egypt'), findsOneWidget);
     expect(find.text('Alexandria, Egypt'), findsNothing);
+  });
+
+  testWidgets('home greeting scales to stay on one line', (tester) async {
+    tester.view.physicalSize = const Size(320, 640);
+    tester.view.devicePixelRatio = 1;
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: Padding(
+            padding: EdgeInsets.all(16),
+            child: HomeGreeting(
+              name: 'Raghdaa with a long family name',
+              points: 125,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    final greeting = tester.widget<Text>(
+      find.text('Good evening, Raghdaa with a long family name 👋'),
+    );
+    expect(greeting.maxLines, 1);
+    expect(greeting.softWrap, isFalse);
+    expect(greeting.overflow, isNull);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('home notification shows the local order update', (tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(home: Scaffold(body: AppHeaderTop())),
+    );
+
+    await tester.tap(find.byIcon(Icons.notifications_none_rounded));
+    await tester.pump();
+
+    expect(find.text('Your coffee order is getting ready!'), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 }

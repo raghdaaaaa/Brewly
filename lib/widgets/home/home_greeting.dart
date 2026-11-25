@@ -13,24 +13,28 @@ class HomeGreeting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(
-              child: Text(
-                'Good evening, $name 👋',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppTextStyles.greeting,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Good evening, $name 👋',
+                    maxLines: 1,
+                    softWrap: false,
+                    style: AppTextStyles.greeting,
+                  ),
+                ),
               ),
             ),
             const SizedBox(width: AppSpacing.sm),
-            Padding(
-              padding: const EdgeInsets.only(top: 2),
-              child: PointsPill(points: points),
-            ),
+            PointsPill(points: points),
           ],
         ),
       ],

@@ -13,11 +13,11 @@ class LoginHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Center(child: AuthEmblem()),
-        SizedBox(height: AppSpacing.sm),
+        SizedBox(height: AppSpacing.lg),
         Text(
           'Welcome Back',
-          textAlign: TextAlign.center,
-          style: AppTextStyles.displayBig,
+          textAlign: TextAlign.left,
+          style: AppTextStyles.authHeaderTitle,
         ),
       ],
     );

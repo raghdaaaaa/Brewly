@@ -32,7 +32,7 @@ class HomeBrandsSection extends StatelessWidget {
           children: [
             SectionHeader(
               title: 'Explore Stores',
-              titleStyle: AppTextStyles.eyebrowCaps,
+              titleStyle: AppTextStyles.storeSectionHeading,
               trailingLabel: snapshot.hasData
                   ? '${brands.length} Stores'
                   : null,

@@ -25,8 +25,8 @@ Rules:
   readable message. Endpoint services do not catch.
 - `ApiClient.shared` is used by `ApiService`, `ProductService` and `BasketService`, so
   the token set by `AuthService` reaches every request.
-- `AuthService` keeps the signed-in user and token for the session. The token is in
-  memory because `shared_preferences` is not in `pubspec.yaml` yet.
+- `AuthService` persists and restores the signed-in user and token with
+  `shared_preferences`; `ApiClient.shared` adds the bearer token to protected requests.
 - `BasketService` exposes shared `ValueNotifier`s for the item count and total; the
   floating nav badge and the current-order bar listen to the same values.
 
@@ -58,8 +58,9 @@ Splash → Welcome → Login ⇄ Register → Home shell (bottom nav)
   states. The Add to cart button sends `POST /api/Basket` with
   `{productId, quantity}`. The live API **sets** the quantity of an existing line (it
   does not add to it); the screen sends the selected quantity as the new value.
-- Cart and Checkout still read the shared dummy basket and delivery methods. Every total
-  is computed from the line totals; nothing is hardcoded per screen.
+- Cart reads the live basket from `BasketService`; Checkout loads delivery methods and
+  submits orders through its services. Totals are computed from the line items and the
+  selected delivery method.
 - Orders passes the `Order` to Order Details; Profile and Checkout share the same address
   form widgets and `AppTextField`.
 - Order Success is pushed after checkout clears the cart and shows the new order id
@@ -72,5 +73,5 @@ Splash → Welcome → Login ⇄ Register → Home shell (bottom nav)
   to the live API and have 4-size × 2-text-scale widget tests.
 - Batch 3a: Product Details is rebuilt from the PNG with the Hero image, local favorite,
   quantity stepper, live total, auth guard and `POST /api/Basket`.
-- Cart, Checkout, Order Success, Orders, Order Details, Profile and My Address are still
-  the earlier dummy-data versions; their API and design pass is next.
+- Cart, Checkout, Orders, Order Details, Profile and My Address use their domain
+  services for live API data. Order Success displays the result passed from Checkout.

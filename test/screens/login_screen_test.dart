@@ -1,3 +1,4 @@
+import 'package:brewly/widgets/auth/auth_emblem.dart';
 import 'package:brewly/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -19,8 +20,24 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.text('Welcome Back'), findsOneWidget);
+        expect(find.byType(AuthEmblem), findsOneWidget);
+        expect(find.text('Brewly'), findsNothing);
+        expect(
+          tester.widget<Text>(find.text('Welcome Back')).textAlign,
+          TextAlign.left,
+        );
+        expect(
+          tester.widget<Text>(find.text('Welcome Back')).style?.fontSize,
+          28,
+        );
+        expect(
+          tester.widget<Text>(find.text('Create account')).style?.fontSize,
+          13,
+        );
         expect(find.byType(TextFormField), findsNWidgets(2));
-        final fields = tester.widgetList<TextFormField>(find.byType(TextFormField));
+        final fields = tester.widgetList<TextFormField>(
+          find.byType(TextFormField),
+        );
         for (final field in fields) {
           expect(field.controller?.text, isEmpty);
         }

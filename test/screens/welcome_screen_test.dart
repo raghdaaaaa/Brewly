@@ -1,6 +1,8 @@
+import 'package:brewly/widgets/auth/auth_emblem.dart';
 import 'package:brewly/core/routes/app_routes.dart';
 import 'package:brewly/screens/login_screen.dart';
 import 'package:brewly/screens/welcome_screen.dart';
+import 'package:brewly/widgets/welcome/welcome_hero_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -20,10 +22,23 @@ void main() {
         await tester.pumpWidget(const MaterialApp(home: WelcomeScreen()));
         await tester.pumpAndSettle();
 
-        expect(find.text('Brewly'), findsOneWidget);
+        expect(find.byType(AuthEmblem), findsOneWidget);
+        expect(find.text('Brewly'), findsNothing);
         expect(find.text('Artisanal Coffee & Pastries,'), findsOneWidget);
         expect(find.text('Delivered Fresh.'), findsOneWidget);
         expect(find.text('Get Started'), findsOneWidget);
+
+        final emblemRect = tester.getRect(find.byType(AuthEmblem));
+        final imageRect = tester.getRect(find.byType(Image).first);
+        final copyRect = tester.getRect(
+          find.text('Artisanal Coffee & Pastries,'),
+        );
+        final heroRect = tester.getRect(find.byType(WelcomeHeroCard));
+        final buttonRect = tester.getRect(find.text('Get Started'));
+        expect(emblemRect.top, greaterThanOrEqualTo(12));
+        expect(imageRect.top, greaterThan(emblemRect.bottom));
+        expect(copyRect.top, greaterThanOrEqualTo(imageRect.bottom));
+        expect(heroRect.bottom, lessThan(buttonRect.top));
         expect(tester.takeException(), isNull);
       }
     }
@@ -33,9 +48,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: const WelcomeScreen(),
-        routes: {
-          AppRoutes.loginRoute: (context) => const LoginScreen(),
-        },
+        routes: {AppRoutes.loginRoute: (context) => const LoginScreen()},
       ),
     );
 

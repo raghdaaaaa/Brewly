@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../common/profile_avatar.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
@@ -54,15 +53,13 @@ class ProductDetailsTopBar extends StatelessWidget {
               onTap: onShare,
               customBorder: const CircleBorder(),
               child: const Icon(
-                Icons.share_rounded,
+                Icons.share_outlined,
                 size: 20,
                 color: AppColors.textColor,
               ),
             ),
           ),
         ),
-        const SizedBox(width: AppSpacing.sm),
-        const ProfileAvatar(),
       ],
     );
   }

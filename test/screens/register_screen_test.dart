@@ -1,3 +1,4 @@
+import 'package:brewly/widgets/auth/auth_emblem.dart';
 import 'package:brewly/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -19,7 +20,8 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.text('Create Account'), findsOneWidget);
-        expect(find.text('Brewly'), findsOneWidget);
+        expect(find.byType(AuthEmblem), findsOneWidget);
+        expect(find.text('Brewly'), findsNothing);
         expect(find.text('Egyptian Phone Number'), findsOneWidget);
         expect(find.text('+20'), findsOneWidget);
         final fields = tester.widgetList<TextFormField>(

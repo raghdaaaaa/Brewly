@@ -21,10 +21,11 @@ class WelcomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              const SizedBox(height: 20),
               const WelcomeBrandHeader(),
-              const SizedBox(height: AppSpacing.sm),
+              const SizedBox(height: 80),
               const WelcomeHeroCard(),
-              const SizedBox(height: AppSpacing.xxl),
+              const SizedBox(height: 30),
               PrimaryButton(
                 label: 'Get Started',
                 iconAsset: AppAssets.welcomeCtaArrow,

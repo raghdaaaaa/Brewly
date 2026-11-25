@@ -10,11 +10,13 @@ class AuthSwitchLink extends StatelessWidget {
     required this.prompt,
     required this.actionLabel,
     required this.onTap,
+    this.actionStyle = AppTextStyles.link,
   });
 
   final String prompt;
   final String actionLabel;
   final VoidCallback onTap;
+  final TextStyle actionStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class AuthSwitchLink extends StatelessWidget {
             minimumSize: const Size(44, 44),
             padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
           ),
-          child: Text(actionLabel, style: AppTextStyles.link),
+          child: Text(actionLabel, style: actionStyle),
         ),
       ],
     );

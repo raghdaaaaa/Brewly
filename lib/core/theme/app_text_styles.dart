@@ -26,21 +26,37 @@ class AppTextStyles {
     color: AppColors.textColor,
   );
 
+  static const TextStyle authHeaderTitle = TextStyle(
+    fontFamily: fontFamily,
+    fontSize: 28,
+    fontWeight: FontWeight.w700,
+    height: 36 / 28,
+    letterSpacing: -0.6,
+    color: AppColors.textColor,
+  );
+
+  static const TextStyle authSwitchAction = TextStyle(
+    fontFamily: fontFamily,
+    fontSize: 13,
+    fontWeight: FontWeight.w600,
+    color: AppColors.primaryColor,
+  );
+
   static const TextStyle heroLine = TextStyle(
     fontFamily: fontFamily,
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: FontWeight.w600,
-    height: 24 / 18,
-    letterSpacing: -0.2,
+    height: 22 / 16,
+    letterSpacing: 0,
     color: AppColors.textColor,
   );
 
   static const TextStyle heroLineAccent = TextStyle(
     fontFamily: fontFamily,
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: FontWeight.w600,
-    height: 24 / 18,
-    letterSpacing: -0.2,
+    height: 22 / 16,
+    letterSpacing: 0,
     color: AppColors.primaryColor,
   );
 
@@ -430,6 +446,15 @@ class AppTextStyles {
     fontWeight: FontWeight.w700,
     height: 26 / 20,
     letterSpacing: -0.3,
+    color: AppColors.textColor,
+  );
+
+  static const TextStyle storeSectionHeading = TextStyle(
+    fontFamily: fontFamily,
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    height: 22 / 16,
+    letterSpacing: -0.2,
     color: AppColors.textColor,
   );
 

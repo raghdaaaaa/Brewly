@@ -48,7 +48,7 @@ class AppSizes {
   static const double detailsShareButton = 45;
   static const double detailsAvatar = 34;
   static const double detailsHeroContentGap = 16;
-  static const double detailsNameDescriptionGap = 14;
+  static const double detailsNameDescriptionGap = 16;
   static const double detailsPriceMaxWidth = 150;
   static const double purchaseBarHeight = 58;
   static const double quantityStepperWidth = 128;
