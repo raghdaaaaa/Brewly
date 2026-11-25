@@ -10,7 +10,6 @@ import '../common/product_list_skeleton.dart';
 import '../common/section_header.dart';
 import '../product_card.dart';
 
-/// "Popular Right Now" header and the product cards from the API.
 class HomePopularSection extends StatelessWidget {
   const HomePopularSection({
     super.key,

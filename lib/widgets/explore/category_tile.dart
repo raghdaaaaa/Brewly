@@ -6,7 +6,6 @@ import '../../core/theme/app_text_styles.dart';
 import '../../models/category.dart';
 import '../common/network_image_box.dart';
 
-/// One image tile of the Explore categories grid.
 class CategoryTile extends StatelessWidget {
   const CategoryTile({
     super.key,

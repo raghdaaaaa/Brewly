@@ -10,7 +10,6 @@ import '../app_text_field.dart';
 import '../common/primary_button.dart';
 import 'phone_number_field.dart';
 
-/// Register fields inside the white form card.
 class RegisterFormCard extends StatelessWidget {
   const RegisterFormCard({
     super.key,

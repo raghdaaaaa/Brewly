@@ -4,7 +4,6 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 
-/// Card containing navigation and setting rows in the Profile screen.
 class ProfileMenuCard extends StatelessWidget {
   const ProfileMenuCard({
     super.key,

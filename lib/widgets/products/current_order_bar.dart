@@ -5,7 +5,6 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/utils/formatters.dart';
 
-/// The dark green bar fixed under the Products List.
 class CurrentOrderBar extends StatelessWidget {
   const CurrentOrderBar({
     super.key,

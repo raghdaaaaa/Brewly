@@ -11,8 +11,6 @@ import 'product_details_content.dart';
 import 'product_details_top_bar.dart';
 import 'product_purchase_bar.dart';
 
-/// Full layout of the Product Details screen: fixed header, scrollable body
-/// and the bottom purchase bar.
 class ProductDetailsView extends StatelessWidget {
   const ProductDetailsView({
     super.key,

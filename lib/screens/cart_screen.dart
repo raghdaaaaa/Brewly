@@ -93,10 +93,15 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   Future<void> _updateQuantity(BasketItem item, int nextQuantity) async {
-    if (nextQuantity < 1 || nextQuantity > 99) return;
+    if (nextQuantity < 0 || nextQuantity > 99) return;
     final previousQuantity = item.quantity;
+    final previousIndex = _items.indexOf(item);
     setState(() {
-      item.quantity = nextQuantity;
+      if (nextQuantity == 0) {
+        _items.remove(item);
+      } else {
+        item.quantity = nextQuantity;
+      }
     });
     _isInternalUpdate = true;
     try {
@@ -111,13 +116,21 @@ class _CartScreenState extends State<CartScreen> {
     } on AppException catch (error) {
       if (!mounted) return;
       setState(() {
-        item.quantity = previousQuantity;
+        if (nextQuantity == 0) {
+          _items.insert(previousIndex, item);
+        } else {
+          item.quantity = previousQuantity;
+        }
       });
       _showMessage(error.message);
     } catch (_) {
       if (!mounted) return;
       setState(() {
-        item.quantity = previousQuantity;
+        if (nextQuantity == 0) {
+          _items.insert(previousIndex, item);
+        } else {
+          item.quantity = previousQuantity;
+        }
       });
       _showMessage('Could not update item quantity. Please try again.');
     } finally {

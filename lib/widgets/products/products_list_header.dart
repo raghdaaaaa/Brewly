@@ -5,7 +5,6 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 
-/// Back button, "Product Detail" title, share button and avatar.
 class ProductsListHeader extends StatelessWidget {
   const ProductsListHeader({
     super.key,

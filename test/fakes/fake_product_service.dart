@@ -4,7 +4,6 @@ import 'package:brewly/models/product.dart';
 import 'package:brewly/models/product_page.dart';
 import 'package:brewly/services/product_service.dart';
 
-/// Serves in-memory products so widget tests never touch the network.
 class FakeProductService extends ProductService {
   FakeProductService({
     this.products = const [],

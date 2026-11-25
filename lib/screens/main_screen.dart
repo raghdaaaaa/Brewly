@@ -24,7 +24,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    // Load the real basket once so the cart badge shows the API count.
     BasketService().getBasket().ignore();
   }
 

@@ -5,7 +5,6 @@ import '../../core/theme/app_spacing.dart';
 import '../../models/product.dart';
 import '../common/network_image_box.dart';
 
-/// The large product photo with the local favorite button on top.
 class ProductHeroImage extends StatelessWidget {
   const ProductHeroImage({
     super.key,

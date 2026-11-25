@@ -1,4 +1,5 @@
 import 'package:brewly/models/basket.dart';
+import 'package:brewly/models/product.dart';
 import 'package:brewly/services/basket_service.dart';
 
 /// Keeps basket changes in memory so widget tests never touch the network.
@@ -13,58 +14,83 @@ class FakeBasketService extends BasketService {
 
   @override
   Future<CustomerBasket> getBasket() async {
-    return CustomerBasket(id: 'fake-basket', items: List.of(_items));
+    _publish();
+    return CustomerBasket(id: '', items: List.of(_items));
   }
 
   @override
   Future<CustomerBasket> addItem({
-    required int productId,
+    required Product product,
     int quantity = 1,
   }) async {
-    final existingIndex = _items.indexWhere((item) => item.id == productId);
-    if (existingIndex >= 0) {
-      _items[existingIndex].quantity = quantity;
-    } else {
-      _items.add(
-        BasketItem(
-          id: productId,
-          productName: 'Product $productId',
-          pictureUrl: '',
-          price: 95,
-          quantity: quantity,
-        ),
-      );
-    }
-    return CustomerBasket(id: 'fake-basket', items: List.of(_items));
+    return addQuantity(product: product, quantity: quantity);
   }
 
   @override
   Future<CustomerBasket> addQuantity({
-    required int productId,
+    required Product product,
     int quantity = 1,
   }) async {
     final existingIndex = _items.indexWhere(
-      (item) => item.productId == productId,
+      (item) => item.productId == product.id,
     );
     if (existingIndex >= 0) {
       _items[existingIndex].quantity += quantity;
     } else {
       _items.add(
         BasketItem(
-          id: productId,
-          productId: productId,
-          productName: 'Product $productId',
-          pictureUrl: '',
-          price: 95,
+          id: product.id,
+          productId: product.id,
+          productName: product.name,
+          pictureUrl: product.pictureUrl,
+          price: product.price,
           quantity: quantity,
         ),
       );
     }
-    return CustomerBasket(id: 'fake-basket', items: List.of(_items));
+    _publish();
+    return CustomerBasket(id: '', items: List.of(_items));
+  }
+
+  @override
+  Future<CustomerBasket> updateItemQuantity({
+    required int productId,
+    required int quantity,
+  }) async {
+    if (quantity == 0) {
+      return removeItem(productId: productId);
+    }
+    final existingIndex = _items.indexWhere(
+      (item) => item.productId == productId,
+    );
+    if (existingIndex >= 0) {
+      _items[existingIndex].quantity = quantity;
+    }
+    _publish();
+    return CustomerBasket(id: '', items: List.of(_items));
+  }
+
+  @override
+  Future<CustomerBasket> removeItem({required int productId}) async {
+    _items.removeWhere((item) => item.productId == productId);
+    _publish();
+    return CustomerBasket(id: '', items: List.of(_items));
+  }
+
+  void _publish() {
+    BasketService.itemCount.value = _items.fold(
+      0,
+      (count, item) => count + item.quantity,
+    );
+    BasketService.total.value = _items.fold(
+      0,
+      (sum, item) => sum + item.lineTotal,
+    );
   }
 
   @override
   Future<void> clearBasket() async {
     _items.clear();
+    _publish();
   }
 }

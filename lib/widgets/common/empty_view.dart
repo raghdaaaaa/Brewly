@@ -4,7 +4,6 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 
-/// Centered message for a list with no results.
 class EmptyView extends StatelessWidget {
   const EmptyView({
     super.key,

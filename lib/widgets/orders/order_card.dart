@@ -8,7 +8,6 @@ import '../../core/utils/formatters.dart';
 import '../../models/order.dart';
 import 'order_status_chip.dart';
 
-/// Card representing one order in the My Orders list.
 class OrderCard extends StatelessWidget {
   const OrderCard({super.key, required this.order});
 

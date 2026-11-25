@@ -6,7 +6,6 @@ import 'filter_chip_bar.dart';
 import 'products_list_header.dart';
 import 'sort_row.dart';
 
-/// Header, search, filter chips and sort row of the Products List.
 class ProductsListControls extends StatelessWidget {
   const ProductsListControls({
     super.key,

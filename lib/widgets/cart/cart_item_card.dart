@@ -7,7 +7,6 @@ import '../../core/utils/formatters.dart';
 import '../../models/basket.dart';
 import '../common/network_image_box.dart';
 
-/// One item row in the shopping basket.
 class CartItemCard extends StatelessWidget {
   const CartItemCard({
     super.key,
@@ -124,18 +123,16 @@ class _CartStepper extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           InkWell(
-            onTap: quantity > 1 ? onDecrease : null,
+            onTap: onDecrease,
             borderRadius: BorderRadius.circular(AppRadius.pill),
-            child: SizedBox(
+            child: const SizedBox(
               width: 24,
               height: 24,
               child: Center(
                 child: Icon(
                   Icons.remove_rounded,
                   size: 14,
-                  color: quantity > 1
-                      ? AppColors.textColor
-                      : AppColors.mutedTextColor.withValues(alpha: 0.3),
+                  color: AppColors.textColor,
                 ),
               ),
             ),

@@ -6,7 +6,6 @@ import '../../core/theme/app_text_styles.dart';
 import '../../core/utils/formatters.dart';
 import '../../models/product.dart';
 
-/// Product name, large price and description under the photo.
 class ProductSummary extends StatelessWidget {
   const ProductSummary({super.key, required this.product});
 

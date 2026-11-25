@@ -4,7 +4,6 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 
-/// Logout card with red icon, label, and forward arrow.
 class ProfileLogoutCard extends StatelessWidget {
   const ProfileLogoutCard({
     super.key,

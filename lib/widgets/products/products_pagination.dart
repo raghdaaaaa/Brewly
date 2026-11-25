@@ -4,7 +4,6 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 
-/// "Showing 1-10 of 24", the progress bar and the Load More button.
 class ProductsPagination extends StatelessWidget {
   const ProductsPagination({
     super.key,

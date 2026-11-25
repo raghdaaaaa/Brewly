@@ -8,7 +8,6 @@ import '../core/theme/app_text_styles.dart';
 import 'common/brewly_brand_lockup.dart';
 import 'common/profile_avatar.dart';
 
-/// Round back button with an optional title.
 class AppHeaderBack extends StatelessWidget {
   const AppHeaderBack({super.key, this.title});
 
@@ -56,7 +55,6 @@ class AppHeaderBack extends StatelessWidget {
   }
 }
 
-/// Home brand and action row.
 class AppHeaderTop extends StatelessWidget {
   const AppHeaderTop({super.key});
 

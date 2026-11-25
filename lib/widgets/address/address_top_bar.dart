@@ -4,7 +4,6 @@ import '../common/profile_avatar.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 
-/// Top bar in My Address screen with circular back button and user avatar.
 class AddressTopBar extends StatelessWidget {
   const AddressTopBar({super.key});
 

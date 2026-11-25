@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 
-/// "Don't have an account? Create account" style link under the auth buttons.
 class AuthSwitchLink extends StatelessWidget {
   const AuthSwitchLink({
     super.key,

@@ -1,10 +1,10 @@
 import 'package:brewly/core/errors/app_exception.dart';
 import 'package:brewly/screens/cart_screen.dart';
-import 'package:brewly/services/dummy/dummy_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../fakes/fake_basket_service.dart';
+import '../fakes/test_data.dart';
 
 class _FailingClearBasketService extends FakeBasketService {
   _FailingClearBasketService({super.items});
@@ -31,7 +31,7 @@ void main() {
         addTearDown(tester.view.resetDevicePixelRatio);
         addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
 
-        final basketService = FakeBasketService(items: dummyBasketItems);
+        final basketService = FakeBasketService(items: buildTestBasketItems());
         await tester.pumpWidget(
           MaterialApp(
             home: CartScreen(
@@ -54,7 +54,8 @@ void main() {
   testWidgets('cart screen shows error and keeps items if clearBasket fails', (
     tester,
   ) async {
-    final basketService = _FailingClearBasketService(items: dummyBasketItems);
+    final basketItems = buildTestBasketItems();
+    final basketService = _FailingClearBasketService(items: basketItems);
     await tester.pumpWidget(
       MaterialApp(
         home: CartScreen(
@@ -71,6 +72,32 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Failed to clear cart'), findsOneWidget);
-    expect(find.text(dummyBasketItems.first.productName), findsOneWidget);
+    expect(find.text(basketItems.first.productName), findsOneWidget);
+  });
+
+  testWidgets('decreasing a single item to zero removes it from the basket', (
+    tester,
+  ) async {
+    final basketItems = buildTestBasketItems();
+    final basketService = FakeBasketService(items: basketItems);
+    await tester.pumpWidget(
+      MaterialApp(
+        home: CartScreen(
+          onBrowseMenu: () {},
+          basketService: basketService,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byIcon(Icons.remove_rounded).first);
+    await tester.pumpAndSettle();
+    expect(find.text(basketItems.first.productName), findsOneWidget);
+    expect(find.text('1'), findsNWidgets(2));
+
+    await tester.tap(find.byIcon(Icons.remove_rounded).first);
+    await tester.pumpAndSettle();
+    expect(find.text(basketItems.first.productName), findsNothing);
+    expect(find.text(basketItems.last.productName), findsOneWidget);
   });
 }

@@ -61,9 +61,6 @@ coverage/
 # VS Code
 .vscode/
 
-# OpenCode
-opencode.json
-
 .idea/
 *.iml
 # Widget Preview related

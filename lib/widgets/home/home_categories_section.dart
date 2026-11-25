@@ -7,7 +7,6 @@ import '../loading_indicator.dart';
 import '../common/section_header.dart';
 import 'category_circle.dart';
 
-/// "Categories" header and the horizontal circle row from the API.
 class HomeCategoriesSection extends StatelessWidget {
   const HomeCategoriesSection({
     super.key,

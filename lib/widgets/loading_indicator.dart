@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../core/theme/app_colors.dart';
 
-/// A simple centered loading spinner.
-/// Used by FutureBuilder while the data is loading.
 class LoadingIndicator extends StatelessWidget {
   const LoadingIndicator({super.key});
 

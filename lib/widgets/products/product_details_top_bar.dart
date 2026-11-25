@@ -4,7 +4,6 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 
-/// Back button, title, share button and avatar of the Product Details screen.
 class ProductDetailsTopBar extends StatelessWidget {
   const ProductDetailsTopBar({super.key, required this.onShare});
 

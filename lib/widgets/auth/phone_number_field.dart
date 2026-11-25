@@ -9,7 +9,6 @@ import '../../core/utils/validators.dart';
 import '../app_text_field.dart';
 import 'country_prefix_pill.dart';
 
-/// Label, Egyptian prefix pill and phone input in one row.
 class PhoneNumberField extends StatelessWidget {
   const PhoneNumberField({
     super.key,

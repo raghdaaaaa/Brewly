@@ -1,27 +1,9 @@
 import '../../models/address.dart';
-import '../../models/basket.dart';
 import '../../models/delivery_method.dart';
 import '../../models/order.dart';
 
 /// Fixed ratings shown on the Home cards only (the API has no rating field).
 const List<double> homeRatings = [4.9, 4.8, 5.0, 4.7];
-
-final List<BasketItem> dummyBasketItems = [
-  BasketItem(
-    id: 1,
-    productName: 'Spanish Iced Latte',
-    pictureUrl: 'https://picsum.photos/seed/brewly-latte/400/400',
-    price: 95,
-    quantity: 2,
-  ),
-  BasketItem(
-    id: 2,
-    productName: 'Pistachio Pain au Chocolat',
-    pictureUrl: 'https://picsum.photos/seed/brewly-pain/400/400',
-    price: 110,
-    quantity: 1,
-  ),
-];
 
 const Address dummyAddress = Address(
   firstName: 'Omar',

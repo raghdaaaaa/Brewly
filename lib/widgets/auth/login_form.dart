@@ -8,7 +8,6 @@ import '../../core/utils/validators.dart';
 import '../app_text_field.dart';
 import '../common/primary_button.dart';
 
-/// Login fields and submit button.
 class LoginForm extends StatelessWidget {
   const LoginForm({
     super.key,

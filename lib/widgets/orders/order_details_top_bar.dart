@@ -5,7 +5,6 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 
-/// Top bar in Order Details screen with back button, order title, share button, and avatar.
 class OrderDetailsTopBar extends StatelessWidget {
   const OrderDetailsTopBar({super.key, required this.orderId});
 

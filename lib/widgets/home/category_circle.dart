@@ -6,7 +6,6 @@ import '../../core/theme/app_text_styles.dart';
 import '../../models/category.dart';
 import '../common/network_image_box.dart';
 
-/// One circular category image with its name, used in the Home row.
 class CategoryCircle extends StatelessWidget {
   const CategoryCircle({
     super.key,

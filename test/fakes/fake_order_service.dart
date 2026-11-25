@@ -4,7 +4,6 @@ import 'package:brewly/models/order.dart';
 import 'package:brewly/services/dummy/dummy_data.dart';
 import 'package:brewly/services/order_service.dart';
 
-/// In-memory order service for widget tests.
 class FakeOrderService extends OrderService {
   FakeOrderService({
     this.deliveryMethods = dummyDeliveryMethods,

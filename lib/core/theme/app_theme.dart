@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'app_colors.dart';
 import 'app_text_styles.dart';
 
-/// The single Material theme used by the whole app.
 class AppTheme {
   const AppTheme._();
 

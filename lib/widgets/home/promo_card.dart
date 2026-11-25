@@ -5,7 +5,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 
-/// The local promo card on Home. Its height grows with the text scale.
+/// Its height grows with the text scale.
 class PromoCard extends StatelessWidget {
   const PromoCard({super.key, required this.onExplore});
 

@@ -6,16 +6,12 @@ import '../core/theme/app_text_styles.dart';
 import '../models/product.dart';
 import 'common/network_image_box.dart';
 
-/// How the small category tag over the image is painted.
 enum ProductTagTone {
-  /// Dark tag used on the Home cards.
   dark,
 
-  /// Pale yellow tag used on the Products List cards.
   accent,
 }
 
-/// The 90 dp product image with the category tag and the Hero transition.
 class ProductThumbnail extends StatelessWidget {
   const ProductThumbnail({
     super.key,

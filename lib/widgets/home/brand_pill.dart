@@ -5,7 +5,6 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../models/brand.dart';
 
-/// One roaster pill in the Home featured row.
 class BrandPill extends StatelessWidget {
   const BrandPill({
     super.key,

@@ -5,7 +5,6 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/utils/formatters.dart';
 
-/// Full-width primary CTA button for proceeding to checkout.
 class CartCheckoutButton extends StatelessWidget {
   const CartCheckoutButton({
     super.key,

@@ -4,10 +4,6 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 
-/// The white search pill used by Home, Explore and Products List.
-///
-/// [onFilterTap] shows the beige filter button; [showClear] shows the clear X
-/// as soon as the field has text.
 class AppSearchField extends StatelessWidget {
   const AppSearchField({
     super.key,

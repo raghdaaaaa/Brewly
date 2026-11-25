@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 
-/// A network image with a fixed box, rounded corners and a local placeholder.
-///
 /// The API sometimes returns a relative or broken URL, so every image in the
 /// app goes through this widget instead of calling [Image.network] directly.
 class NetworkImageBox extends StatelessWidget {

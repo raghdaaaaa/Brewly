@@ -6,8 +6,6 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 
-/// The single primary action button used by the app.
-///
 /// While [isLoading] is true the button keeps its size and colour, hides the
 /// arrow and shows a small white spinner instead.
 class PrimaryButton extends StatelessWidget {

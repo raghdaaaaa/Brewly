@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../core/constants/app_assets.dart';
 import '../../core/theme/app_colors.dart';
 
-/// Round back button used by Login and Register.
 class AuthBackButton extends StatelessWidget {
   const AuthBackButton({
     super.key,

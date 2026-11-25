@@ -4,7 +4,6 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 
-/// The white "Sort: ..." pill and the green item counter.
 class SortRow extends StatelessWidget {
   const SortRow({
     super.key,

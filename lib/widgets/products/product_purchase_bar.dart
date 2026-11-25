@@ -6,7 +6,6 @@ import '../../core/theme/app_text_styles.dart';
 import '../../core/utils/formatters.dart';
 import 'quantity_stepper.dart';
 
-/// The fixed bottom bar with the quantity stepper and the add-to-cart button.
 class ProductPurchaseBar extends StatelessWidget {
   const ProductPurchaseBar({
     super.key,

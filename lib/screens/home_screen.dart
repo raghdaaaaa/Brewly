@@ -134,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _addToBasket(Product product) async {
     setState(() => _addingIds.add(product.id));
     try {
-      await _basketService.addQuantity(productId: product.id, quantity: 1);
+      await _basketService.addQuantity(product: product, quantity: 1);
       if (!mounted) {
         return;
       }

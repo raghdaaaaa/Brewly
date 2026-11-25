@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 
-/// Status pill matching Figma design Frame 3 (In Preparation, Delivered, Canceled).
 class OrderStatusChip extends StatelessWidget {
   const OrderStatusChip({super.key, required this.status});
 

@@ -8,7 +8,6 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../services/profile_image_service.dart';
 
-/// Top card in Profile screen displaying the user's avatar, badge, name, and email.
 class ProfileHeaderCard extends StatelessWidget {
   const ProfileHeaderCard({
     super.key,

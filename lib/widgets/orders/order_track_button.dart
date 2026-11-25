@@ -4,7 +4,6 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 
-/// Sticky bottom track order button matching Figma Frame 4.
 class OrderTrackButton extends StatelessWidget {
   const OrderTrackButton({super.key, required this.onTap});
 

@@ -4,7 +4,6 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 
-/// White pill with the minus, quantity and plus controls.
 class QuantityStepper extends StatelessWidget {
   const QuantityStepper({
     super.key,

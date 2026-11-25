@@ -5,7 +5,6 @@ import '../../models/product.dart';
 import 'product_hero_image.dart';
 import 'product_summary.dart';
 
-/// Scrollable body of the Product Details screen.
 class ProductDetailsContent extends StatelessWidget {
   const ProductDetailsContent({
     super.key,

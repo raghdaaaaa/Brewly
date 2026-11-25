@@ -16,7 +16,6 @@ import '../../screens/register_screen.dart';
 import '../../screens/splash_screen.dart';
 import '../../screens/welcome_screen.dart';
 
-/// Named routes and the route table used by [MaterialApp].
 class AppRoutes {
   const AppRoutes._();
 

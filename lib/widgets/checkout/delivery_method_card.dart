@@ -5,7 +5,6 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../models/delivery_method.dart';
 
-/// Card selector for choosing a delivery method.
 class DeliveryMethodCard extends StatelessWidget {
   const DeliveryMethodCard({
     super.key,

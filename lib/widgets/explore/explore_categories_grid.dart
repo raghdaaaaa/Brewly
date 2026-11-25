@@ -4,7 +4,6 @@ import '../../core/theme/app_spacing.dart';
 import '../../models/category.dart';
 import 'category_tile.dart';
 
-/// Two-column categories grid used by Explore.
 class ExploreCategoriesGrid extends StatelessWidget {
   const ExploreCategoriesGrid({
     super.key,

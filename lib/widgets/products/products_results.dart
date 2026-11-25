@@ -11,8 +11,6 @@ import '../product_card.dart';
 import '../product_thumbnail.dart';
 import 'products_pagination.dart';
 
-/// The FutureBuilder body of the Products List: loading, error, empty or the
-/// cards plus the pagination footer.
 class ProductsResults extends StatelessWidget {
   const ProductsResults({
     super.key,

@@ -20,6 +20,17 @@ class BasketItem {
 
   double get lineTotal => price * quantity;
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'productId': productId,
+      'productName': productName,
+      'pictureUrl': pictureUrl,
+      'price': price,
+      'quantity': quantity,
+    };
+  }
+
   factory BasketItem.fromJson(Map<String, dynamic> json) {
     final id = Json.asInt(json['id']);
     return BasketItem(

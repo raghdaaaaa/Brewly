@@ -6,7 +6,6 @@ import '../../core/theme/app_text_styles.dart';
 import '../../core/utils/formatters.dart';
 import '../../models/order.dart';
 
-/// Card showing payment summary with subtotal, delivery fee, and total paid.
 class OrderPaymentCard extends StatelessWidget {
   const OrderPaymentCard({super.key, required this.order});
 

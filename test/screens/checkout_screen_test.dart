@@ -4,12 +4,12 @@ import 'package:brewly/models/address.dart';
 import 'package:brewly/models/basket.dart';
 import 'package:brewly/models/order.dart';
 import 'package:brewly/screens/checkout_screen.dart';
-import 'package:brewly/services/dummy/dummy_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../fakes/fake_basket_service.dart';
 import '../fakes/fake_order_service.dart';
+import '../fakes/test_data.dart';
 
 class _RetryableOrderService extends FakeOrderService {
   int createCalls = 0;
@@ -102,7 +102,7 @@ void main() {
         addTearDown(tester.view.resetDevicePixelRatio);
         addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
 
-        final basketService = FakeBasketService(items: dummyBasketItems);
+        final basketService = FakeBasketService(items: buildTestBasketItems());
         final orderService = FakeOrderService();
         await tester.pumpWidget(
           MaterialApp(
@@ -156,7 +156,7 @@ void main() {
     tester,
   ) async {
     final basketService = _RetryableClearBasketService(
-      items: dummyBasketItems,
+      items: buildTestBasketItems(),
     );
     final orderService = _RetryableOrderService();
     await tester.pumpWidget(
@@ -192,7 +192,7 @@ void main() {
 
   testWidgets('order creation failure can be retried normally', (tester) async {
     final basketService = _RetryableClearBasketService(
-      items: dummyBasketItems,
+      items: buildTestBasketItems(),
       failFirstClear: false,
     );
     final orderService = _RetryableOrderService()..failNextCreate = true;

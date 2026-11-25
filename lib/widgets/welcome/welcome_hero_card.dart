@@ -5,11 +5,9 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 
-/// White onboarding card with the hero photo and the two-line promise.
 class WelcomeHeroCard extends StatelessWidget {
   const WelcomeHeroCard({super.key});
 
-  /// The Figma frame shows 256 dp of photo inside a 358 dp card.
   static const double _heroAspectRatio = 358 / 256;
 
   @override

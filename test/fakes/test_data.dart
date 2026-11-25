@@ -1,4 +1,5 @@
 import 'package:brewly/models/brand.dart';
+import 'package:brewly/models/basket.dart';
 import 'package:brewly/models/category.dart';
 import 'package:brewly/models/product.dart';
 
@@ -38,4 +39,25 @@ List<Product> buildTestProducts({int count = 12}) {
       categoryName: longCategoryName,
     );
   });
+}
+
+List<BasketItem> buildTestBasketItems() {
+  return [
+    BasketItem(
+      id: 1,
+      productId: 1,
+      productName: 'Spanish Iced Latte',
+      pictureUrl: '',
+      price: 95,
+      quantity: 2,
+    ),
+    BasketItem(
+      id: 2,
+      productId: 2,
+      productName: 'Pistachio Pain au Chocolat',
+      pictureUrl: '',
+      price: 110,
+      quantity: 1,
+    ),
+  ];
 }

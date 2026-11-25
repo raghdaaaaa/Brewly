@@ -4,7 +4,6 @@ import '../../core/constants/app_assets.dart';
 import 'auth_back_button.dart';
 import 'register_brand_chip.dart';
 
-/// Back button on the left and the BREWLY chip on the right.
 class AuthTopBar extends StatelessWidget {
   const AuthTopBar({
     super.key,

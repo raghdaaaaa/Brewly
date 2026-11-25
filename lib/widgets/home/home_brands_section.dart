@@ -8,7 +8,6 @@ import '../loading_indicator.dart';
 import '../common/section_header.dart';
 import 'brand_pill.dart';
 
-/// Store brands from the API.
 class HomeBrandsSection extends StatelessWidget {
   const HomeBrandsSection({
     super.key,

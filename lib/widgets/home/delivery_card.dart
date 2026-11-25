@@ -4,7 +4,6 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 
-/// The beige delivery address card at the top of Home.
 class DeliveryCard extends StatelessWidget {
   const DeliveryCard({super.key, required this.address, required this.onTap});
 

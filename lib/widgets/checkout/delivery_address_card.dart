@@ -5,7 +5,6 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../app_text_field.dart';
 
-/// Form card for entering and editing the delivery address.
 class DeliveryAddressCard extends StatelessWidget {
   const DeliveryAddressCard({
     super.key,

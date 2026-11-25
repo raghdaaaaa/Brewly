@@ -5,8 +5,6 @@ import '../core/theme/app_colors.dart';
 import '../core/theme/app_spacing.dart';
 import '../core/theme/app_text_styles.dart';
 
-/// The single text-field style used by the whole app.
-///
 /// The label is drawn above the field and the field grows with its validation
 /// error or helper text, so messages never overlap the next field.
 enum AppTextFieldVariant {

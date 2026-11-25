@@ -5,7 +5,6 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 
-/// Top bar with back button, title "Checkout", share button, and avatar.
 class CheckoutTopBar extends StatelessWidget {
   const CheckoutTopBar({super.key});
 

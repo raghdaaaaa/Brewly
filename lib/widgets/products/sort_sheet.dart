@@ -5,7 +5,6 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../services/product_service.dart';
 
-/// Bottom sheet with the two sort values the API understands.
 class SortSheet extends StatelessWidget {
   const SortSheet({super.key, required this.selected});
 

@@ -5,7 +5,6 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/utils/formatters.dart';
 
-/// Checkout order summary card with subtotal, delivery fee and total payable.
 class CheckoutSummaryCard extends StatelessWidget {
   const CheckoutSummaryCard({
     super.key,
