@@ -13,6 +13,7 @@ class ProductsListControls extends StatelessWidget {
     required this.searchController,
     required this.categoryName,
     required this.brandName,
+    required this.title,
     required this.sortLabel,
     required this.count,
     required this.onShare,
@@ -27,6 +28,7 @@ class ProductsListControls extends StatelessWidget {
   final TextEditingController searchController;
   final String? categoryName;
   final String? brandName;
+  final String title;
   final String sortLabel;
   final int count;
   final VoidCallback onShare;
@@ -48,7 +50,7 @@ class ProductsListControls extends StatelessWidget {
             AppSpacing.lg,
             0,
           ),
-          child: ProductsListHeader(onShare: onShare),
+          child: ProductsListHeader(onShare: onShare, title: title),
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(
@@ -82,11 +84,7 @@ class ProductsListControls extends StatelessWidget {
             AppSpacing.lg,
             AppSpacing.xs,
           ),
-          child: SortRow(
-            sortLabel: sortLabel,
-            count: count,
-            onTap: onSortTap,
-          ),
+          child: SortRow(sortLabel: sortLabel, count: count, onTap: onSortTap),
         ),
       ],
     );

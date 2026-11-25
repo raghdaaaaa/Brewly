@@ -7,7 +7,7 @@ import '../core/theme/app_spacing.dart';
 import '../core/theme/app_text_styles.dart';
 import '../core/utils/validators.dart';
 import '../services/auth_service.dart';
-import '../widgets/auth/auth_top_bar.dart';
+import '../widgets/auth/register_brand_chip.dart';
 import '../widgets/auth/register_form_card.dart';
 import '../widgets/common/auth_switch_link.dart';
 
@@ -162,8 +162,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              AuthTopBar(onBack: _goToLogin, showBrandChip: true),
-              const SizedBox(height: AppSpacing.xl),
+              const SizedBox(height: AppSpacing.lg),
+              const Center(child: RegisterBrandChip()),
+              const SizedBox(height: AppSpacing.xxl),
               const Text('Create Account', style: AppTextStyles.displayBig),
               const SizedBox(height: AppSpacing.lg),
               RegisterFormCard(

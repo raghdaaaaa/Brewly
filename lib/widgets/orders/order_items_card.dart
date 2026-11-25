@@ -15,7 +15,7 @@ class OrderItemsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final receiptNumber = order.id.replaceAll(RegExp(r'[^0-9]'), '');
     return Container(
-      padding: const EdgeInsets.all(AppSpacing.lg),
+      padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
         color: AppColors.cardColor,
         borderRadius: BorderRadius.circular(AppRadius.xl),
@@ -54,7 +54,7 @@ class OrderItemsCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: AppSpacing.md),
+          const SizedBox(height: AppSpacing.sm),
           for (int i = 0; i < order.items.length; i++) ...[
             if (i > 0) const SizedBox(height: AppSpacing.sm),
             _OrderItemRow(item: order.items[i]),
@@ -84,8 +84,8 @@ class _OrderItemRow extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(AppRadius.md),
             child: SizedBox(
-              width: 72,
-              height: 72,
+              width: 64,
+              height: 64,
               child: item.pictureUrl.startsWith('assets/')
                   ? Image.asset(item.pictureUrl, fit: BoxFit.cover)
                   : Image.network(
@@ -105,7 +105,7 @@ class _OrderItemRow extends StatelessWidget {
           const SizedBox(width: AppSpacing.sm),
           Expanded(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(minHeight: 72),
+              constraints: const BoxConstraints(minHeight: 64),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,

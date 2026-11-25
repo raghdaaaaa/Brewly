@@ -47,9 +47,9 @@ class OrderCard extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.symmetric(
           horizontal: AppSpacing.lg,
-          vertical: AppSpacing.sm,
+          vertical: AppSpacing.xs,
         ),
-        padding: const EdgeInsets.all(AppSpacing.lg),
+        padding: const EdgeInsets.all(AppSpacing.md),
         decoration: BoxDecoration(
           color: AppColors.cardColor,
           borderRadius: BorderRadius.circular(AppRadius.xl),
@@ -92,7 +92,7 @@ class OrderCard extends StatelessWidget {
                 OrderStatusChip(status: order.status),
               ],
             ),
-            const SizedBox(height: AppSpacing.md),
+            const SizedBox(height: AppSpacing.sm),
             Row(
               mainAxisAlignment: isInPreparation
                   ? MainAxisAlignment.spaceBetween
@@ -110,7 +110,7 @@ class OrderCard extends StatelessWidget {
                   const SizedBox(width: AppSpacing.sm),
                   Flexible(
                     child: SizedBox(
-                      height: 40,
+                      height: 36,
                       child: FilledButton(
                         onPressed: () {
                           Navigator.pushNamed(
@@ -139,7 +139,7 @@ class OrderCard extends StatelessWidget {
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: AppTextStyles.buttonLabel.copyWith(
-                                  fontSize: 12,
+                                  fontSize: 11,
                                   color: AppColors.cardColor,
                                 ),
                               ),

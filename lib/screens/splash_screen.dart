@@ -5,6 +5,7 @@ import '../core/theme/app_colors.dart';
 import '../core/theme/app_spacing.dart';
 import '../core/theme/app_text_styles.dart';
 import '../services/auth_service.dart';
+import '../services/profile_image_service.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -31,11 +32,13 @@ class _SplashScreenState extends State<SplashScreen>
       parent: _controller,
       curve: Curves.easeOut,
     );
-    _scaleAnimation = Tween<double>(begin: 0.85, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 0.85,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
     _controller.forward();
 
+    ProfileImageService.instance.initialize().ignore();
     _startApp();
   }
 

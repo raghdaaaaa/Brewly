@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '../../core/constants/app_assets.dart';
+import '../common/profile_avatar.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 
 /// Top bar in Order Details screen with back button, order title, share button, and avatar.
 class OrderDetailsTopBar extends StatelessWidget {
-  const OrderDetailsTopBar({
-    super.key,
-    required this.orderId,
-  });
+  const OrderDetailsTopBar({super.key, required this.orderId});
 
   final String orderId;
 
@@ -19,8 +16,8 @@ class OrderDetailsTopBar extends StatelessWidget {
     return Row(
       children: [
         SizedBox(
-          width: AppSizes.backButton,
-          height: AppSizes.backButton,
+          width: AppSizes.detailsShareButton,
+          height: AppSizes.detailsShareButton,
           child: Material(
             color: AppColors.softSurfaceColor,
             shape: const CircleBorder(),
@@ -55,9 +52,8 @@ class OrderDetailsTopBar extends StatelessWidget {
             shape: const CircleBorder(),
             child: InkWell(
               onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Coming soon')),
-                );
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(const SnackBar(content: Text('Coming soon')));
               },
               customBorder: const CircleBorder(),
               child: const Center(
@@ -71,18 +67,7 @@ class OrderDetailsTopBar extends StatelessWidget {
           ),
         ),
         const SizedBox(width: AppSpacing.sm),
-        Container(
-          width: AppSizes.detailsAvatar,
-          height: AppSizes.detailsAvatar,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: AppColors.cardColor, width: 2),
-            image: const DecorationImage(
-              image: AssetImage(AppAssets.userAvatar),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
+        const ProfileAvatar(),
       ],
     );
   }

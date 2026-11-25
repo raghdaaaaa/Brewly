@@ -5,11 +5,7 @@ import '../../core/theme/app_text_styles.dart';
 import 'points_pill.dart';
 
 class HomeGreeting extends StatelessWidget {
-  const HomeGreeting({
-    super.key,
-    required this.name,
-    required this.points,
-  });
+  const HomeGreeting({super.key, required this.name, required this.points});
 
   final String name;
   final int points;
@@ -25,7 +21,7 @@ class HomeGreeting extends StatelessWidget {
             Expanded(
               child: Text(
                 'Good evening, $name 👋',
-                maxLines: 2,
+                maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: AppTextStyles.greeting,
               ),

@@ -19,17 +19,19 @@ class OrderTrackButton extends StatelessWidget {
         top: false,
         child: SizedBox(
           width: double.infinity,
-          height: AppSizes.buttonHeight,
+          height: 52,
           child: FilledButton.icon(
             onPressed: onTap,
             icon: const Icon(
               Icons.local_shipping_outlined,
-              color: AppColors.onAccentColor,
+              color: AppColors.cardColor,
               size: 20,
             ),
             label: Text(
               'Track Order',
-              style: AppTextStyles.buttonLabelBold.copyWith(color: AppColors.onAccentColor),
+              style: AppTextStyles.buttonLabelBold.copyWith(
+                color: AppColors.cardColor,
+              ),
             ),
             style: FilledButton.styleFrom(
               backgroundColor: AppColors.primaryColor,

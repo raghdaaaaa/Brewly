@@ -197,7 +197,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 controller: _searchController,
                 hint: 'Search specialty beans, croissants, coffee...',
                 onSubmitted: _search,
-                onFilterTap: () => _showMessage('Coming soon'),
               ),
               const SizedBox(height: AppSpacing.xl),
               PromoCard(onExplore: () => _openProducts()),

@@ -1,44 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../core/constants/app_assets.dart';
+import '../common/profile_avatar.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 
 /// Back button, "Product Detail" title, share button and avatar.
 class ProductsListHeader extends StatelessWidget {
-  const ProductsListHeader({super.key, required this.onShare});
+  const ProductsListHeader({
+    super.key,
+    required this.onShare,
+    required this.title,
+  });
 
   final VoidCallback onShare;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         SizedBox(
-          width: AppSizes.backButton,
-          height: AppSizes.backButton,
+          width: AppSizes.detailsShareButton,
+          height: AppSizes.detailsShareButton,
           child: Material(
-            color: AppColors.softSurfaceDeepColor,
+            color: AppColors.softSurfaceColor,
             shape: const CircleBorder(),
             child: InkWell(
               onTap: () => Navigator.of(context).maybePop(),
               customBorder: const CircleBorder(),
-              child: Center(
-                child: SvgPicture.asset(
-                  AppAssets.backArrow,
-                  width: 10,
-                  height: 17,
+              child: const Center(
+                child: Icon(
+                  Icons.arrow_back_rounded,
+                  size: 20,
+                  color: AppColors.textColor,
                 ),
               ),
             ),
           ),
         ),
         const SizedBox(width: AppSpacing.md),
-        const Expanded(
+        Expanded(
           child: Text(
-            'Product Detail',
+            title,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: AppTextStyles.detailsTopBarTitle,
@@ -55,26 +59,15 @@ class ProductsListHeader extends StatelessWidget {
               onTap: onShare,
               customBorder: const CircleBorder(),
               child: const Icon(
-                Icons.ios_share_rounded,
-                size: 20,
+                Icons.share_outlined,
+                size: 18,
                 color: AppColors.textColor,
               ),
             ),
           ),
         ),
         const SizedBox(width: AppSpacing.sm),
-        Container(
-          width: AppSizes.detailsAvatar,
-          height: AppSizes.detailsAvatar,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: AppColors.cardColor, width: 2),
-            image: const DecorationImage(
-              image: AssetImage(AppAssets.userAvatar),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
+        const ProfileAvatar(),
       ],
     );
   }

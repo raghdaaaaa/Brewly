@@ -36,7 +36,8 @@ void main() {
         );
         await tester.pumpAndSettle();
 
-        expect(find.text('Product Detail'), findsOneWidget);
+        expect(find.textContaining(longCategoryName), findsWidgets);
+        expect(find.text('Product Detail'), findsNothing);
         expect(find.text('12 items found'), findsOneWidget);
         expect(tester.takeException(), isNull);
       }

@@ -28,19 +28,19 @@ class AppTextStyles {
 
   static const TextStyle heroLine = TextStyle(
     fontFamily: fontFamily,
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: FontWeight.w600,
-    height: 28 / 20,
-    letterSpacing: -0.3,
+    height: 24 / 18,
+    letterSpacing: -0.2,
     color: AppColors.textColor,
   );
 
   static const TextStyle heroLineAccent = TextStyle(
     fontFamily: fontFamily,
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: FontWeight.w600,
-    height: 28 / 20,
-    letterSpacing: -0.3,
+    height: 24 / 18,
+    letterSpacing: -0.2,
     color: AppColors.primaryColor,
   );
 
@@ -272,6 +272,15 @@ class AppTextStyles {
     color: AppColors.textColor,
   );
 
+  static const TextStyle brandLockupName = TextStyle(
+    fontFamily: fontFamily,
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    height: 20 / 16,
+    letterSpacing: 0.2,
+    color: AppColors.primaryColor,
+  );
+
   static const TextStyle brandLabel = TextStyle(
     fontFamily: fontFamily,
     fontSize: 12,
@@ -400,10 +409,10 @@ class AppTextStyles {
 
   static const TextStyle greeting = TextStyle(
     fontFamily: fontFamily,
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: FontWeight.w700,
-    height: 30 / 24,
-    letterSpacing: -0.5,
+    height: 28 / 22,
+    letterSpacing: -0.4,
     color: AppColors.textColor,
   );
 

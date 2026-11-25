@@ -158,9 +158,7 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
       context: context,
       backgroundColor: AppColors.cardColor,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(AppRadius.xl),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xl)),
       ),
       builder: (context) => SortSheet(selected: _sort),
     );
@@ -224,9 +222,8 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
   }
 
   void _showMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   String get _sortLabel => _sort == ProductService.sortPriceDesc
@@ -244,6 +241,7 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
               searchController: _searchController,
               categoryName: _categoryName,
               brandName: _brandName,
+              title: _categoryName ?? _brandName ?? 'Products',
               sortLabel: _sortLabel,
               count: _total,
               onShare: () => _showMessage('Coming soon'),

@@ -9,7 +9,7 @@ class WelcomeBrandHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Padding(
-      padding: EdgeInsets.symmetric(vertical: AppSpacing.lg),
+      padding: EdgeInsets.only(top: AppSpacing.sm, bottom: AppSpacing.md),
       child: Center(child: BrewlyBrandLockup()),
     );
   }

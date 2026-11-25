@@ -65,11 +65,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
     );
   }
 
-  void _showMessage(String message) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,7 +83,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
               controller: _searchController,
               hint: 'Search categories, roast styles, roasters..',
               onSubmitted: _search,
-              onFilterTap: () => _showMessage('Coming soon'),
             ),
             const SizedBox(height: AppSpacing.lg),
             const Text('Categories', style: AppTextStyles.sectionHeading),

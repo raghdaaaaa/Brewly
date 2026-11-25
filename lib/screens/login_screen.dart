@@ -46,15 +46,6 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  void _goBack() {
-    final navigator = Navigator.of(context);
-    if (navigator.canPop()) {
-      navigator.pop();
-    } else {
-      navigator.pushReplacementNamed(AppRoutes.welcomeRoute);
-    }
-  }
-
   Future<void> _login() async {
     if (_isLoading || !_formKey.currentState!.validate()) {
       return;
@@ -74,10 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (!mounted) {
         return;
       }
-      navigator.pushNamedAndRemoveUntil(
-        AppRoutes.homeRoute,
-        (route) => false,
-      );
+      navigator.pushNamedAndRemoveUntil(AppRoutes.homeRoute, (route) => false);
     } on AppException catch (error) {
       if (!mounted) {
         return;
@@ -114,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              LoginHeader(onBack: _goBack),
+              const LoginHeader(),
               const SizedBox(height: AppSpacing.xl),
               LoginForm(
                 formKey: _formKey,

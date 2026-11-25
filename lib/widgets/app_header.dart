@@ -6,6 +6,7 @@ import '../core/theme/app_colors.dart';
 import '../core/theme/app_spacing.dart';
 import '../core/theme/app_text_styles.dart';
 import 'common/brewly_brand_lockup.dart';
+import 'common/profile_avatar.dart';
 
 /// Round back button with an optional title.
 class AppHeaderBack extends StatelessWidget {
@@ -95,25 +96,7 @@ class AppHeaderTop extends StatelessWidget {
             ),
           ),
           const SizedBox(width: AppSpacing.sm),
-          Container(
-            width: AppSizes.headerAction,
-            height: AppSizes.headerAction,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: AppColors.cardColor, width: 2),
-              boxShadow: const [
-                BoxShadow(
-                  color: AppColors.shadowBlack10,
-                  blurRadius: 4,
-                  offset: Offset(0, 2),
-                ),
-              ],
-              image: const DecorationImage(
-                image: AssetImage(AppAssets.userAvatar),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
+          const ProfileAvatar(size: AppSizes.headerAction, borderWidth: 2),
         ],
       ),
     );

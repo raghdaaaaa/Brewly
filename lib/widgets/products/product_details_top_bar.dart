@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../core/constants/app_assets.dart';
+import '../common/profile_avatar.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
@@ -62,18 +62,7 @@ class ProductDetailsTopBar extends StatelessWidget {
           ),
         ),
         const SizedBox(width: AppSpacing.sm),
-        Container(
-          width: AppSizes.detailsAvatar,
-          height: AppSizes.detailsAvatar,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: AppColors.cardColor, width: 2),
-            image: const DecorationImage(
-              image: AssetImage(AppAssets.userAvatar),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
+        const ProfileAvatar(),
       ],
     );
   }
