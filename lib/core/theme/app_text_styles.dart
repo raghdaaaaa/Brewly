@@ -484,9 +484,9 @@ class AppTextStyles {
 
   static const TextStyle points = TextStyle(
     fontFamily: fontFamily,
-    fontSize: 13,
+    fontSize: 8,
     fontWeight: FontWeight.w700,
-    height: 18 / 13,
+    height: 15 / 15,
     color: AppColors.onAccentColor,
   );
 
